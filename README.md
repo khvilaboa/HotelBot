@@ -11,5 +11,15 @@ ChatBot que pretende gestionar la reserva de habitaciones en un hotel. Entre los
 
 ## Instalación
 HotelBot tiene las siguientes dependencias:
-####Python Telegram API
+
+**Python Telegram API**, para crear el bot de Telegram.
+
 ```   pip install python-telegram-bot```
+
+**NLTK**: para analizar lenguaje natural.
+
+```   pip install nltk```
+
+**Langdetect, langid and textblob**: para la detección del idioma.
+
+```   pip install Langdetect langid textblob```
