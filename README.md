@@ -20,6 +20,6 @@ HotelBot tiene las siguientes dependencias:
 
 ```   pip install nltk```
 
-**Langdetect, langid and textblob**: para la detección del idioma.
+**Langdetect, langid y textblob**: para la detección del idioma.
 
 ```   pip install Langdetect langid textblob```
