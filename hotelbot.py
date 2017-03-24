@@ -1,21 +1,34 @@
 #!/usr/bin/env python
 # -*- coding: iso-8859-1 -*-
 
+# Mail for future use: dasihotelbot@gmail.com / 3m0j1Lun4
+
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-updater = Updater(token='344919668:AAFvtg7WYYvxT9d8msQAu6cvbsmggKwyDEk')  # @DASIHotelBot
+from agents import HotelAgent, InsultsAgent
 
+updater = Updater(token='344919668:AAFvtg7WYYvxT9d8msQAu6cvbsmggKwyDEk')  # @DASIHotelBot
 dispatcher = updater.dispatcher
+
+agents = [HotelAgent(), InsultsAgent()]
 
 # Default command (executed on bot init)
 def start(bot, update):
 	update.message.reply_text("Buenaaaas. Una habitacion?")
 
-# To handle text (text that doesn't start with '/')
+# To handle text (that doesn't start with '/')
 def text(bot, update):
-	# Add intelligence here
-	print update
-	update.message.reply_text("Mi no entender :(")
+	print("trying..")
+	try:
+		for agent in agents:
+			print(agent)
+			print(agent.evaluate(update.message.text))
+		response = max([agent.evaluate(update.message.text) for agent in agents])[1]
+	except Exception as e:
+		print(e)
+	
+	print("response: " + response)
+	update.message.reply_text(response)
 
 # To handle unknown commands
 def unknown(bot, update):
