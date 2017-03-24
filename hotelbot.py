@@ -18,17 +18,14 @@ def start(bot, update):
 
 # To handle text (that doesn't start with '/')
 def text(bot, update):
-	print("trying..")
+	text = update.message.text
+	print("Received: %s" % text)
 	try:
-		for agent in agents:
-			print(agent)
-			print(agent.evaluate(update.message.text))
-		response = max([agent.evaluate(update.message.text) for agent in agents])[1]
+		response = max([agent.evaluate(text) for agent in agents])[1]
+		print("Response: " + response)
+		update.message.reply_text(response)
 	except Exception as e:
 		print(e)
-	
-	print("response: " + response)
-	update.message.reply_text(response)
 
 # To handle unknown commands
 def unknown(bot, update):
