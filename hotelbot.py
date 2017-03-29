@@ -19,7 +19,7 @@ def start(bot, update):
 # To handle text (that doesn't start with '/')
 def text(bot, update):
 	text = update.message.text
-	print("Received: %s" % text)
+	print("\nReceived: %s" % text)
 	try:
 		response = max([agent.evaluate(text) for agent in agents])[1]
 		print("Response: " + response)

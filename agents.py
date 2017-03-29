@@ -3,7 +3,7 @@
 
 #from resources import Database, Weather
 
-import nltk, string
+import langdetect, langid, nltk, string, textblob
 
 class AgentUtils:
 	stopwords = nltk.corpus.stopwords.words('spanish')
@@ -27,11 +27,31 @@ class AgentUtils:
 			stems = ['']
 		return stems
 		
+	@staticmethod
+	def language(text):
+		try:
+			# Try to detect the language with three different packages
+			lang1 = langid.classify(text)[0]
+			lang2 = langdetect.detect(text)
+			lang3 = textblob.TextBlob(text).detect_language()
+			
+			print(lang1, lang2, lang3)
+			
+			if lang1 == lang2 == lang3:  # If all oh them throws the same result, return it
+				return lang1
+			elif lang1 == 'es' or lang2 == 'es' or lang3 == 'es':  # If at least one detect spanish...
+				return 'es'
+			else: 
+				return lang1 
+		except Exception as e:
+			print(e)
+			return None  # Insuficient information
 
 class HotelAgent:
 	def evaluate(self, text):
-		tokenized = str(AgentUtils.tokenize(text))
-		return 1, tokenized # trust, response 
+		resp = "Language: %s" % AgentUtils.language(text)
+		resp += "\nTokenized: %s" % AgentUtils.tokenize(text)
+		return 1, resp # trust, response 
 
 		
 class InsultsAgent:
