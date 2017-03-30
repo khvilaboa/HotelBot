@@ -5,7 +5,7 @@
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from agents import HotelAgent, InsultsAgent
+from agents import HotelAgent, InsultsAgent, UserInput
 
 updater = Updater(token='344919668:AAFvtg7WYYvxT9d8msQAu6cvbsmggKwyDEk')  # @DASIHotelBot
 dispatcher = updater.dispatcher
@@ -21,7 +21,8 @@ def text(bot, update):
 	text = update.message.text
 	print("\nReceived: %s" % text)
 	try:
-		response = max([agent.evaluate(text) for agent in agents])[1]
+		input = UserInput(text)
+		response = max([agent.evaluate(input) for agent in agents])[1]
 		print("Response: " + response)
 		update.message.reply_text(response)
 	except Exception as e:

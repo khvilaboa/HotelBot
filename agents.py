@@ -3,32 +3,38 @@
 
 #from resources import Database, Weather
 
-import langdetect, langid, nltk, string, textblob
+import langdetect, langid, nltk, string, textblob, unicodedata
 
-class AgentUtils:
+class UserInput:
 	stopwords = nltk.corpus.stopwords.words('spanish')
 	stemmer = nltk.stem.SnowballStemmer('spanish')
 	non_words = list(string.punctuation) + ['¿', '¡']
 	
-	@staticmethod
-	def tokenize(text):
+	def __init__(self, text):
+		self.text = text
+		self.lang = self.language(text)
+		self.parsed = self.tokenize(text_san)
+		
+	def __str__(self):
+		return self.text
+	
+	def tokenize(self, text):
 		# Remove punctuation symbols
-		text = ''.join([c for c in text if c not in AgentUtils.non_words])
+		text = ''.join([c for c in text if c not in UserInput.non_words])
 
 		# Separate words
 		tokens =  nltk.word_tokenize(text)
 
 		
 		try:
-			stems = map(lambda token: AgentUtils.stemmer.stem(token), tokens)
+			stems = map(lambda token: UserInput.stemmer.stem(token), tokens)
 		except Exception as e:
 			print(e)
 			print(text)
 			stems = ['']
 		return stems
 		
-	@staticmethod
-	def language(text):
+	def language(self, text):
 		try:
 			# Try to detect the language with three different packages
 			lang1 = langid.classify(text)[0]
@@ -48,12 +54,12 @@ class AgentUtils:
 			return None  # Insuficient information
 
 class HotelAgent:
-	def evaluate(self, text):
-		resp = "Language: %s" % AgentUtils.language(text)
-		resp += "\nTokenized: %s" % AgentUtils.tokenize(text)
+	def evaluate(self, input):
+		resp = "Language: %s" % input.lang
+		resp += "\nTokenized: %s" % input.parsed
 		return 1, resp # trust, response 
 
 		
 class InsultsAgent:
-	def evaluate(self, text):
-		return 0, text.lower() # trust, response
+	def evaluate(self, input):
+		return 0, str(input).upper() # trust, response
