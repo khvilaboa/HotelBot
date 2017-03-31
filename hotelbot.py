@@ -1,11 +1,12 @@
 #!/usr/bin/env python
-# -*- coding: iso-8859-1 -*-
+# -*- coding: utf8 -*-
 
 # Mail for future use: dasihotelbot@gmail.com / 3m0j1Lun4
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from agents import HotelAgent, InsultsAgent, UserInput
+import traceback
 
 updater = Updater(token='344919668:AAFvtg7WYYvxT9d8msQAu6cvbsmggKwyDEk')  # @DASIHotelBot
 dispatcher = updater.dispatcher
@@ -26,6 +27,7 @@ def text(bot, update):
 		print("Response: " + response)
 		update.message.reply_text(response)
 	except Exception as e:
+		traceback.print_exc()
 		print(e)
 
 # To handle unknown commands

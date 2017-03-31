@@ -1,9 +1,9 @@
 #!/usr/bin/env python
-# -*- coding: iso-8859-1 -*-
+# -*- coding: utf8 -*-
 
 #from resources import Database, Weather
 
-import langdetect, langid, nltk, string, textblob, unicodedata
+import langdetect, langid, nltk, string, textblob, unicodedata, pdb
 
 class UserInput:
 	stopwords = nltk.corpus.stopwords.words('spanish')
@@ -12,11 +12,17 @@ class UserInput:
 	
 	def __init__(self, text):
 		self.text = text
-		self.lang = self.language(text)
-		self.parsed = self.tokenize(text_san)
+		self.text_san = self.sanitize(text)
+		self.lang = self.language(self.text)
+		self.parsed = self.tokenize(self.text)
 		
 	def __str__(self):
 		return self.text
+		
+	def sanitize(self, text):
+		rep = {u'á': 'a', u'é': 'e', u'í': 'i', u'ó': 'o', u'ú': 'u', u'Á': 'A', u'É': 'E', u'Í': 'I', u'Ó': 'O', u'Ú': 'U', u'ü': 'u', u'Ü': 'u', u'ñ': 'n', u'Ñ': 'n'}   # temporal
+		for k, v in rep.iteritems(): text = text.replace(k, v)
+		return ''.join(filter(lambda c: c in string.printable, text))
 	
 	def tokenize(self, text):
 		# Remove punctuation symbols
@@ -56,10 +62,11 @@ class UserInput:
 class HotelAgent:
 	def evaluate(self, input):
 		resp = "Language: %s" % input.lang
+		resp += "\nSanitized: %s" % input.text_san
 		resp += "\nTokenized: %s" % input.parsed
 		return 1, resp # trust, response 
 
 		
 class InsultsAgent:
 	def evaluate(self, input):
-		return 0, str(input).upper() # trust, response
+		return 0, input.text.upper() # trust, response
