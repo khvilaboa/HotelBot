@@ -3,7 +3,7 @@
 
 #from resources import Database, Weather
 
-import langdetect, langid, nltk, string, textblob, unicodedata, pdb
+import langdetect, langid, nltk, pdb, spellchecker as sc, string, textblob, unicodedata
 
 class UserInput:
 	stopwords = nltk.corpus.stopwords.words('spanish')
@@ -13,8 +13,9 @@ class UserInput:
 	def __init__(self, text):
 		self.text = text
 		self.text_san = self.sanitize(text)
-		self.lang = self.language(self.text)
-		self.parsed = self.tokenize(self.text)
+		self.text_sc = ' '.join([sc.correction(w) for w in self.text_san.split()])
+		self.lang = self.language(self.text_sc)
+		self.parsed = self.tokenize(self.text_sc)
 		
 	def __str__(self):
 		return self.text
@@ -63,6 +64,7 @@ class HotelAgent:
 	def evaluate(self, input):
 		resp = "Language: %s" % input.lang
 		resp += "\nSanitized: %s" % input.text_san
+		resp += "\nCorrected: %s" % input.text_sc
 		resp += "\nTokenized: %s" % input.parsed
 		return 1, resp # trust, response 
 
