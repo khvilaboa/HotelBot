@@ -1,0 +1,5 @@
+python-telegram-bot
+nltk
+langdetect
+langid
+textblob
