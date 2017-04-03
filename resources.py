@@ -2,8 +2,8 @@
 # -*- coding: utf8 -*-
 
 class Database:
-	pass
+    pass
 
-		
+
 class Weather:
-	pass
+    pass
