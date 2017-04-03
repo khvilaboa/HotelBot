@@ -1,3 +1,4 @@
+pyowm
 python-telegram-bot
 nltk
 langdetect

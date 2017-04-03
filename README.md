@@ -23,3 +23,7 @@ HotelBot tiene las siguientes dependencias:
 **Langdetect, langid y textblob**: para la detección del idioma.
 
 ```   pip install Langdetect langid textblob```
+
+**pyowm**: para el pronóstico meteorológico.
+
+```   pip install pyowm```

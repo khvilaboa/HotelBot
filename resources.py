@@ -4,6 +4,3 @@
 class Database:
     pass
 
-
-class Weather:
-    pass
