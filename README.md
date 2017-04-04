@@ -9,6 +9,8 @@ ChatBot que pretende gestionar la reserva de habitaciones en un hotel. Entre los
 - Posibilidad de enviar correos electrónicos para confirmar la reserva.
 - Valoración de la experiencia.
 
+Se recomienda utilizar Python 2 para ejecutar el bot.
+
 ## Instalación
 HotelBot tiene las siguientes dependencias:
 
@@ -27,3 +29,18 @@ HotelBot tiene las siguientes dependencias:
 **pyowm**: para el pronóstico meteorológico.
 
 ```   pip install pyowm```
+
+Todas estas dependencias además están recogidas en el fichero **requirements.txt**. Para obtener todas las dependencias
+sin necesidad de escribirlas a mano una a una, basta con ejecutar el siguiente comando:
+
+```   pip install -r requirements.txt```
+
+## Autores
+Estos son los autores de este proyecto:
+- Kevin Henares ([@khvilaboa](https://github.com/khvilaboa))
+- Iván Martínez ([@iMartinezMateu](https://github.com/iMartinezMateu))
+- Fernando Suárez ([@fersj](https://github.com/fersj))
+- Christian Álvarez ([@chalvare](https://github.com/chalvare))
+- Kevin Arboleda ([@kevinarb](https://github.com/kevinarb))
+- Diego Monjas ([@dmonjas](https://github.com/dmonjas))
+
