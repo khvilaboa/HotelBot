@@ -3,7 +3,12 @@
 
 # from resources import Database, Weather
 
-import langdetect, langid, nltk, pdb, spellchecker as sc, string, textblob, unicodedata
+import langdetect
+import langid
+import nltk
+import spellchecker as sc
+import string
+import textblob
 
 
 class UserInput:

@@ -1,9 +1,10 @@
 import ntpath
 import smtplib
-from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+
+from email import encoders
 
 
 class Email:
@@ -13,7 +14,7 @@ class Email:
         self.server_username = server_username
         self.server_password = server_password
 
-    def send_email(self,from_address,to_address,subject,body):
+    def send_email(self, from_address, to_address, subject, body):
         msg = MIMEMultipart()
         msg['From'] = from_address
         msg['To'] = to_address
@@ -26,7 +27,7 @@ class Email:
         server.sendmail(from_address, to_address, text)
         server.quit()
 
-    def send_email_with_attachments(self,from_address,to_address,subject,body,file_paths):
+    def send_email_with_attachments(self, from_address, to_address, subject, body, file_paths):
         msg = MIMEMultipart()
         msg['From'] = from_address
         msg['To'] = to_address

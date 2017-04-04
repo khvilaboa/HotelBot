@@ -3,10 +3,12 @@
 
 # Mail for future use: dasihotelbot@gmail.com / 3m0j1Lun4
 
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from agents import HotelAgent, InsultsAgent, UserInput
 import traceback
+
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
+
+from agents import HotelAgent, InsultsAgent, UserInput
 
 updater = Updater(token='344919668:AAFvtg7WYYvxT9d8msQAu6cvbsmggKwyDEk')  # @DASIHotelBot
 dispatcher = updater.dispatcher
