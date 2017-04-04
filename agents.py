@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
-# from resources import Database, Weather
+# from resources import Database
 
 import langdetect
 import langid

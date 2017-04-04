@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf8 -*-
+
 import ntpath
 import smtplib
 from email.mime.base import MIMEBase
