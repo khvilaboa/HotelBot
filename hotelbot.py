@@ -58,6 +58,18 @@ def room_types(bot, update):
     update.message.reply_text("Tenemos los siguientes tipos de habitación. Elije una, por favor.", \
                               reply_markup=rooms_markup)
 
+def pension_types(bot, update):
+    # rooms_keyboard = [['Individual', 'Doble', 'Suite']]
+    keyboard = [[InlineKeyboardButton("Solo desayuno", callback_data='desayuno')], \
+                [InlineKeyboardButton("Media pensión", callback_data='media')], \
+                [InlineKeyboardButton("Pensión completa", callback_data='completa')]]
+
+    rooms_markup = InlineKeyboardMarkup(keyboard)  # , one_time_keyboard=True
+
+    update.message.reply_text("Qué tipo de pensión desea?. Elije una, por favor.", \
+                              reply_markup=rooms_markup)   
+    
+    
 
 # Example of in-line keyboard use
 def keyboard_press(bot, update):
