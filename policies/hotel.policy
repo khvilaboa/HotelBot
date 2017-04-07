@@ -1,0 +1,12 @@
+
+from facts import Desire, Response
+
+#i=0
+
+rule rule_e:
+	#agenda-group "rooms"
+	when:
+		$desire := Desire(id == Desire.ESTABLISH_ROOM_TYPE)
+	then:
+		#attribute i = i + 1
+		learn Response("Tipo de habitacion establecido")
