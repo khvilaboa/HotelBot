@@ -30,6 +30,12 @@ HotelBot tiene las siguientes dependencias:
 
 ```   pip install pyowm```
 
+**Intellect**: sistema de reglas.
+
+```pip install http://antlr3.org/download/Python/antlr_python_runtime-3.1.3.tar.gz```
+
+```pip install Intellect```
+
 Todas estas dependencias además están recogidas en el fichero **requirements.txt**. Para obtener todas las dependencias
 sin necesidad de escribirlas a mano una a una, basta con ejecutar el siguiente comando:
 
