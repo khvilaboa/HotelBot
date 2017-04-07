@@ -4,7 +4,7 @@
 #from resources import Database, Weather
 
 import langdetect, langid, textblob
-import nltk, pdb, utils.spellchecker as sc, string
+import nltk, pdb, re, utils.spellchecker as sc, string
 from intellect.Intellect import Intellect, Callable
 from facts import *
 
@@ -62,6 +62,15 @@ class UserInput:
 		except Exception as e:
 			print(e)
 			return None  # Insuficient information
+			
+	def desires(self):
+		des = []
+		
+		# temporal, only test purposes (need spanish pos-tagger to improve)
+		if ('quer' in self.parsed or 'quier' in self.parsed) and 'habitacion' in self.parsed:
+			des.append(Desire(Desire.WANT_ROOM))
+		
+		return des or None
 
 
 # Custom intellect to improve the management of facts and policies
@@ -93,12 +102,16 @@ class HotelAgent:
 		resp += "\nCorrected: %s" % input.text_sc
 		resp += "\nTokenized: %s" % input.parsed
 		
-		self.intellect.learn(Desire(Desire.ESTABLISH_ROOM_TYPE))  # Example
-		self.intellect.reason()
-		r = self.intellect.extract_response()
+		desires = input.desires()
+		print("Desires: ", input.desires())
+		if desires is not None:
+			for desire in desires:
+				self.intellect.learn(desire) 
+			self.intellect.reason()
+			r = self.intellect.extract_response()
 		
-		if r is not None:
-			resp += "\nIntellect test: %s" % r.msg
+			if r is not None:
+				resp += "\nIntellect test: %s" % r.msg
 		
 		return 1, resp # trust, response 
 

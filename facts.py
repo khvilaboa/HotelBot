@@ -1,7 +1,12 @@
+#!/usr/bin/env python
+# -*- coding: utf8 -*-
+
+import random
 
 # To comunicate de client's desires to the intellect
 class Desire(object):
 	
+	WANT_ROOM = "wantRoom"
 	ESTABLISH_ROOM_TYPE = "roomType"
 	
 	def __init__(self, id = None):
@@ -18,6 +23,9 @@ class Desire(object):
 		
 # To extract the intellect response
 class Response(object):
+
+	# Once more, that throws errors with tildes
+	WANT_ROOM = ["Reservemos una habitacion pues", "Esta bien que muestres interes en nuestros servicios, pero aun no estoy implementado :("]
 	
 	def __init__(self, msg):
 		self._msg = msg
@@ -29,6 +37,15 @@ class Response(object):
 	@msg.setter
 	def msg(self, value):
 		self._msg = value
+		
+	@staticmethod
+	def output(id):
+		out = None
+		
+		if id == "WANT_ROOM":
+			out = Response.WANT_ROOM
+		# ... (all the cases)
+		return random.choice(out) if type(out) is list else out
 
 """class Reservation(object):
 

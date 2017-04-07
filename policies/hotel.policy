@@ -6,7 +6,7 @@ from facts import Desire, Response
 rule rule_e:
 	#agenda-group "rooms"
 	when:
-		$desire := Desire(id == Desire.ESTABLISH_ROOM_TYPE)
+		$desire := Desire(id == Desire.WANT_ROOM)
 	then:
 		#attribute i = i + 1
-		learn Response("Tipo de habitacion establecido")
+		learn Response(Response.output("WANT_ROOM"))
