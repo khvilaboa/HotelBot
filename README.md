@@ -30,6 +30,10 @@ HotelBot tiene las siguientes dependencias:
 
 ```   pip install pyowm```
 
+**googlemaps**: para las indicaciones de cómo llegar al hotel.
+
+```   pip install googlemaps```
+
 **Intellect**: sistema de reglas.
 
 ```pip install http://antlr3.org/download/Python/antlr_python_runtime-3.1.3.tar.gz```
