@@ -67,7 +67,19 @@ def pension_types(bot, update):
     rooms_markup = InlineKeyboardMarkup(keyboard)  # , one_time_keyboard=True
 
     update.message.reply_text("Qué tipo de pensión desea?. Elije una, por favor.", \
-                              reply_markup=rooms_markup)   
+                              reply_markup=rooms_markup)
+
+def user_valoration(bot, update):
+    keyboard = [[InlineKeyboardButton("\u2B50", callback_data='deficiente')], \
+                [InlineKeyboardButton("\u2B50\u2B50", callback_data='baja')], \
+                [InlineKeyboardButton("\u2B50\u2B50\u2B50", callback_data='normal')], \
+                [InlineKeyboardButton("\u2B50\u2B50\u2B50\u2B50", callback_data='buena')], \
+                [InlineKeyboardButton("\u2B50\u2B50\u2B50\u2B50\u2B50", callback_data='muy buena')]]
+
+    valoration_markup = InlineKeyboardMarkup(keyboard)  # , one_time_keyboard=True
+
+    update.message.reply_text("Gracias por confiar en nosotros. Antes de que se marche, ¿podría valorar su experiencia conmigo?", \
+                              reply_markup=valoration_markup)
     
     
 
@@ -84,6 +96,7 @@ def keyboard_press(bot, update):
 # Handlers
 dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('roomtypes', room_types))
+dispatcher.add_handler(CommandHandler('uservaloration', user_valoration))
 dispatcher.add_handler(MessageHandler(Filters.text, text))
 dispatcher.add_handler(MessageHandler(Filters.command, unknown))
 dispatcher.add_handler(MessageHandler(Filters.photo, images))
