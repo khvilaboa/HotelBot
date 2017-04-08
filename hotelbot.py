@@ -96,6 +96,7 @@ def keyboard_press(bot, update):
 # Handlers
 dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('roomtypes', room_types))
+dispatcher.add_handler(CommandHandler('pensiontypes', pension_types))
 dispatcher.add_handler(CommandHandler('uservaloration', user_valoration))
 dispatcher.add_handler(MessageHandler(Filters.text, text))
 dispatcher.add_handler(MessageHandler(Filters.command, unknown))
