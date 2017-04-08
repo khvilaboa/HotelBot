@@ -7,6 +7,7 @@ from collections import Counter
 
 def words(text): return re.findall(r'\w+', text.lower())
 
+
 WORDS = Counter(words(open('./utils/dic/es.txt').read()))
 
 
