@@ -4,7 +4,8 @@
 #from resources import Database, Weather
 
 import langdetect, langid, textblob
-import nltk, pdb, re, utils.spellchecker as sc, string
+import nltk, pdb, re, string
+from utils import spellchecker as sc, postagger as pos
 from intellect.Intellect import Intellect, Callable
 from facts import *
 
@@ -20,6 +21,7 @@ class UserInput:
 		self.text_sc = ' '.join([sc.correction(w) for w in self.text_san.split()])
 		self.lang = self.language(self.text_sc)
 		self.parsed = self.tokenize(self.text_sc)
+		self.tagged = pos.tag(self.parsed)
 		
 	def __str__(self):
 		return self.text
@@ -101,6 +103,7 @@ class HotelAgent:
 		resp += "\nSanitized: %s" % input.text_san
 		resp += "\nCorrected: %s" % input.text_sc
 		resp += "\nTokenized: %s" % input.parsed
+		resp += "\nTagged: %s" % input.tagged
 		
 		desires = input.desires()
 		print("Desires: ", input.desires())
