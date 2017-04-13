@@ -3,50 +3,49 @@
 
 import random
 
-
 # To comunicate de client's desires to the intellect
 class Desire(object):
-    WANT_ROOM = "wantRoom"
-    ESTABLISH_ROOM_TYPE = "roomType"
+	
+	WANT_ROOM = "wantRoom"
+	ESTABLISH_ROOM_TYPE = "roomType"
+	
+	def __init__(self, id = None):
+		self._id = id
+		self._data = {}
+		
+	@property
+	def id(self):
+		return self._id
 
-    def __init__(self, id=None):
-        self._id = id
+	@id.setter
+	def id(self, value):
+		self._id = value
+		
+	@property
+	def data(self):
+		return self._data
 
-    @property
-    def id(self):
-        return self._id
+	@data.setter
+	def data(self, value):
+		self._data = value
 
-    @id.setter
-    def id(self, value):
-        self._id = value
-
-
+		
 # To extract the intellect response
 class Response(object):
-    # Once more, that throws errors with tildes
-    WANT_ROOM = ["Reservemos una habitacion pues",
-                 "Esta bien que muestres interes en nuestros servicios, pero aun no estoy implementado :("]
 
-    def __init__(self, msg):
-        self._msg = msg
+	def __init__(self, msg):
+		if type(msg) is list:
+			msg = random.choice(msg)
+		self._msg = msg
+		
+	@property
+	def msg(self):
+		return self._msg
 
-    @property
-    def msg(self):
-        return self._msg
-
-    @msg.setter
-    def msg(self, value):
-        self._msg = value
-
-    @staticmethod
-    def output(id):
-        out = None
-
-        if id == "WANT_ROOM":
-            out = Response.WANT_ROOM
-        # ... (all the cases)
-        return random.choice(out) if type(out) is list else out
-
+	@msg.setter
+	def msg(self, value):
+		self._msg = value
+		
 
 """class Reservation(object):
 
@@ -70,3 +69,8 @@ class Response(object):
 	@pensionType.setter
 	def pensionType(self, value):
 		self._pensionType = value"""
+		
+
+		
+	
+		

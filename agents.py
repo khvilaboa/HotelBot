@@ -12,6 +12,10 @@ from facts import *
 
 # To encapsulate the client's message and doing preparse tasks
 class UserInput:
+
+    VERB = "v"
+    NOUN = "n"
+
     stopwords = nltk.corpus.stopwords.words('spanish')
     stemmer = nltk.stem.SnowballStemmer('spanish')
     non_words = list(string.punctuation) + ['¿', '¡']
@@ -69,12 +73,37 @@ class UserInput:
     def desires(self):
         des = []
         
+        verbs_want = ("queria", "quiero", "qerria", "necesitaba", "necesitaria", "gustaria")
+        noun_room = ("habitacion", "reserva")
+        
+        room_types = {"individual", "doble", "suite"}
+        
         # temporal, only test purposes (need spanish pos-tagger to improve)
-        if ('quer' in self.parsed or 'quier' in self.parsed) and 'habitacion' in self.parsed:
-            des.append(Desire(Desire.WANT_ROOM))
+        if self.has_word(verbs_want, UserInput.VERB) and self.has_word(noun_room, UserInput.NOUN):
+            room_type = None
+            for rt in room_types:
+                if self.has_word(rt):
+                    room_type = rt
+      
+            if room_type is None:  # Room type specified
+                des.append(Desire(Desire.WANT_ROOM))
+            else:
+                d = Desire(Desire.ESTABLISH_ROOM_TYPE)
+                d.data["room_type"] = room_type 
+                des.append(d)
         
         return des or None
-
+        
+    # Check if the input have some of the verbs in a list
+    def has_word(self, lst, word_type = None):
+        if type(lst) is str:
+            lst = (lst,)
+        lst = map(self.stemmer.stem, lst)
+        for word, tag in self.tagged.iteritems():
+            if (word_type is None or (tag is not None and tag.startswith(word_type))) and word in lst:
+                return True
+        return False
+       
 
 # Custom intellect to improve the management of facts and policies
 class MyIntellect(Intellect):
