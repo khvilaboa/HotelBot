@@ -8,6 +8,8 @@ class Desire(object):
 	
 	WANT_ROOM = "wantRoom"
 	ESTABLISH_ROOM_TYPE = "roomType"
+	ESTABLISH_INIT_DATE = "initDate"
+	ESTABLISH_END_DATE = "endDate"
 	
 	def __init__(self, id = None):
 		self._id = id
@@ -28,15 +30,26 @@ class Desire(object):
 	@data.setter
 	def data(self, value):
 		self._data = value
+		
+	def is_goal(self):
+		return self.id == Desire.ESTABLISH_ROOM_TYPE
 
 		
 # To extract the intellect response
 class Response(object):
 
-	def __init__(self, msg):
-		if type(msg) is list:
-			msg = random.choice(msg)
-		self._msg = msg
+	ASK_ROOM_TYPE = "Que tipo de habitacion quieres?"
+	ASK_INIT_DATE = "Que dia quieres comenzar tu estancia?"
+	ASK_INIT_DATE = "Hasta que dia quieres estar?"
+	CONFIRM_ROOM_TYPE = "Una {room_type} pues"
+	
+	UNKNOWN_INPUT = "Perdona, pero no te he entendido."
+	
+	KEYBOARD_ROOM_TYPES = "keyboardRoomTypes"
+
+	def __init__(self, msg, keyboard = None):
+		self._msg = [msg] if type(msg) is str else msg
+		self._keyboard = keyboard
 		
 	@property
 	def msg(self):

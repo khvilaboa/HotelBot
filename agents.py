@@ -5,6 +5,7 @@
 
 import langdetect, langid, textblob
 import nltk, pdb, re, string
+from collections import OrderedDict
 from utils import spellchecker as sc, postagger as pos
 from intellect.Intellect import Intellect, Callable
 from facts import *
@@ -107,6 +108,11 @@ class UserInput:
 
 # Custom intellect to improve the management of facts and policies
 class MyIntellect(Intellect):
+
+    def __init__(self):
+        Intellect.__init__(self)
+        self.goals = []
+
     @Callable
     def test(self):
         print(">>>>>>>>>>>>>>  called MyIntellect's bar method as it was decorated as callable.")
@@ -119,8 +125,23 @@ class MyIntellect(Intellect):
     def extract_response(self):
         for fact in self.knowledge:
             if type(fact) is Response:
+                self._knowledge.remove(fact)
                 return fact
         return None
+        
+    # Add a desire to the facts database 
+    def add_desire(self, des):
+        if des.is_goal():
+            self.goals.append(des.id)
+        self.learn(des)
+    
+    # Returns the next question in the preferred flowchart
+    @Callable
+    def next_question(self):
+        if Desire.ESTABLISH_ROOM_TYPE not in self.goals:
+            return Response.ASK_ROOM_TYPE
+        elif Desire.ESTABLISH_INIT_DATE not in self.goals:
+            return Response.ASK_INIT_DATE
 
 
 class HotelAgent:
@@ -129,50 +150,35 @@ class HotelAgent:
         self.intellect.learn(Intellect.local_file_uri("./policies/hotel.policy"))
 
     def evaluate(self, input):
-        resp = "Language: %s" % input.lang
-        resp += "\nSanitized: %s" % input.text_san
-        resp += "\nCorrected: %s" % input.text_sc
-        resp += "\nTokenized: %s" % input.parsed
-
+        msg = "Language: %s" % input.lang
+        msg += "\nSanitized: %s" % input.text_san
+        msg += "\nCorrected: %s" % input.text_sc
+        msg += "\nTokenized: %s" % input.parsed
+            
+        resp = None
+        
         desires = input.desires()
-        print("Desires: ", input.desires())
+        pdb.set_trace()
         if desires is not None:
+            print("Desires: ")
+            for d in desires: print(d.id)
+            
             for desire in desires:
-                self.intellect.learn(desire)
+                self.intellect.add_desire(desire)
             self.intellect.reason()
-            r = self.intellect.extract_response()
+            resp = self.intellect.extract_response()
 
-            if r is not None:
-                resp += "\nIntellect test: %s" % r.msg
-
+            if resp is not None:
+                msg += "\nIntellect test: %s" % resp.msg
+        
+        if resp is None:
+            resp = Response(Response.UNKNOWN_INPUT)
+        
+        print(msg)  # Only for testing purposes
         return 1, resp  # trust, response
 
-        
-    def __init__(self):
-        self.intellect = MyIntellect()
-        self.intellect.learn(Intellect.local_file_uri("./policies/hotel.policy"))
-
-    def evaluate(self, input):
-        resp = "Language: %s" % input.lang
-        resp += "\nSanitized: %s" % input.text_san
-        resp += "\nCorrected: %s" % input.text_sc
-        resp += "\nTokenized: %s" % input.parsed
-        resp += "\nTagged: %s" % input.tagged
-        
-        desires = input.desires()
-        print("Desires: ", input.desires())
-        if desires is not None:
-            for desire in desires:
-                self.intellect.learn(desire) 
-            self.intellect.reason()
-            r = self.intellect.extract_response()
-        
-            if r is not None:
-                resp += "\nIntellect test: %s" % r.msg
-        
-        return 1, resp # trust, response 
 
 
 class InsultsAgent:
     def evaluate(self, input):
-        return 0, input.text.upper()  # trust, response
+        return 0, Response(Response.UNKNOWN_INPUT)  # trust, response

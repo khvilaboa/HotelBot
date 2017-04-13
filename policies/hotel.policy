@@ -3,8 +3,7 @@ from facts import Desire, Response
 
 #i=0
 
-ASK_ROOM_TYPE = ["Reservemos una habitacion pues", "Esta bien que muestres interes en nuestros servicios, pero aun no estoy implementado :("]
-CONFIRM_ROOM_TYPE = "Una {room_type} pues"
+
 
 rule want_room:
 	#agenda-group "rooms"
@@ -12,12 +11,13 @@ rule want_room:
 		$desire := Desire(id == Desire.WANT_ROOM)
 	then:
 		#attribute i = i + 1
-		learn Response(ASK_ROOM_TYPE)
+		learn Response(Response.ASK_ROOM_TYPE)
 		
 rule want_room:
 	when:
 		$desire := Desire(id == Desire.ESTABLISH_ROOM_TYPE)
 	then:
 		data = $desire.data
-		msg = CONFIRM_ROOM_TYPE.replace("{room_type}", data["room_type"])
-		learn Response(msg)
+		forget $desire
+		msg1 = Response.CONFIRM_ROOM_TYPE.replace("{room_type}", data["room_type"])
+		msg2 = next_question()
