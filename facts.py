@@ -60,30 +60,44 @@ class Response(object):
 		self._msg = value
 		
 
-"""class Reservation(object):
+class Reservation(object):
 
-	def __init__(self, roomType = None, pensionType = None):
-		self._roomType = roomType
-		self._pensionType = pensionType
-		self.test = [1, 2, 3, 4, 5]
+	def __init__(self):
+		self._room_type = None
+		self._pension_type = None
+		self._init_date = None
+		self._end_date = None
 
 	@property
-	def roomType(self):
-		return self._roomType
+	def room_type(self):
+		return self._room_type
 
-	@roomType.setter
-	def roomType(self, value):
-		self._roomType = value
+	@room_type.setter
+	def room_type(self, value):
+		self._room_type = value
 		
 	@property
-	def pensionType(self):
-		return self._pensionType
+	def pension_type(self):
+		return self._pension_type
 
-	@pensionType.setter
-	def pensionType(self, value):
-		self._pensionType = value"""
+	@pension_type.setter
+	def pension_type(self, value):
+		self._pension_type = value
 		
+	@property
+	def init_date(self):
+		return self._init_date
 
+	@init_date.setter
+	def init_date(self, value):
+		self._init_date = value
 		
+	@property
+	def end_date(self):
+		return self._end_date
+
+	@end_date.setter
+	def end_date(self, value):
+		self._end_date = value
 	
 		

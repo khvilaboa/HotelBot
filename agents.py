@@ -112,6 +112,7 @@ class MyIntellect(Intellect):
     def __init__(self):
         Intellect.__init__(self)
         self.goals = []
+        self.learn(Reservation())
 
     @Callable
     def test(self):
@@ -134,15 +135,28 @@ class MyIntellect(Intellect):
         if des.is_goal():
             self.goals.append(des.id)
         self.learn(des)
+        
+    # Returns the first response of the knowledge
+    def clear_desires(self):
+        for fact in self.knowledge:
+            if type(fact) is Desire:
+                self._knowledge.remove(fact)
     
     # Returns the next question in the preferred flowchart
     @Callable
     def next_question(self):
-        if Desire.ESTABLISH_ROOM_TYPE not in self.goals:
+        reservation = self.reservation()
+        if reservation.room_type is None:
             return Response.ASK_ROOM_TYPE
-        elif Desire.ESTABLISH_INIT_DATE not in self.goals:
+        elif reservation.init_date is None:
             return Response.ASK_INIT_DATE
 
+    # Get the reservation object from the fact database
+    @Callable
+    def reservation(self):
+        for fact in self.knowledge:
+            if type(fact) is Reservation:
+                return fact
 
 class HotelAgent:
     def __init__(self):
@@ -170,6 +184,8 @@ class HotelAgent:
 
             if resp is not None:
                 msg += "\nIntellect test: %s" % resp.msg
+        
+        self.intellect.clear_desires()  # Remove the current desires
         
         if resp is None:
             resp = Response(Response.UNKNOWN_INPUT)

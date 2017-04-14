@@ -11,13 +11,21 @@ rule want_room:
 		$desire := Desire(id == Desire.WANT_ROOM)
 	then:
 		#attribute i = i + 1
-		learn Response(Response.ASK_ROOM_TYPE)
+		msg = next_question()
+		learn Response(msg)
 		
 rule want_room:
 	when:
 		$desire := Desire(id == Desire.ESTABLISH_ROOM_TYPE)
 	then:
+		# Get needed data
 		data = $desire.data
-		forget $desire
+		
+		# Modify room type in the current reservation
+		reserv = reservation()
+		reserv.room_type = data["room_type"]
+		
+		# Generate the replies
 		msg1 = Response.CONFIRM_ROOM_TYPE.replace("{room_type}", data["room_type"])
 		msg2 = next_question()
+		learn Response([msg1, msg2], Response.KEYBOARD_ROOM_TYPES)
