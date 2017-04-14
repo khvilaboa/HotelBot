@@ -71,7 +71,8 @@ class UserInput:
             print(e)
             return None  # Insuficient information
             
-    def desires(self):
+    # Generates the desires based on the user input
+    def desires(self, last_question = None):
         des = []
         
         verbs_want = ("queria", "quiero", "qerria", "necesitaba", "necesitaria", "gustaria")
@@ -79,19 +80,18 @@ class UserInput:
         
         room_types = {"individual", "doble", "suite"}
         
-        # temporal, only test purposes (need spanish pos-tagger to improve)
-        if self.has_word(verbs_want, UserInput.VERB) and self.has_word(noun_room, UserInput.NOUN):
+        if (self.has_word(verbs_want, UserInput.VERB) and self.has_word(noun_room, UserInput.NOUN)) or last_question == Response.ASK_ROOM_TYPE:
             room_type = None
             for rt in room_types:
                 if self.has_word(rt):
                     room_type = rt
       
-            if room_type is None:  # Room type specified
-                des.append(Desire(Desire.WANT_ROOM))
-            else:
+            if room_type is not None:  # Room type specified
                 d = Desire(Desire.ESTABLISH_ROOM_TYPE)
                 d.data["room_type"] = room_type 
                 des.append(d)
+            elif last_question != Response.ASK_ROOM_TYPE:
+                des.append(Desire(Desire.WANT_ROOM))
         
         return des or None
         
@@ -113,10 +113,7 @@ class MyIntellect(Intellect):
         Intellect.__init__(self)
         self.goals = []
         self.learn(Reservation())
-
-    @Callable
-    def test(self):
-        print(">>>>>>>>>>>>>>  called MyIntellect's bar method as it was decorated as callable.")
+        self.last_question = None
 
     @Callable  # It can be called form the rules file
     def clear_facts(self):
@@ -132,8 +129,8 @@ class MyIntellect(Intellect):
         
     # Add a desire to the facts database 
     def add_desire(self, des):
-        if des.is_goal():
-            self.goals.append(des.id)
+        #if des.is_goal():
+        #    self.goals.append(des.id)
         self.learn(des)
         
     # Returns the first response of the knowledge
@@ -141,22 +138,50 @@ class MyIntellect(Intellect):
         for fact in self.knowledge:
             if type(fact) is Desire:
                 self._knowledge.remove(fact)
+                
+    # Forget the last question (when it's already resolved)
+    def clear_last_question(self):
+        self.last_question = None
     
     # Returns the next question in the preferred flowchart
     @Callable
     def next_question(self):
         reservation = self.reservation()
+        resp = None
         if reservation.room_type is None:
-            return Response.ASK_ROOM_TYPE
+            resp = Response.ASK_ROOM_TYPE
         elif reservation.init_date is None:
-            return Response.ASK_INIT_DATE
+            resp = Response.ASK_INIT_DATE
 
+        self.last_question = resp
+        return resp
+        
     # Get the reservation object from the fact database
     @Callable
     def reservation(self):
         for fact in self.knowledge:
             if type(fact) is Reservation:
                 return fact
+
+    # --------------------------------------------------------
+    # Support methods for the rules
+    @Callable
+    def response_from_room_types(self, last, new):
+        reserv = self.reservation()
+        print(last, new)
+        # It was already specified in the past...
+        if last is not None:  
+            # ... and it matchs with the new info...
+            if last == new:
+                msg = Response.KNOWN_INFO
+            else: 
+                msg = Response.CHANGE_ROOM_TYPE.replace("{room_type}", last).replace("{new_room_type}", new)
+                reserv.room_type = new      
+        else:
+            msg = Response.CONFIRM_ROOM_TYPE.replace("{room_type}", new)
+            reserv.room_type = new
+        
+        return msg
 
 class HotelAgent:
     def __init__(self):
@@ -171,8 +196,8 @@ class HotelAgent:
             
         resp = None
         
-        desires = input.desires()
-        pdb.set_trace()
+        desires = input.desires(self.intellect.last_question)
+        
         if desires is not None:
             print("Desires: ")
             for d in desires: print(d.id)
@@ -189,7 +214,9 @@ class HotelAgent:
         
         if resp is None:
             resp = Response(Response.UNKNOWN_INPUT)
-        
+        else:
+            self.intellect.clear_last_question()
+            
         print(msg)  # Only for testing purposes
         return 1, resp  # trust, response
 

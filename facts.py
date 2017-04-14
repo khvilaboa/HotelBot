@@ -41,9 +41,13 @@ class Response(object):
 	ASK_ROOM_TYPE = "Que tipo de habitacion quieres?"
 	ASK_INIT_DATE = "Que dia quieres comenzar tu estancia?"
 	ASK_INIT_DATE = "Hasta que dia quieres estar?"
-	CONFIRM_ROOM_TYPE = "Una {room_type} pues"
 	
-	UNKNOWN_INPUT = "Perdona, pero no te he entendido."
+	CONFIRM_ROOM_TYPE = "Una {room_type} pues"
+	CHANGE_ROOM_TYPE = "Tenia apuntada una {room_type}... cambio a una {new_room_type}"
+	
+	UNKNOWN_INPUT = "Perdona, pero no te he entendido"
+	
+	KNOWN_INFO = "Ya, ya me lo habias comentado"
 	
 	KEYBOARD_ROOM_TYPES = "keyboardRoomTypes"
 

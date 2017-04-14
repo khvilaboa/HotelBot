@@ -23,9 +23,11 @@ rule want_room:
 		
 		# Modify room type in the current reservation
 		reserv = reservation()
-		reserv.room_type = data["room_type"]
 		
-		# Generate the replies
-		msg1 = Response.CONFIRM_ROOM_TYPE.replace("{room_type}", data["room_type"])
+		msg1 = response_from_room_types(reserv.room_type, data["room_type"])
+		
+		#reserv.room_type = data["room_type"]
+		
+		#msg1 = Response.CONFIRM_ROOM_TYPE.replace("{room_type}", data["room_type"])
 		msg2 = next_question()
 		learn Response([msg1, msg2], Response.KEYBOARD_ROOM_TYPES)
