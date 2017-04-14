@@ -13,5 +13,5 @@ for pair in open('./utils/dic/tag').read().split("\n"):
 def tag(list):
 	tagged = OrderedDict()
 	for w in list:
-		tagged[w] = WORDS[w]
+		tagged[w] = WORDS[w] if not re.match("[0-9]{8}", w) else "dt"
 	return tagged

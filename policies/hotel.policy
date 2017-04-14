@@ -12,9 +12,9 @@ rule want_room:
 	then:
 		#attribute i = i + 1
 		msg = next_question()
-		learn Response(msg)
+		learn Response(msg, Response.KEYBOARD_ROOM_TYPES)
 		
-rule want_room:
+rule room_type:
 	when:
 		$desire := Desire(id == Desire.ESTABLISH_ROOM_TYPE)
 	then:
@@ -25,9 +25,35 @@ rule want_room:
 		reserv = reservation()
 		
 		msg1 = response_from_room_types(reserv.room_type, data["room_type"])
-		
-		#reserv.room_type = data["room_type"]
-		
-		#msg1 = Response.CONFIRM_ROOM_TYPE.replace("{room_type}", data["room_type"])
 		msg2 = next_question()
-		learn Response([msg1, msg2], Response.KEYBOARD_ROOM_TYPES)
+		learn Response([msg1, msg2])
+		
+rule init_date:
+	when:
+		$desire := Desire(id == Desire.ESTABLISH_INIT_DATE)
+	then:
+		# Get needed data
+		data = $desire.data
+		
+		# Modify room type in the current reservation
+		reserv = reservation()
+		reserv.init_date = data["init_date"]
+		
+		msg1 = Response.CONFIRM_DATE.replace("{date}", data["init_date"])
+		msg2 = next_question()
+		learn Response([msg1, msg2])
+		
+rule end_date:
+	when:
+		$desire := Desire(id == Desire.ESTABLISH_END_DATE)
+	then:
+		# Get needed data
+		data = $desire.data
+		
+		# Modify room type in the current reservation
+		reserv = reservation()
+		reserv.end_date = data["end_date"]
+		
+		msg1 = Response.CONFIRM_DATE.replace("{date}", data["end_date"])
+		msg2 = next_question()
+		learn Response([msg1, msg2])

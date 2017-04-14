@@ -6,7 +6,7 @@
 import langdetect, langid, textblob
 import nltk, pdb, re, string
 from collections import OrderedDict
-from utils import spellchecker as sc, postagger as pos
+from utils import spellchecker as sc, postagger as pos, dateparser as dp
 from intellect.Intellect import Intellect, Callable
 from facts import *
 
@@ -26,7 +26,8 @@ class UserInput:
         self.text_san = self.sanitize(text)
         self.text_sc = ' '.join([sc.correction(w) for w in self.text_san.split()])
         self.lang = self.language(self.text_sc)
-        self.parsed = self.tokenize(self.text_sc)
+        self.dateparsed = dp.parse(self.text_sc)
+        self.parsed = self.tokenize(self.dateparsed)
         self.tagged = pos.tag(self.parsed)
         
     def __str__(self):
@@ -79,6 +80,7 @@ class UserInput:
         noun_room = ("habitacion", "reserva")
         
         room_types = {"individual", "doble", "suite"}
+        pension_types = {"completa", "parcial", "desayuno"}
         
         if (self.has_word(verbs_want, UserInput.VERB) and self.has_word(noun_room, UserInput.NOUN)) or last_question == Response.ASK_ROOM_TYPE:
             room_type = None
@@ -92,6 +94,14 @@ class UserInput:
                 des.append(d)
             elif last_question != Response.ASK_ROOM_TYPE:
                 des.append(Desire(Desire.WANT_ROOM))
+        if last_question == Response.ASK_INIT_DATE and len(self.dates()) > 0:
+            d = Desire(Desire.ESTABLISH_INIT_DATE)
+            d.data["init_date"] = self.dates()[0] 
+            des.append(d)
+        if last_question == Response.ASK_END_DATE and len(self.dates()) > 0:
+            d = Desire(Desire.ESTABLISH_END_DATE)
+            d.data["end_date"] = self.dates()[0] 
+            des.append(d)
         
         return des or None
         
@@ -104,6 +114,14 @@ class UserInput:
             if (word_type is None or (tag is not None and tag.startswith(word_type))) and word in lst:
                 return True
         return False
+        
+    # Check if the input have some of the verbs in a list
+    def dates(self):
+        dates = []
+        for word, tag in self.tagged.iteritems():
+            if tag is not None and tag.startswith("dt"):
+                dates.append("%s/%s/%s" % (word[:2], word[2:4], word[4:]))
+        return dates
        
 
 # Custom intellect to improve the management of facts and policies
@@ -152,6 +170,10 @@ class MyIntellect(Intellect):
             resp = Response.ASK_ROOM_TYPE
         elif reservation.init_date is None:
             resp = Response.ASK_INIT_DATE
+        elif reservation.end_date is None:
+            resp = Response.ASK_END_DATE
+        elif reservation.pension_type is None:
+            resp = Response.ASK_PENSION_TYPE
 
         self.last_question = resp
         return resp
@@ -192,12 +214,14 @@ class HotelAgent:
         msg = "Language: %s" % input.lang
         msg += "\nSanitized: %s" % input.text_san
         msg += "\nCorrected: %s" % input.text_sc
+        msg += "\nDateparser: %s" % input.dateparsed
         msg += "\nTokenized: %s" % input.parsed
+        msg += "\nTagged: %s" % input.tagged
             
         resp = None
         
         desires = input.desires(self.intellect.last_question)
-        
+        #pdb.set_trace()
         if desires is not None:
             print("Desires: ")
             for d in desires: print(d.id)
@@ -214,8 +238,6 @@ class HotelAgent:
         
         if resp is None:
             resp = Response(Response.UNKNOWN_INPUT)
-        else:
-            self.intellect.clear_last_question()
             
         print(msg)  # Only for testing purposes
         return 1, resp  # trust, response

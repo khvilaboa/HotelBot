@@ -40,10 +40,13 @@ class Response(object):
 
 	ASK_ROOM_TYPE = "Que tipo de habitacion quieres?"
 	ASK_INIT_DATE = "Que dia quieres comenzar tu estancia?"
-	ASK_INIT_DATE = "Hasta que dia quieres estar?"
+	ASK_END_DATE = "Hasta que dia quieres estar?"
+	ASK_PENSION_TYPE = "Que tipo de pension prefieres? (completa, parcial, solo desayuno)"
 	
 	CONFIRM_ROOM_TYPE = "Una {room_type} pues"
 	CHANGE_ROOM_TYPE = "Tenia apuntada una {room_type}... cambio a una {new_room_type}"
+	
+	CONFIRM_DATE = "Bien, para el {date}"
 	
 	UNKNOWN_INPUT = "Perdona, pero no te he entendido"
 	
@@ -62,6 +65,14 @@ class Response(object):
 	@msg.setter
 	def msg(self, value):
 		self._msg = value
+		
+	@property
+	def keyboard(self):
+		return self._keyboard
+
+	@keyboard.setter
+	def keyboard(self, value):
+		self._keyboard = value
 		
 
 class Reservation(object):

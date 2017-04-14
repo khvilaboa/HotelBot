@@ -6,6 +6,7 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from agents import HotelAgent, InsultsAgent, UserInput
+from facts import Response
 import traceback
 
 updater = Updater(token='344919668:AAFvtg7WYYvxT9d8msQAu6cvbsmggKwyDEk')  # @DASIHotelBot
@@ -20,6 +21,7 @@ def start(bot, update):
 # To handle text (that doesn't start with '/')
 def text(bot, update):
 	text = update.message.text
+	
 	print("\nReceived: %s" % text)
 	try:
 		input = UserInput(text)
@@ -27,6 +29,9 @@ def text(bot, update):
 		print("Response: ", response.msg)
 		for msg in response.msg:
 			update.message.reply_text(msg)
+			
+		if response.keyboard == Response.KEYBOARD_ROOM_TYPES:
+			room_types(bot, update)
 	except Exception as e:
 		traceback.print_exc()
 		print(e)
@@ -49,17 +54,19 @@ def room_types(bot, update):
 					
 	rooms_markup = InlineKeyboardMarkup(keyboard) #, one_time_keyboard=True
 				
-	update.message.reply_text("Tenemos los siguientes tipos de habitación. Elije una, por favor.", \
+	update.message.reply_text("Tenemos los siguientes tipos:", \
 								reply_markup=rooms_markup)
 	
 # Example of in-line keyboard use
 def keyboard_press(bot, update):
 	query = update.callback_query
-	
+
 	# To modify the keyboard message ("una habitación" if query.data != "Suite" else "", query.data)
 	bot.editMessageText(text="Has seleccionado: %s" % query.data,
 						chat_id=query.message.chat_id,
 						message_id=query.message.message_id)
+						
+	
 	
 # Handlers
 dispatcher.add_handler(CommandHandler('start', start))
