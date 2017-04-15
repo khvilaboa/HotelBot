@@ -10,6 +10,7 @@ class Desire(object):
 	ESTABLISH_ROOM_TYPE = "roomType"
 	ESTABLISH_INIT_DATE = "initDate"
 	ESTABLISH_END_DATE = "endDate"
+	ESTABLISH_PENSION_TYPE = "pensionType"
 	
 	def __init__(self, id = None):
 		self._id = id
@@ -42,11 +43,15 @@ class Response(object):
 	ASK_INIT_DATE = "Que dia quieres comenzar tu estancia?"
 	ASK_END_DATE = "Hasta que dia quieres estar?"
 	ASK_PENSION_TYPE = "Que tipo de pension prefieres? (completa, parcial, solo desayuno)"
+	SHOW_INTRO_SUMMARY = "Bien, entonces los datos de la reserva son los siguientes:"
 	
 	CONFIRM_ROOM_TYPE = "Una {room_type} pues"
 	CHANGE_ROOM_TYPE = "Tenia apuntada una {room_type}... cambio a una {new_room_type}"
 	
 	CONFIRM_DATE = "Bien, para el {date}"
+	CONFIRM_PENSION_TYPE = "Vale, {pension_type} entonces"
+	
+	CONFIRM_BASIC = "Esta todo correcto?"
 	
 	UNKNOWN_INPUT = "Perdona, pero no te he entendido"
 	
@@ -55,7 +60,13 @@ class Response(object):
 	KEYBOARD_ROOM_TYPES = "keyboardRoomTypes"
 
 	def __init__(self, msg, keyboard = None):
-		self._msg = [msg] if type(msg) is str else msg
+		msg = [msg] if type(msg) is str else msg
+		self._msg = []
+		for m in msg:
+			if type(m) is list:
+				self._msg += m
+			else:
+				self._msg.append(m)
 		self._keyboard = keyboard
 		
 	@property
@@ -115,4 +126,16 @@ class Reservation(object):
 	def end_date(self, value):
 		self._end_date = value
 	
+	def summary(self):
+		summ = ""
+		if self.room_type is not None:
+			summ += "Tipo de habitacion: %s\n" % self.room_type
+		if self.init_date is not None:
+			summ += "Fecha de entrada: %s\n" % self.init_date
+		if self.end_date is not None:
+			summ += "Fecha de salida: %s\n" % self.end_date
+		if self.pension_type is not None:
+			summ += "Tipo de pension: %s\n" % self.pension_type
+			
+		return summ
 		

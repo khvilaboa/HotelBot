@@ -57,3 +57,19 @@ rule end_date:
 		msg1 = Response.CONFIRM_DATE.replace("{date}", data["end_date"])
 		msg2 = next_question()
 		learn Response([msg1, msg2])
+		
+rule pension_type:
+	when:
+		$desire := Desire(id == Desire.ESTABLISH_PENSION_TYPE)
+	then:
+		# Get needed data
+		data = $desire.data
+		
+		# Modify room type in the current reservation
+		reserv = reservation()
+		reserv.pension_type = data["pension_type"]
+		
+		msg1 = Response.CONFIRM_PENSION_TYPE.replace("{pension_type}", data["pension_type"])
+		msg2 = next_question()
+		
+		learn Response([msg1, msg2])

@@ -102,6 +102,16 @@ class UserInput:
             d = Desire(Desire.ESTABLISH_END_DATE)
             d.data["end_date"] = self.dates()[0] 
             des.append(d)
+        #pdb.set_trace()
+        if last_question == Response.ASK_PENSION_TYPE and self.has_word(pension_types):
+            pension_type = None
+            for pt in pension_types:
+                if self.has_word(pt):
+                    pension_type = pt
+                    
+            d = Desire(Desire.ESTABLISH_PENSION_TYPE)
+            d.data["pension_type"] = pension_type
+            des.append(d)
         
         return des or None
         
@@ -174,8 +184,12 @@ class MyIntellect(Intellect):
             resp = Response.ASK_END_DATE
         elif reservation.pension_type is None:
             resp = Response.ASK_PENSION_TYPE
+        else:
+            resp = [Response.SHOW_INTRO_SUMMARY]
+			resp.append(reservation.summary())
+			resp.append(Response.CONFIRM_BASIC)
 
-        self.last_question = resp
+        self.last_question = resp if type(resp) is not list else resp[0]
         return resp
         
     # Get the reservation object from the fact database
