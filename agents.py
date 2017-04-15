@@ -62,7 +62,7 @@ class UserInput:
             
             print(lang1, lang2, lang3)
             
-            if lang1 == lang2 == lang3:  # If all oh them throws the same result, return it
+            if lang1 == lang2 == lang3:  # If all of them throw the same result, return it
                 return lang1
             elif lang1 == 'es' or lang2 == 'es' or lang3 == 'es':  # If at least one detect spanish...
                 return 'es'
@@ -79,8 +79,10 @@ class UserInput:
         verbs_want = ("queria", "quiero", "qerria", "necesitaba", "necesitaria", "gustaria")
         noun_room = ("habitacion", "reserva")
         
-        room_types = {"individual", "doble", "suite"}
-        pension_types = {"completa", "parcial", "desayuno"}
+        room_types = ("individual", "doble", "suite")
+        pension_types = ("completa", "parcial", "desayuno")
+        
+        afirmations = ("si", "vale")
         
         if (self.has_word(verbs_want, UserInput.VERB) and self.has_word(noun_room, UserInput.NOUN)) or last_question == Response.ASK_ROOM_TYPE:
             room_type = None
@@ -112,6 +114,8 @@ class UserInput:
             d = Desire(Desire.ESTABLISH_PENSION_TYPE)
             d.data["pension_type"] = pension_type
             des.append(d)
+        if last_question == Response.SHOW_INTRO_SUMMARY and self.has_word(afirmations):
+            des.append(Desire(Desire.FINISH_RESERVATION))
         
         return des or None
         
@@ -186,8 +190,8 @@ class MyIntellect(Intellect):
             resp = Response.ASK_PENSION_TYPE
         else:
             resp = [Response.SHOW_INTRO_SUMMARY]
-			resp.append(reservation.summary())
-			resp.append(Response.CONFIRM_BASIC)
+            resp.append(reservation.summary())
+            resp.append(Response.CONFIRM_BASIC)
 
         self.last_question = resp if type(resp) is not list else resp[0]
         return resp

@@ -3,8 +3,6 @@ from facts import Desire, Response
 
 #i=0
 
-
-
 rule want_room:
 	#agenda-group "rooms"
 	when:
@@ -35,7 +33,7 @@ rule init_date:
 		# Get needed data
 		data = $desire.data
 		
-		# Modify room type in the current reservation
+		# Modify start date in the current reservation
 		reserv = reservation()
 		reserv.init_date = data["init_date"]
 		
@@ -50,7 +48,7 @@ rule end_date:
 		# Get needed data
 		data = $desire.data
 		
-		# Modify room type in the current reservation
+		# Modify end date in the current reservation
 		reserv = reservation()
 		reserv.end_date = data["end_date"]
 		
@@ -65,7 +63,7 @@ rule pension_type:
 		# Get needed data
 		data = $desire.data
 		
-		# Modify room type in the current reservation
+		# Modify pension type in the current reservation
 		reserv = reservation()
 		reserv.pension_type = data["pension_type"]
 		
@@ -73,3 +71,11 @@ rule pension_type:
 		msg2 = next_question()
 		
 		learn Response([msg1, msg2])
+		
+rule finish_reservation:
+	when:
+		$desire := Desire(id == Desire.FINISH_RESERVATION)
+	then:		
+		msg = Response.FINISH_RESERVATION
+		learn Response(msg)
+		# TODO: save reservation into mongo db
