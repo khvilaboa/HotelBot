@@ -7,13 +7,20 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Callb
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from agents import HotelAgent, InsultsAgent, UserInput
 from facts import Response
-import traceback
+import pdb, traceback
 
 updater = Updater(token='344919668:AAFvtg7WYYvxT9d8msQAu6cvbsmggKwyDEk')  # @DASIHotelBot
 dispatcher = updater.dispatcher
 
-agents = [HotelAgent(), InsultsAgent()]
+agents = {"insults": InsultsAgent()}  # HotelAgent()
 
+# ------------------------------------------------------------------------------
+
+def check_agent(username):
+	if username not in agents:
+		agents[username] = HotelAgent(username)  # Register the user specific agent
+
+# ------------------------------------------------------------------------------
 # Default command (executed on bot init)
 def start(bot, update):
 	update.message.reply_text("Buenaaaas. Una habitacion?")
@@ -21,11 +28,14 @@ def start(bot, update):
 # To handle text (that doesn't start with '/')
 def text(bot, update):
 	text = update.message.text
+	username = update.message.from_user.username
+	check_agent(username)
 	
 	print("\nReceived: %s" % text)
 	try:
 		input = UserInput(text)
-		response = max([agent.evaluate(input) for agent in agents])[1]
+		suitable_agents = (agents["insults"], agents[username])
+		response = max([agent.evaluate(input) for agent in suitable_agents])[1]
 		print("Response: ", response.msg)
 		for msg in response.msg:
 			update.message.reply_text(msg)
@@ -66,7 +76,7 @@ def keyboard_press(bot, update):
 						chat_id=query.message.chat_id,
 						message_id=query.message.message_id)
 						
-	
+# ------------------------------------------------------------------------------
 	
 # Handlers
 dispatcher.add_handler(CommandHandler('start', start))

@@ -19,8 +19,12 @@ hotels = hotel.hotels
 rooms = hotel.rooms
 #clients = hotel.clients
 
+print("Limpiando datos anteriores...")
+hotels.remove()
+rooms.remove()
+
 print("\nIntroduciendo datos del hotel...")
-hotels.insert_one({"price_individual": 20, "price_double": 35, "price_suite": 60})
+hotels.insert_one({"room_prices": {"individual": 20, "double": 35, "suite": 60}})
 
 print("\nIntroduciendo datos de las habitaciones...")
 for floor in range(1, NUM_FLOORS + 1):

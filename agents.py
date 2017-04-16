@@ -4,11 +4,12 @@
 # from resources import Database, Weather
 
 import langdetect, langid, textblob
-import nltk, pdb, re, string
+import nltk, pdb, pymongo, re, string
 from collections import OrderedDict
 from utils import spellchecker as sc, postagger as pos, dateparser as dp
 from intellect.Intellect import Intellect, Callable
-from facts import *
+from facts import Desire, Response, Reservation
+from handlers import DBHandler
 
 
 # To encapsulate the client's message and doing preparse tasks
@@ -224,9 +225,17 @@ class MyIntellect(Intellect):
         return msg
 
 class HotelAgent:
-    def __init__(self):
+    def __init__(self, username):
         self.intellect = MyIntellect()
         self.intellect.learn(Intellect.local_file_uri("./policies/hotel.policy"))
+        
+        try:
+            self.db = DBHandler()
+            self.db.check_client(username)
+        except:
+            print("The connection with the DB could not be established")
+            
+        
 
     def evaluate(self, input):
         msg = "Language: %s" % input.lang
