@@ -37,6 +37,10 @@ class DBHandler:
 		reserv_doc["room"] = room["number"]
 		reserv_doc["floor"] = room["floor"]
 		
+		days = self.dates_in_interval(reserv.init_date, reserv.end_date)
+		self.rooms.update({"number": room["number"], "floor": room["floor"]}, \
+		                  {"$push": {"reservations": {"$each": days}}})
+		
 		self.clients.update({DBHandler.FIELD_CLIENT_USER: username}, {"$push": {DBHandler.FIELD_CLIENT_RESERV: reserv_doc}})
 		
 	def free_room_from_dates(self, init_date, end_date):
