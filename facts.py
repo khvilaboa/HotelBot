@@ -44,7 +44,7 @@ class Response(object):
 	ASK_INIT_DATE = "Que dia quieres comenzar tu estancia?"
 	ASK_END_DATE = "Hasta que dia quieres estar?"
 	ASK_PENSION_TYPE = "Que tipo de pension prefieres? (completa, parcial, solo desayuno)"
-	SHOW_INTRO_SUMMARY = "Bien, entonces los datos de la reserva son los siguientes:"
+	SHOW_INTRO_SUMMARY = "Los datos de la reserva son los siguientes:"
 	FINISH_RESERVATION = "Bien, guardo la reserva. Gracias por usar nuestros servicios."
 	
 	CONFIRM_ROOM_TYPE = "Una {room_type} pues"

@@ -1,6 +1,7 @@
 
 from pymongo import MongoClient
 from facts import Reservation
+from datetime import datetime
 import pdb
 
 class DBHandler:
@@ -27,6 +28,10 @@ class DBHandler:
 		reserv_doc["init_date"] = reserv.init_date
 		reserv_doc["end_date"] = reserv.end_date
 		reserv_doc["pension_type"] = reserv.pension_type
+		
+		now = datetime.now()
+		reserv_doc["reservation_date"] = now.strftime("%d/%m/%Y")
+		reserv_doc["reservation_hour"] = now.strftime("%H:%M:%S")
 		
 		self.clients.update({DBHandler.FIELD_CLIENT_USER: username}, {"$push": {DBHandler.FIELD_CLIENT_RESERV: reserv_doc}})
 		

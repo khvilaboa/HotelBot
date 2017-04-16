@@ -10,6 +10,7 @@ from utils import spellchecker as sc, postagger as pos, dateparser as dp
 from intellect.Intellect import Intellect, Callable
 from facts import Desire, Response, Reservation
 from handlers import DBHandler
+from datetime import datetime
 
 
 # To encapsulate the client's message and doing preparse tasks
@@ -142,11 +143,13 @@ class UserInput:
 # Custom intellect to improve the management of facts and policies
 class MyIntellect(Intellect):
 
-    def __init__(self):
+    def __init__(self, username, db):
         Intellect.__init__(self)
         self.goals = []
         self.learn(Reservation())
         self.last_question = None
+        self.db = db
+        self.username = username
 
     @Callable  # It can be called form the rules file
     def clear_facts(self):
@@ -205,7 +208,7 @@ class MyIntellect(Intellect):
                 return fact
 
     # --------------------------------------------------------
-    # Support methods for the rules
+    # Return the suitable message based on the last and new (if exists) type of room chosed
     @Callable
     def response_from_room_types(self, last, new):
         reserv = self.reservation()
@@ -223,11 +226,17 @@ class MyIntellect(Intellect):
             reserv.room_type = new
         
         return msg
+        
+    # Save current reservation (finished) in the DB and reset it in the facts base
+    @Callable
+    def finish_reservation(self):
+        reserv = self.reservation()
+        self.db.add_reservation(self.username, reserv)
+        self._knowledge.remove(reserv)
+        self.learn(Reservation())
 
 class HotelAgent:
     def __init__(self, username):
-        self.intellect = MyIntellect()
-        self.intellect.learn(Intellect.local_file_uri("./policies/hotel.policy"))
         
         try:
             self.db = DBHandler()
@@ -235,6 +244,8 @@ class HotelAgent:
         except:
             print("The connection with the DB could not be established")
             
+        self.intellect = MyIntellect(username, self.db)
+        self.intellect.learn(Intellect.local_file_uri("./policies/hotel.policy"))
         
 
     def evaluate(self, input):
@@ -248,7 +259,7 @@ class HotelAgent:
         resp = None
         
         desires = input.desires(self.intellect.last_question)
-        #pdb.set_trace()
+        pdb.set_trace()
         if desires is not None:
             print("Desires: ")
             for d in desires: print(d.id)

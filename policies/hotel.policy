@@ -78,4 +78,4 @@ rule finish_reservation:
 	then:		
 		msg = Response.FINISH_RESERVATION
 		learn Response(msg)
-		# TODO: save reservation into mongo db
+		finish_reservation()

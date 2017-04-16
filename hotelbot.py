@@ -28,6 +28,7 @@ def start(bot, update):
 # To handle text (that doesn't start with '/')
 def text(bot, update):
 	text = update.message.text
+	#pdb.set_trace()
 	username = update.message.from_user.username
 	check_agent(username)
 	
