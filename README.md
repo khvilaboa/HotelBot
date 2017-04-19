@@ -40,6 +40,10 @@ HotelBot tiene las siguientes dependencias:
 
 ```pip install Intellect```
 
+**PyMongo**: para la comunicación de la base de datos. Antes de ejecutar HotelBot será necesario el despliegue de un servidor de Mongo, para el almacenamiento persistente de la información generada por el mismo (en el puerto por defecto).
+
+```pip install pymongo```
+
 Todas estas dependencias además están recogidas en el fichero **requirements.txt**. Para obtener todas las dependencias
 sin necesidad de escribirlas a mano una a una, basta con ejecutar el siguiente comando:
 
