@@ -67,3 +67,6 @@ class DBHandler:
 		if self.clients.find_one({DBHandler.FIELD_CLIENT_USER: username}) is None:
 			self.clients.insert_one({DBHandler.FIELD_CLIENT_USER: username})
 		
+	# Returns the price of a specific type of room
+	def price(self, room_type):
+		return self.hotels.find_one()["room_prices"][room_type]

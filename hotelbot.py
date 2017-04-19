@@ -8,6 +8,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from agents import HotelAgent, InsultsAgent, UserInput
 from facts import Response
 import pdb, traceback
+from handlers import DBHandler
 
 updater = Updater(token='344919668:AAFvtg7WYYvxT9d8msQAu6cvbsmggKwyDEk')  # @DASIHotelBot
 dispatcher = updater.dispatcher
@@ -58,10 +59,11 @@ def images(bot, update):
 
 # Example of in-line keyboard use
 def room_types(bot, update):
-	#rooms_keyboard = [['Individual', 'Doble', 'Suite']]
-	keyboard = [[InlineKeyboardButton("Individual", callback_data='Individual')], \
-                [InlineKeyboardButton("Doble", callback_data='Doble')], \
-                [InlineKeyboardButton("Suite", callback_data='Suite')]]
+	db = DBHandler()
+	#pdb.set_trace()
+	keyboard = [[InlineKeyboardButton("Individual (%d EUR/noche)" % db.price(DBHandler.ROOM_INDIVIDUAL), callback_data='Individual')], \
+                [InlineKeyboardButton("Doble (%d EUR/noche)" % db.price(DBHandler.ROOM_DOUBLE), callback_data='Doble')], \
+                [InlineKeyboardButton("Suite (%d EUR/noche)" % db.price(DBHandler.ROOM_SUITE), callback_data='Suite')]]
 					
 	rooms_markup = InlineKeyboardMarkup(keyboard) #, one_time_keyboard=True
 				

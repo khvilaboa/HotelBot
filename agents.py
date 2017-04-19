@@ -259,7 +259,7 @@ class HotelAgent:
         resp = None
         
         desires = input.desires(self.intellect.last_question)
-        pdb.set_trace()
+        #pdb.set_trace()
         if desires is not None:
             print("Desires: ")
             for d in desires: print(d.id)
