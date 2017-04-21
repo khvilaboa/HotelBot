@@ -15,7 +15,7 @@ class DBHandler:
 
 	def __init__(self):
 		self.mongo_client = MongoClient()
-		self.hotel_db = self.mongo_client.hotel
+		self.hotel_db = self.mongo_client.hotelbot
 		
 		# Collections
 		self.hotels = self.hotel_db.hotels
@@ -43,8 +43,8 @@ class DBHandler:
 		
 		self.clients.update({DBHandler.FIELD_CLIENT_USER: username}, {"$push": {DBHandler.FIELD_CLIENT_RESERV: reserv_doc}})
 		
-	def free_room_from_dates(self, init_date, end_date):
-		days = self.dates_in_interval(init_date, end_date)
+	def free_room_from_dates(self, init_date, end_date = None):
+		days = self.dates_in_interval(init_date, end_date) if end_date else [init_date]
 		results = self.rooms.find({"reservations": {"$nin": days}})
 		
 		return results.next() if results.count() != 0 else None

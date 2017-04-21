@@ -28,7 +28,7 @@ rule room_type:
 		
 rule init_date:
 	when:
-		$desire := Desire(id == Desire.ESTABLISH_INIT_DATE)
+		$desire := Desire(id == Desire.ESTABLISH_INIT_DATE) 
 	then:
 		# Get needed data
 		data = $desire.data
@@ -37,9 +37,11 @@ rule init_date:
 		reserv = reservation()
 		reserv.init_date = data["init_date"]
 		
-		msg1 = Response.CONFIRM_DATE.replace("{date}", data["init_date"])
-		msg2 = next_question()
-		learn Response([msg1, msg2])
+		msg = response_from_init_date(data["init_date"])
+		
+		#msg1 = Response.CONFIRM_DATE.replace("{date}", data["init_date"])
+		#msg2 = next_question()
+		learn Response(msg)
 		
 rule end_date:
 	when:

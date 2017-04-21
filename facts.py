@@ -47,6 +47,8 @@ class Response(object):
 	SHOW_INTRO_SUMMARY = "Los datos de la reserva son los siguientes:"
 	FINISH_RESERVATION = "Bien, guardo la reserva. Gracias por usar nuestros servicios."
 	
+	NO_INIT_DATE = "Lo siento, pero no tenemos {type} disponibles para esa fecha"
+	
 	CONFIRM_ROOM_TYPE = "Una {room_type} pues"
 	CHANGE_ROOM_TYPE = "Tenia apuntada una {room_type}... cambio a una {new_room_type}"
 	

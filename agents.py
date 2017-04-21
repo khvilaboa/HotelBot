@@ -220,12 +220,28 @@ class MyIntellect(Intellect):
                 msg = Response.KNOWN_INFO
             else: 
                 msg = Response.CHANGE_ROOM_TYPE.replace("{room_type}", last).replace("{new_room_type}", new)
-                reserv.room_type = new      
+                reserv.room_type = new          
         else:
             msg = Response.CONFIRM_ROOM_TYPE.replace("{room_type}", new)
             reserv.room_type = new
         
         return msg
+    
+    @Callable
+    def response_from_init_date(self, init_date):
+        reserv = self.reservation()
+        if self.free_room(init_date):
+            msg = [Response.CONFIRM_DATE.replace("{date}", init_date)]
+            msg.append(self.next_question())
+        else:
+            msg = Response.NO_INIT_DATE.format(type = reserv.room_type if reserv.room_type is not None else "habitaciones")
+        
+        return msg
+        
+        
+    @Callable
+    def free_room(self, init_date, end_date = None):
+        return self.db.free_room_from_dates(init_date, end_date) is not None
         
     # Save current reservation (finished) in the DB and reset it in the facts base
     @Callable
