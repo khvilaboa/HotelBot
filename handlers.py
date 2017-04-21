@@ -43,9 +43,13 @@ class DBHandler:
 		
 		self.clients.update({DBHandler.FIELD_CLIENT_USER: username}, {"$push": {DBHandler.FIELD_CLIENT_RESERV: reserv_doc}})
 		
-	def free_room_from_dates(self, init_date, end_date = None):
+	def free_room_from_dates(self, init_date, end_date = None, room_type = None):
 		days = self.dates_in_interval(init_date, end_date) if end_date else [init_date]
-		results = self.rooms.find({"reservations": {"$nin": days}})
+		
+		if room_type is None:
+			results = self.rooms.find({"reservations": {"$nin": days}})
+		else:
+			results = self.rooms.find({"reservations": {"$nin": days}, "type": room_type})
 		
 		return results.next() if results.count() != 0 else None
 		

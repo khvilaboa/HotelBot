@@ -34,8 +34,8 @@ rule init_date:
 		data = $desire.data
 		
 		# Modify start date in the current reservation
-		reserv = reservation()
-		reserv.init_date = data["init_date"]
+		#reserv = reservation()
+		#reserv.init_date = data["init_date"]
 		
 		msg = response_from_init_date(data["init_date"])
 		
