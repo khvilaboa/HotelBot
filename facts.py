@@ -61,6 +61,8 @@ class Response(object):
 	
 	KNOWN_INFO = "Ya, ya me lo habias comentado"
 	
+	TOTAL_PRICE = "Precio total: {price} EUR"
+	
 	KEYBOARD_ROOM_TYPES = "keyboardRoomTypes"
 
 	def __init__(self, msg, keyboard = None):

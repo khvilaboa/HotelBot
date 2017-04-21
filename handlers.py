@@ -63,7 +63,7 @@ class DBHandler:
 			days.append(idt.strftime("%d/%m/%Y"))
 			idt += delta
 			
-		days.append(idt.strftime("%d/%m/%Y"))
+		#days.append(idt.strftime("%d/%m/%Y"))
 		return days
 		
 	
