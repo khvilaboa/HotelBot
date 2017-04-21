@@ -74,3 +74,6 @@ class DBHandler:
 	# Returns the price of a specific type of room
 	def price(self, room_type):
 		return self.hotels.find_one()["room_prices"][room_type]
+		
+	def price_pension(self, pension_type):
+		return self.hotels.find_one()["pension_prices"][pension_type]

@@ -24,7 +24,7 @@ hotels.remove()
 rooms.remove()
 
 print("\nIntroduciendo datos del hotel...")
-hotels.insert_one({"room_prices": {"individual": 20, "double": 35, "suite": 60}})
+hotels.insert_one({"room_prices": {"individual": 20, "double": 35, "suite": 60}}, "pension_prices": {"completa": 10, "parcial": 6, "desayuno": 3}})
 
 room_types = ("individual", "double", "suite") 
 ind = 0
