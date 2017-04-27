@@ -14,3 +14,5 @@ hotelbot:
   container_name: hotelbot
   links:
     - mongodb
+  environment:
+    - PYTHONUNBUFFERED=0

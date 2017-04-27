@@ -295,7 +295,7 @@ class HotelAgent:
         
         if resp is None:
             resp = Response(Response.UNKNOWN_INPUT)
-            
+        #resp.msg = [msg]
         print(msg)  # Only for testing purposes
         return 1, resp  # trust, response
 
