@@ -1,9 +1,6 @@
 FROM continuumio/anaconda:latest
 MAINTAINER Iván Martínez
 
-ARG DB_ADDRESS
-ARG DB_PORT
-
 RUN mkdir -p /usr/local/hotelbot
 ENV HOTELBOT_HOME /usr/local/hotelbot
 ADD agents.py /usr/local/hotelbot
@@ -18,5 +15,7 @@ COPY utils /usr/local/hotelbot/utils
 
 WORKDIR $HOTELBOT_HOME
 RUN pip install -r requirements.txt
-
+RUN python -m nltk.downloader punkt
+RUN python -m nltk.downloader stopwords
+RUN python -m nltk.downloader averaged_perceptron_tagger
 CMD ["python","hotelbot.py"]

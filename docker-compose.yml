@@ -1,0 +1,16 @@
+mongodb:
+  container_name: hotelbot_mongodb
+  image: mongo:latest
+  ports:
+    - "27017:27017"
+
+mongo-seed:
+  build: ./mongo-seed
+  links:
+    - mongodb
+
+hotelbot:
+  build: .
+  container_name: hotelbot
+  links:
+    - mongodb
