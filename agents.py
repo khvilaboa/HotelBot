@@ -249,7 +249,7 @@ class MyIntellect(Intellect):
         reserv = self.reservation()
         if self.db.free_room_from_dates(init_date, room_type = reserv.room_type):
             reserv.init_date = init_date
-            msg = [Response.CONFIRM_DATE.replace("{date}", init_date)]
+            msg = [Response.CONFIRM_INIT_DATE.replace("{date}", init_date)]
         else:
             room_type = reserv.room_type if reserv.room_type is not None else "habitaciones"
             room_type += "s" if room_type != DBHandler.ROOM_INDIVIDUAL else "es"

@@ -53,7 +53,7 @@ rule end_date:
 		reserv = reservation()
 		reserv.end_date = data["end_date"]
 		
-		msg = Response.CONFIRM_DATE.replace("{date}", data["end_date"])
+		msg = Response.CONFIRM_END_DATE.replace("{date}", data["end_date"])
 		learn Response([msg])
 		
 rule pension_type:

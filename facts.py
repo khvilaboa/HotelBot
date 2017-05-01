@@ -52,8 +52,9 @@ class Response(object):
 	CONFIRM_ROOM_TYPE = "Una {room_type} pues"
 	CHANGE_ROOM_TYPE = "Tenia apuntada una {room_type}... cambio a una {new_room_type}"
 	
-	CONFIRM_DATE = "Bien, para el {date}"
-	CONFIRM_PENSION_TYPE = "Vale, {pension_type} entonces"
+	CONFIRM_INIT_DATE = "Fecha de entrada para el {date}..."
+	CONFIRM_END_DATE = "Fecha de salida para el {date}..."
+	CONFIRM_PENSION_TYPE = "Bien, {pension_type} entonces"
 	
 	CONFIRM_BASIC = "Esta todo correcto?"
 	
