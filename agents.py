@@ -26,7 +26,7 @@ class UserInput:
     def __init__(self, text):
         self.text = text
         self.text_san = self.sanitize(text)
-        self.text_sc = ' '.join([sc.correction(w) for w in self.text_san.split()])
+        self.text_sc = ' '.join([sc.correction(w) if not re.match("[0-9]+", w) else w for w in self.text_san.split()])
         self.lang = self.language(self.text_sc)
         self.dateparsed = dp.parse(self.text_sc)
         self.parsed = self.tokenize(self.dateparsed)
