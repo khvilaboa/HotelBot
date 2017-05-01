@@ -79,7 +79,7 @@ class UserInput:
         des = []
         
         verbs_want = ("queria", "quiero", "qerria", "necesitaba", "necesitaria", "gustaria")
-        noun_room = ("habitacion", "reserva")
+        noun_room = ("habitacion", "reserva", "individual", "doble", "suite")
         
         room_types = ("individual", "doble", "suite")
         pension_types = ("completa", "parcial", "desayuno")
@@ -102,12 +102,13 @@ class UserInput:
             d = Desire(Desire.ESTABLISH_INIT_DATE)
             d.data["init_date"] = self.dates()[0] 
             des.append(d)
-        if last_question == Response.ASK_END_DATE and len(self.dates()) > 0:
+        if (last_question == Response.ASK_END_DATE and len(self.dates()) > 0) or \
+           (self.has_word(["hasta", "al"]) and len(self.dates()) > 1):
             d = Desire(Desire.ESTABLISH_END_DATE)
-            d.data["end_date"] = self.dates()[0] 
+            d.data["end_date"] = self.dates()[-1] 
             des.append(d)
         #pdb.set_trace()
-        if last_question == Response.ASK_PENSION_TYPE and self.has_word(pension_types):
+        if self.has_word(pension_types): # last_question == Response.ASK_PENSION_TYPE and 
             pension_type = None
             for pt in pension_types:
                 if self.has_word(pt):
