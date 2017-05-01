@@ -171,8 +171,12 @@ class MyIntellect(Intellect):
             else:
                 i += 1
                 
+        next = self.next_question()
         if m is not None and m.next_question:
-            m.append(self.next_question())
+            m.append(next)
+        if next == Response.ASK_PENSION_TYPE:
+            m.keyboard = Response.KEYBOARD_PENSION_TYPES
+            
         return m
         
     # Add a desire to the facts database 

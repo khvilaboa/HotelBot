@@ -43,7 +43,7 @@ class Response(object):
 	ASK_ROOM_TYPE = "Que tipo de habitacion quieres?"
 	ASK_INIT_DATE = "Que dia quieres comenzar tu estancia?"
 	ASK_END_DATE = "Hasta que dia quieres estar?"
-	ASK_PENSION_TYPE = "Que tipo de pension prefieres? (completa, parcial, solo desayuno)"
+	ASK_PENSION_TYPE = "Que tipo de pension prefieres?"
 	SHOW_INTRO_SUMMARY = "Los datos de la reserva son los siguientes:"
 	FINISH_RESERVATION = "Bien, guardo la reserva. Gracias por usar nuestros servicios."
 	
@@ -65,6 +65,7 @@ class Response(object):
 	TOTAL_PRICE = "Precio total: {price} EUR"
 	
 	KEYBOARD_ROOM_TYPES = "keyboardRoomTypes"
+	KEYBOARD_PENSION_TYPES = "keyboardPensionTypes"
 
 	def __init__(self, msg = [], keyboard = None, next_question = True):
 		#pdb.set_trace()

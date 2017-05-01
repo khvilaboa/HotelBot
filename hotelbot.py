@@ -44,6 +44,8 @@ def text(bot, update):
 			
 		if response.keyboard == Response.KEYBOARD_ROOM_TYPES:
 			room_types(bot, update)
+		elif response.keyboard == Response.KEYBOARD_PENSION_TYPES:	
+			pension_types(bot, update)
 	except Exception as e:
 		traceback.print_exc()
 		print(e)
@@ -64,6 +66,18 @@ def room_types(bot, update):
 	keyboard = [[InlineKeyboardButton("Individual (%d EUR/noche)" % db.price(DBHandler.ROOM_INDIVIDUAL), callback_data='Individual')], \
                 [InlineKeyboardButton("Doble (%d EUR/noche)" % db.price(DBHandler.ROOM_DOUBLE), callback_data='Doble')], \
                 [InlineKeyboardButton("Suite (%d EUR/noche)" % db.price(DBHandler.ROOM_SUITE), callback_data='Suite')]]
+					
+	rooms_markup = InlineKeyboardMarkup(keyboard) #, one_time_keyboard=True
+				
+	update.message.reply_text("Tenemos los siguientes tipos:", \
+								reply_markup=rooms_markup)
+								
+def pension_types(bot, update):
+	db = DBHandler()
+	#pdb.set_trace()
+	keyboard = [[InlineKeyboardButton("Completa (%d EUR/dia)" % db.price_pension(DBHandler.PENSION_FULL), callback_data='Completa')], \
+                [InlineKeyboardButton("Parcial (%d EUR/dia)" % db.price_pension(DBHandler.PENSION_HALF), callback_data='Parcial')], \
+                [InlineKeyboardButton("Desayuno (%d EUR/dia)" % db.price_pension(DBHandler.PENSION_BREAKFAST), callback_data='Desayuno')]]
 					
 	rooms_markup = InlineKeyboardMarkup(keyboard) #, one_time_keyboard=True
 				
