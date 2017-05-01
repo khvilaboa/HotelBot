@@ -9,8 +9,8 @@ rule want_room:
 		$desire := Desire(id == Desire.WANT_ROOM)
 	then:
 		#attribute i = i + 1
-		msg = next_question()
-		learn Response(msg, Response.KEYBOARD_ROOM_TYPES)
+		#msg = next_question()
+		learn Response([], Response.KEYBOARD_ROOM_TYPES)
 		
 rule room_type:
 	when:
@@ -22,9 +22,8 @@ rule room_type:
 		# Modify room type in the current reservation
 		reserv = reservation()
 		
-		msg1 = response_from_room_types(reserv.room_type, data["room_type"])
-		msg2 = next_question()
-		learn Response([msg1, msg2])
+		msg = response_from_room_types(reserv.room_type, data["room_type"])
+		learn Response(msg)
 		
 rule init_date:
 	when:
@@ -54,9 +53,8 @@ rule end_date:
 		reserv = reservation()
 		reserv.end_date = data["end_date"]
 		
-		msg1 = Response.CONFIRM_DATE.replace("{date}", data["end_date"])
-		msg2 = next_question()
-		learn Response([msg1, msg2])
+		msg = Response.CONFIRM_DATE.replace("{date}", data["end_date"])
+		learn Response([msg])
 		
 rule pension_type:
 	when:
@@ -69,15 +67,14 @@ rule pension_type:
 		reserv = reservation()
 		reserv.pension_type = data["pension_type"]
 		
-		msg1 = Response.CONFIRM_PENSION_TYPE.replace("{pension_type}", data["pension_type"])
-		msg2 = next_question()
+		msg = Response.CONFIRM_PENSION_TYPE.replace("{pension_type}", data["pension_type"])
 		
-		learn Response([msg1, msg2])
+		learn Response(msg)
 		
 rule finish_reservation:
 	when:
 		$desire := Desire(id == Desire.FINISH_RESERVATION)
 	then:		
 		msg = Response.FINISH_RESERVATION
-		learn Response(msg)
+		learn Response([msg], None, False)
 		finish_reservation()

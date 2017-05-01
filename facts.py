@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
-import random
+import random, pdb
 
 # To comunicate de client's desires to the intellect
 class Desire(object):
@@ -65,7 +65,8 @@ class Response(object):
 	
 	KEYBOARD_ROOM_TYPES = "keyboardRoomTypes"
 
-	def __init__(self, msg, keyboard = None):
+	def __init__(self, msg = [], keyboard = None, next_question = True):
+		#pdb.set_trace()
 		msg = [msg] if type(msg) is str else msg
 		self._msg = []
 		for m in msg:
@@ -74,6 +75,21 @@ class Response(object):
 			else:
 				self._msg.append(m)
 		self._keyboard = keyboard
+		self._next_question = next_question
+		
+	def merge(self, resp):
+		for text in resp.msg:
+			self._msg.append(text)
+		if self.keyboard is None and resp.keyboard is not None:
+			self.keyboard = resp.keyboard
+		return self
+		
+	def append(self, new):
+		if type(new) is str:
+			self._msg.append(new)
+		else:
+			for text in new:
+				self._msg.append(text)
 		
 	@property
 	def msg(self):
@@ -90,6 +106,14 @@ class Response(object):
 	@keyboard.setter
 	def keyboard(self, value):
 		self._keyboard = value
+		
+	@property
+	def next_question(self):
+		return self._next_question
+
+	@next_question.setter
+	def next_question(self, value):
+		self._next_question = value
 		
 
 class Reservation(object):

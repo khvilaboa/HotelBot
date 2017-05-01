@@ -98,7 +98,7 @@ class UserInput:
                 des.append(d)
             elif last_question != Response.ASK_ROOM_TYPE:
                 des.append(Desire(Desire.WANT_ROOM))
-        if last_question == Response.ASK_INIT_DATE and len(self.dates()) > 0:
+        if (last_question == Response.ASK_INIT_DATE or self.has_word(["comienzo", "empezando", "del", "desde", "para"])) and len(self.dates()) > 0:
             d = Desire(Desire.ESTABLISH_INIT_DATE)
             d.data["init_date"] = self.dates()[0] 
             des.append(d)
@@ -155,13 +155,24 @@ class MyIntellect(Intellect):
     def clear_facts(self):
         self._knowledge = []
 
-    # Returns the first response of the knowledge
+    # Returns the responses of the knowledge
     def extract_response(self):
-        for fact in self.knowledge:
+        m = None
+        i = 0
+        while i < len(self._knowledge):
+            fact = self._knowledge[i]
             if type(fact) is Response:
                 self._knowledge.remove(fact)
-                return fact
-        return None
+                if m is None:
+                    m = fact
+                else:
+                    m = m.merge(fact)
+            else:
+                i += 1
+                
+        if m is not None and m.next_question:
+            m.append(self.next_question())
+        return m
         
     # Add a desire to the facts database 
     def add_desire(self, des):
@@ -238,7 +249,6 @@ class MyIntellect(Intellect):
         if self.db.free_room_from_dates(init_date, room_type = reserv.room_type):
             reserv.init_date = init_date
             msg = [Response.CONFIRM_DATE.replace("{date}", init_date)]
-            msg.append(self.next_question())
         else:
             room_type = reserv.room_type if reserv.room_type is not None else "habitaciones"
             room_type += "s" if room_type != DBHandler.ROOM_INDIVIDUAL else "es"
