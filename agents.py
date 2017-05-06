@@ -84,7 +84,8 @@ class UserInput:
         room_types = ("individual", "doble", "suite")
         pension_types = ("completa", "parcial", "desayuno")
         
-        afirmations = ("si", "vale")
+        afirmations = ("si", "yep", "vale", "nada", "bien")
+        denials = ("no", "nope")
         
         if (self.has_word(verbs_want, UserInput.VERB) and self.has_word(noun_room, UserInput.NOUN)) or last_question == Response.ASK_ROOM_TYPE:
             room_type = None
@@ -98,12 +99,13 @@ class UserInput:
                 des.append(d)
             elif last_question != Response.ASK_ROOM_TYPE:
                 des.append(Desire(Desire.WANT_ROOM))
-        if (last_question == Response.ASK_INIT_DATE or self.has_word(["comienzo", "empezando", "del", "desde", "para"])) and len(self.dates()) > 0:
+        if (last_question == Response.ASK_INIT_DATE or self.has_word(["comienzo", "empezando", "del", "desde"])) and len(self.dates()) > 0:
             d = Desire(Desire.ESTABLISH_INIT_DATE)
             d.data["init_date"] = self.dates()[0] 
             des.append(d)
         if (last_question == Response.ASK_END_DATE and len(self.dates()) > 0) or \
-           (self.has_word(["hasta", "al"]) and len(self.dates()) > 1):
+           (self.has_word(["hasta", "al"]) and len(self.dates()) > 1) or \
+		   (self.has_word(["salida", "hasta"]) and len(self.dates()) > 0):
             d = Desire(Desire.ESTABLISH_END_DATE)
             d.data["end_date"] = self.dates()[-1] 
             des.append(d)
@@ -117,8 +119,15 @@ class UserInput:
             d = Desire(Desire.ESTABLISH_PENSION_TYPE)
             d.data["pension_type"] = pension_type
             des.append(d)
-        if last_question == Response.SHOW_INTRO_SUMMARY and self.has_word(afirmations):
-            des.append(Desire(Desire.FINISH_RESERVATION))
+        if last_question == Response.SHOW_INTRO_SUMMARY:
+            if self.has_word(afirmations):
+                d = Desire(Desire.CONFIRM_RESERVATION)
+                d.data["response"] = "yes"
+                des.append(d)
+            elif self.has_word(denials):
+                d = Desire(Desire.CONFIRM_RESERVATION)
+                d.data["response"] = "no"
+                des.append(d)
         
         return des or None
         
@@ -187,9 +196,13 @@ class MyIntellect(Intellect):
         
     # Returns the first response of the knowledge
     def clear_desires(self):
-        for fact in self.knowledge:
+        i = 0
+        while i < len(self._knowledge):
+            fact = self._knowledge[i]
             if type(fact) is Desire:
                 self._knowledge.remove(fact)
+            else:
+                i += 1
                 
     # Forget the last question (when it's already resolved)
     def clear_last_question(self):
@@ -260,7 +273,15 @@ class MyIntellect(Intellect):
             msg = Response.NO_INIT_DATE.format(type = room_type)
         
         return msg
-        
+    
+    # Handle the confirmation response when the bot shows the summary
+    @Callable
+    def confirm_reservation(self, user_resp):
+        if user_resp == "yes":
+            return Response.ASK_SERVICES
+        else:
+            return Response.ASK_WRONG_INFO
+    
     # Save current reservation (finished) in the DB and reset it in the facts base
     @Callable
     def finish_reservation(self):

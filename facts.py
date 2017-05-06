@@ -11,7 +11,7 @@ class Desire(object):
 	ESTABLISH_INIT_DATE = "initDate"
 	ESTABLISH_END_DATE = "endDate"
 	ESTABLISH_PENSION_TYPE = "pensionType"
-	FINISH_RESERVATION = "finishReservation"
+	CONFIRM_RESERVATION = "finishReservation"
 	
 	def __init__(self, id = None):
 		self._id = id
@@ -45,7 +45,9 @@ class Response(object):
 	ASK_END_DATE = "Hasta que dia quieres estar?"
 	ASK_PENSION_TYPE = "Que tipo de pension prefieres?"
 	SHOW_INTRO_SUMMARY = "Los datos de la reserva son los siguientes:"
-	FINISH_RESERVATION = "Bien, guardo la reserva. Gracias por usar nuestros servicios."
+	ASK_WRONG_INFO = "Bueno... ¿que quieres cambiar entonces?"
+	ASK_SERVICES = ["Bien, ¿estas interesado en alguno de nuestros servicios?", "Disponemos de camas supletorias, parking y minibar.", "Además te puedo hablar de lugares cercanos que te puedan ser de interes"]
+	FINISH_RESERVATION = "Perfecto, guardo la reserva. Gracias por usar nuestros servicios."
 	
 	NO_INIT_DATE = "Lo siento, pero no tenemos {type} disponibles para esa fecha"
 	

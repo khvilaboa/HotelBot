@@ -10,6 +10,10 @@ class DBHandler:
 	ROOM_DOUBLE = "double"
 	ROOM_SUITE = "suite"
 	
+	PENSION_FULL = "completa"
+	PENSION_HALF = "parcial"
+	PENSION_BREAKFAST = "desayuno"
+	
 	FIELD_CLIENT_USER = "username"
 	FIELD_CLIENT_RESERV = "reservations"
 

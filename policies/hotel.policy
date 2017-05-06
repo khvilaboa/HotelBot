@@ -73,8 +73,12 @@ rule pension_type:
 		
 rule finish_reservation:
 	when:
-		$desire := Desire(id == Desire.FINISH_RESERVATION)
+		$desire := Desire(id == Desire.CONFIRM_RESERVATION)
 	then:		
-		msg = Response.FINISH_RESERVATION
+		# Get needed data
+		data = $desire.data
+		
+		user_resp = data["response"]
+		msg = confirm_reservation(user_resp)
 		learn Response([msg], None, False)
-		finish_reservation()
+		#finish_reservation()
