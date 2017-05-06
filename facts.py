@@ -12,6 +12,8 @@ class Desire(object):
 	ESTABLISH_END_DATE = "endDate"
 	ESTABLISH_PENSION_TYPE = "pensionType"
 	CONFIRM_RESERVATION = "finishReservation"
+	ASK_SERVICE = "wantService"
+	SHOW_SUMMARY = "showSummary"
 	
 	def __init__(self, id = None):
 		self._id = id
@@ -46,7 +48,8 @@ class Response(object):
 	ASK_PENSION_TYPE = "Que tipo de pension prefieres?"
 	SHOW_INTRO_SUMMARY = "Los datos de la reserva son los siguientes:"
 	ASK_WRONG_INFO = "Bueno... ¿que quieres cambiar entonces?"
-	ASK_SERVICES = ["Bien, ¿estas interesado en alguno de nuestros servicios?", "Disponemos de camas supletorias, parking y minibar.", "Además te puedo hablar de lugares cercanos que te puedan ser de interes"]
+	ASK_SERVICES = ["¿estas interesado en alguno de nuestros servicios?", "Disponemos de camas supletorias, parking y minibar"]
+	#, "Además te puedo hablar de lugares cercanos que te puedan ser de interes"
 	FINISH_RESERVATION = "Perfecto, guardo la reserva. Gracias por usar nuestros servicios."
 	
 	NO_INIT_DATE = "Lo siento, pero no tenemos {type} disponibles para esa fecha"
@@ -65,6 +68,12 @@ class Response(object):
 	KNOWN_INFO = "Ya, ya me lo habias comentado"
 	
 	TOTAL_PRICE = "Precio total: {price} EUR"
+	
+	SERVICE_ADITIONAL_BED = "Añado una cama supletoria"
+	SERVICE_PARKING = "Añado el servicio de parking"
+	SERVICE_MINIBAR = "El minibar se combrará en función de las bebidas que se consuman en la habitacion (2 EUR por bebida)"
+	SERVICE_MORE = "¿Algo mas?"
+	SERVICE_WHAT = "¿De que servicios quiere disponer?"
 	
 	KEYBOARD_ROOM_TYPES = "keyboardRoomTypes"
 	KEYBOARD_PENSION_TYPES = "keyboardPensionTypes"
@@ -127,6 +136,8 @@ class Reservation(object):
 		self._pension_type = None
 		self._init_date = None
 		self._end_date = None
+		self._parking = False
+		self._aditional_bed = False
 
 	@property
 	def room_type(self):
@@ -159,6 +170,22 @@ class Reservation(object):
 	@end_date.setter
 	def end_date(self, value):
 		self._end_date = value
+		
+	@property
+	def parking(self):
+		return self._parking
+
+	@parking.setter
+	def parking(self, value):
+		self._parking = value
+		
+	@property
+	def aditional_bed(self):
+		return self._aditional_bed
+
+	@aditional_bed.setter
+	def aditional_bed(self, value):
+		self._aditional_bed = value
 	
 	def summary(self):
 		summ = ""
@@ -170,6 +197,9 @@ class Reservation(object):
 			summ += "Fecha de salida: %s\n" % self.end_date
 		if self.pension_type is not None:
 			summ += "Tipo de pension: %s\n" % self.pension_type
+		
+		summ += "Cama supletoria: %s\n" % ("Si" if self.aditional_bed else "No")
+		summ += "Parking: %s\n" % ("Si" if self.parking else "No")
 			
 		return summ
 		

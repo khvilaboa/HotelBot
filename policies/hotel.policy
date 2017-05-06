@@ -70,7 +70,25 @@ rule pension_type:
 		msg = Response.CONFIRM_PENSION_TYPE.replace("{pension_type}", data["pension_type"])
 		
 		learn Response(msg)
+
+rule show_summary:
+	when:
+		$desire := Desire(id == Desire.SHOW_SUMMARY)
+	then:
+		show_summary()
+		learn Response([])
 		
+rule set_service:
+	when:
+		$desire := Desire(id == Desire.ASK_SERVICE)
+	then:		
+		# Get needed data
+		data = $desire.data
+		
+		services = data["services"]
+		msg = set_services(services)
+		learn Response([msg], None, False)
+
 rule finish_reservation:
 	when:
 		$desire := Desire(id == Desire.CONFIRM_RESERVATION)
@@ -81,4 +99,4 @@ rule finish_reservation:
 		user_resp = data["response"]
 		msg = confirm_reservation(user_resp)
 		learn Response([msg], None, False)
-		#finish_reservation()
+		finish_reservation()

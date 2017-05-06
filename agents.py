@@ -99,13 +99,13 @@ class UserInput:
                 des.append(d)
             elif last_question != Response.ASK_ROOM_TYPE:
                 des.append(Desire(Desire.WANT_ROOM))
-        if (last_question == Response.ASK_INIT_DATE or self.has_word(["comienzo", "empezando", "del", "desde"])) and len(self.dates()) > 0:
+        if (last_question == Response.ASK_INIT_DATE or self.has_word(["comienzo", "entrada", "empezando", "del", "desde"])) and len(self.dates()) > 0:
             d = Desire(Desire.ESTABLISH_INIT_DATE)
             d.data["init_date"] = self.dates()[0] 
             des.append(d)
         if (last_question == Response.ASK_END_DATE and len(self.dates()) > 0) or \
            (self.has_word(["hasta", "al"]) and len(self.dates()) > 1) or \
-		   (self.has_word(["salida", "hasta"]) and len(self.dates()) > 0):
+           (self.has_word(["salida", "hasta"]) and len(self.dates()) > 0):
             d = Desire(Desire.ESTABLISH_END_DATE)
             d.data["end_date"] = self.dates()[-1] 
             des.append(d)
@@ -127,6 +127,22 @@ class UserInput:
             elif self.has_word(denials):
                 d = Desire(Desire.CONFIRM_RESERVATION)
                 d.data["response"] = "no"
+                des.append(d)
+        print(last_question, last_question == Response.ASK_SERVICES)
+        if last_question == Response.ASK_SERVICES[0]:
+            services = []
+            if self.has_word(["supletoria"]) or (self.has_word(["cama"]) and self.has_word(["adicional"])):
+                services.append("aditional_bed")
+            if self.has_word(["parking", "aparcamiento"]):
+                services.append("parking")
+            if self.has_word(["minibar"]):
+                services.append("minibar")
+                
+            if not services and self.has_word(denials):
+                des.append(Desire(Desire.SHOW_SUMMARY))   
+            elif services or self.has_word(afirmations):
+                d = Desire(Desire.ASK_SERVICE)
+                d.data["services"] = services
                 des.append(d)
         
         return des or None
@@ -221,6 +237,8 @@ class MyIntellect(Intellect):
             resp = Response.ASK_END_DATE
         elif reservation.pension_type is None:
             resp = Response.ASK_PENSION_TYPE
+        elif self.last_question != Response.SHOW_INTRO_SUMMARY:
+            resp = Response.ASK_SERVICES
         else:
             price_per_night = self.db.price(reservation.room_type)
             price_pension = self.db.price_pension(reservation.pension_type)
@@ -278,9 +296,37 @@ class MyIntellect(Intellect):
     @Callable
     def confirm_reservation(self, user_resp):
         if user_resp == "yes":
-            return Response.ASK_SERVICES
+            self.last_question = Response.FINISH_RESERVATION
+            return Response.FINISH_RESERVATION
         else:
             return Response.ASK_WRONG_INFO
+            
+    @Callable
+    def show_summary(self):
+        self.last_question = Response.SHOW_INTRO_SUMMARY
+            
+    # Handle the confirmation response when the bot shows the summary
+    @Callable
+    def set_services(self, services):
+        reserv = self.reservation()
+        msg = []
+        
+        for service in services:
+            if service == "aditional_bed":
+                msg.append(Response.SERVICE_ADITIONAL_BED)
+                reserv.aditional_bed = True
+            elif service == "parking":
+                msg.append(Response.SERVICE_PARKING)
+                reserv.parking = True
+            elif service == "minibar":
+                msg.append(Response.SERVICE_MINIBAR)
+                
+        if msg:
+            msg.append(Response.SERVICE_MORE)
+        else:
+            msg.append(Response.SERVICE_WHAT)
+            
+        return msg
     
     # Save current reservation (finished) in the DB and reset it in the facts base
     @Callable
