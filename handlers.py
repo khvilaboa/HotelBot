@@ -81,3 +81,7 @@ class DBHandler:
 		
 	def price_pension(self, pension_type):
 		return self.hotels.find_one()["pension_prices"][pension_type]
+		
+	def location(self):
+		loc = self.hotels.find_one()["location"]
+		return (loc["latitude"], loc["longitude"])

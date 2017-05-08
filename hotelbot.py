@@ -29,7 +29,7 @@ def start(bot, update):
 # To handle text (that doesn't start with '/')
 def text(bot, update):
 	text = update.message.text
-	#pdb.set_trace()
+	pdb.set_trace()
 	username = update.message.from_user.username
 	check_agent(username)
 	
@@ -57,7 +57,17 @@ def unknown(bot, update):
 
 # To handle images
 def images(bot, update):
+	bot.sendPhoto(chat_id=chat_id, photo=open(filename, 'rb'))
 	update.message.reply_text("Eso... es una imagen.")
+	
+# To handle locations
+def location(bot, update):
+	db = DBHandler()
+	hotel_loc = db.location()
+	url = "http://maps.google.com/?saddr=%s,%s&daddr=%s,%s"
+	loc = update.message.location
+	update.message.reply_text("Puedes consultar la ruta desde la localización enviada hasta el hotel en el siguiente enlace:")
+	update.message.reply_text("http://maps.google.com/?saddr=%f,%f&daddr=%f,%f" % ((loc.latitude, loc.longitude) + hotel_loc))
 
 # Example of in-line keyboard use
 def room_types(bot, update):
@@ -101,6 +111,7 @@ dispatcher.add_handler(CommandHandler('roomtypes', room_types))
 dispatcher.add_handler(MessageHandler(Filters.text, text))
 dispatcher.add_handler(MessageHandler(Filters.command, unknown))
 dispatcher.add_handler(MessageHandler(Filters.photo, images))
+dispatcher.add_handler(MessageHandler(Filters.location, location))
 updater.dispatcher.add_handler(CallbackQueryHandler(keyboard_press))  # To handle keyboard press
 
 
