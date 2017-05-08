@@ -75352,6 +75352,7 @@ ensenariais
 ensenariamos
 ensenarian
 ensenarias
+ensenarme
 ensenaron
 ensenas
 ensenase
@@ -117447,6 +117448,7 @@ mostrariais
 mostrariamos
 mostrarian
 mostrarias
+mostrarme
 mostraron
 mostrase
 mostraseis

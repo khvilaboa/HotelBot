@@ -100,3 +100,10 @@ rule finish_reservation:
 		msg = confirm_reservation(user_resp)
 		learn Response([msg], None, False)
 		finish_reservation()
+		
+rule show_rooms:
+	when:
+		$desire := Desire(id == Desire.SHOW_ROOMS)
+	then:		
+		msg = Response.SHOW_ROOMS
+		learn Response([msg], None, False, Response.ACTION_SHOW_ROOMS)

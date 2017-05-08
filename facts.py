@@ -14,6 +14,7 @@ class Desire(object):
 	CONFIRM_RESERVATION = "finishReservation"
 	ASK_SERVICE = "wantService"
 	SHOW_SUMMARY = "showSummary"
+	SHOW_ROOMS = "showRooms"
 	
 	def __init__(self, id = None):
 		self._id = id
@@ -52,6 +53,8 @@ class Response(object):
 	#, "Además te puedo hablar de lugares cercanos que te puedan ser de interes"
 	FINISH_RESERVATION = "Perfecto, guardo la reserva. Gracias por usar nuestros servicios."
 	
+	SHOW_ROOMS = "Disponemos de los siguientes tipos de habitacion:"
+	
 	NO_INIT_DATE = "Lo siento, pero no tenemos {type} disponibles para esa fecha"
 	
 	CONFIRM_ROOM_TYPE = "Una {room_type} pues"
@@ -77,8 +80,10 @@ class Response(object):
 	
 	KEYBOARD_ROOM_TYPES = "keyboardRoomTypes"
 	KEYBOARD_PENSION_TYPES = "keyboardPensionTypes"
+	
+	ACTION_SHOW_ROOMS = "showRooms"
 
-	def __init__(self, msg = [], keyboard = None, next_question = True):
+	def __init__(self, msg = [], keyboard = None, next_question = True, action = None):
 		#pdb.set_trace()
 		msg = [msg] if type(msg) is str else msg
 		self._msg = []
@@ -89,6 +94,7 @@ class Response(object):
 				self._msg.append(m)
 		self._keyboard = keyboard
 		self._next_question = next_question
+		self._action = action
 		
 	def merge(self, resp):
 		for text in resp.msg:
@@ -127,6 +133,14 @@ class Response(object):
 	@next_question.setter
 	def next_question(self, value):
 		self._next_question = value
+		
+	@property
+	def action(self):
+		return self._action
+
+	@action.setter
+	def action(self, value):
+		self._action = value
 		
 
 class Reservation(object):

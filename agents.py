@@ -46,7 +46,7 @@ class UserInput:
 
         # Separate words
         tokens =  nltk.word_tokenize(text)
-        
+
         try:
             stems = map(lambda token: UserInput.stemmer.stem(token), tokens)
         except Exception as e:
@@ -87,6 +87,9 @@ class UserInput:
         afirmations = ("si", "yep", "vale", "nada", "bien")
         denials = ("no", "nope")
         
+        # ---------------------
+        # RESERVATION DESIRES
+        # ---------------------
         if (self.has_word(verbs_want, UserInput.VERB) and self.has_word(noun_room, UserInput.NOUN)) or last_question == Response.ASK_ROOM_TYPE:
             room_type = None
             for rt in room_types:
@@ -144,6 +147,15 @@ class UserInput:
                 d = Desire(Desire.ASK_SERVICE)
                 d.data["services"] = services
                 des.append(d)
+                
+        # ---------------------
+        # INFORMATION DESIRES
+        # ---------------------
+        #pdb.set_trace()
+        if (self.has_word(["ensenar", "ensenarme", "mostrar", "mostrarme", "ver"]) and \
+            self.has_word(["habitacion", "habitaciones"]) and \
+            self.has_word(["contais", "cuentas", "teneis", "tienes", "disponeis", "dispones", "hotel", "tipo"])):
+            des.append(Desire(Desire.SHOW_ROOMS))
         
         return des or None
         

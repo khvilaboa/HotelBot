@@ -29,7 +29,7 @@ def start(bot, update):
 # To handle text (that doesn't start with '/')
 def text(bot, update):
 	text = update.message.text
-	pdb.set_trace()
+	#pdb.set_trace()
 	username = update.message.from_user.username
 	check_agent(username)
 	
@@ -42,10 +42,15 @@ def text(bot, update):
 		for msg in response.msg:
 			update.message.reply_text(msg)
 			
+		# Keyboards
 		if response.keyboard == Response.KEYBOARD_ROOM_TYPES:
 			room_types(bot, update)
 		elif response.keyboard == Response.KEYBOARD_PENSION_TYPES:	
 			pension_types(bot, update)
+			
+		# Actions
+		if response.action == Response.ACTION_SHOW_ROOMS:
+			images(bot, update)
 	except Exception as e:
 		traceback.print_exc()
 		print(e)
@@ -57,12 +62,13 @@ def unknown(bot, update):
 
 # To handle images
 def images(bot, update):
+	db = DBHandler()
 	chat_id = update.message.chat_id
-	update.message.reply_text("Habitación individual:")
+	update.message.reply_text("Habitación individual (%d EUR/noche)" % db.price(DBHandler.ROOM_INDIVIDUAL))
 	bot.sendPhoto(chat_id=chat_id, photo=open("images/individual.jpg", 'rb'))
-	update.message.reply_text("Habitación doble:")
+	update.message.reply_text("Habitación doble (%d EUR/noche)" % db.price(DBHandler.ROOM_DOUBLE))
 	bot.sendPhoto(chat_id=chat_id, photo=open("images/doble.jpg", 'rb'))
-	update.message.reply_text("Suite:")
+	update.message.reply_text("Suite (%d EUR/noche)" % db.price(DBHandler.ROOM_SUITE))
 	bot.sendPhoto(chat_id=chat_id, photo=open("images/suite.jpg", 'rb'))
 	
 	
