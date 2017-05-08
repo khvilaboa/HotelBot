@@ -57,8 +57,14 @@ def unknown(bot, update):
 
 # To handle images
 def images(bot, update):
-	bot.sendPhoto(chat_id=chat_id, photo=open(filename, 'rb'))
-	update.message.reply_text("Eso... es una imagen.")
+	chat_id = update.message.chat_id
+	update.message.reply_text("Habitación individual:")
+	bot.sendPhoto(chat_id=chat_id, photo=open("images/individual.jpg", 'rb'))
+	update.message.reply_text("Habitación doble:")
+	bot.sendPhoto(chat_id=chat_id, photo=open("images/doble.jpg", 'rb'))
+	update.message.reply_text("Suite:")
+	bot.sendPhoto(chat_id=chat_id, photo=open("images/suite.jpg", 'rb'))
+	
 	
 # To handle locations
 def location(bot, update):
