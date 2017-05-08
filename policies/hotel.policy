@@ -99,7 +99,6 @@ rule finish_reservation:
 		user_resp = data["response"]
 		msg = confirm_reservation(user_resp)
 		learn Response([msg], None, False)
-		finish_reservation()
 		
 rule show_rooms:
 	when:

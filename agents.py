@@ -90,6 +90,7 @@ class UserInput:
         # ---------------------
         # RESERVATION DESIRES
         # ---------------------
+           
         if (self.has_word(verbs_want, UserInput.VERB) and self.has_word(noun_room, UserInput.NOUN)) or last_question == Response.ASK_ROOM_TYPE:
             room_type = None
             for rt in room_types:
@@ -309,6 +310,7 @@ class MyIntellect(Intellect):
     def confirm_reservation(self, user_resp):
         if user_resp == "yes":
             self.last_question = Response.FINISH_RESERVATION
+            self.finish_reservation()
             return Response.FINISH_RESERVATION
         else:
             return Response.ASK_WRONG_INFO
