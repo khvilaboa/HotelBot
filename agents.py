@@ -232,5 +232,30 @@ class HotelAgent:
 
 
 class InsultsAgent:
+    RACIST = ["negrata", "sudaca", "moro", "esclavo"];
+    MACHIST = ["zorra", "esclava", "maricon"];
+    GENERICS = ["puta", "puto", "cabron", "cabrona", "gilipollas"];
+    RESPONSE=["No me gusta su estilo","Porque no te vas a tomar por culo","Hable con educacion"];
+
+
     def evaluate(self, input):
-        return 0, Response(Response.UNKNOWN_INPUT)  # trust, response
+        if input.has_word(InsultsAgent.RACIST) or input.has_word(InsultsAgent.MACHIST) or input.has_word(InsultsAgent.GENERICS):
+            return 1,Response(random.choice(InsultsAgent.RESPONSE))
+        return 0, Response(Response.UNKNOWN_INPUT)
+
+class LanguagesAgent:
+    def evaluate(self, input):
+
+        if input.lang=="en":
+            return 1, Response("I only talk in spanish")  # trust, response
+        elif input.lang == "de":
+            return 1, Response("Ich spreche nur Spanisch")  # trust, response
+        elif input.lang == "it":
+            return 1, Response("Io solo parliamo spagnolo")  # trust, response
+        elif input.lang == "fr":
+            return 1, Response("Je parle seulement espagnol")  # trust, response
+        elif input.lang == "pt":
+            return 1, Response("Eu só falo espanhol")  # trust, response
+
+
+        return 0, Response(Response.UNKNOWN_INPUT)
