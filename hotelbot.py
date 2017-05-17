@@ -5,7 +5,7 @@
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from agents import HotelAgent, InsultsAgent, UserInput
+from agents import HotelAgent, InsultsAgent, UserInput, LanguagesAgent
 from facts import Response
 import pdb, traceback
 from resources import UserInput, DBHandler
@@ -13,7 +13,7 @@ from resources import UserInput, DBHandler
 updater = Updater(token='344919668:AAFvtg7WYYvxT9d8msQAu6cvbsmggKwyDEk')  # @DASIHotelBot
 dispatcher = updater.dispatcher
 
-agents = {"insults": InsultsAgent()}  # HotelAgent()
+agents = {"insults": InsultsAgent(), "languages":LanguagesAgent()}  # HotelAgent()
 
 # ------------------------------------------------------------------------------
 
@@ -36,7 +36,7 @@ def text(bot, update):
 	print("\nReceived: %s" % text)
 	try:
 		input = UserInput(text)
-		suitable_agents = (agents["insults"], agents[username])
+		suitable_agents = (agents["insults"], agents[username], agents["languages"])
 		response = max([agent.evaluate(input) for agent in suitable_agents])[1]
 		print("Response: ", response.msg)
 		for msg in response.msg:
