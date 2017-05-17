@@ -8,7 +8,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from agents import HotelAgent, InsultsAgent, UserInput
 from facts import Response
 import pdb, traceback
-from handlers import DBHandler
+from resources import UserInput, DBHandler
 
 updater = Updater(token='344919668:AAFvtg7WYYvxT9d8msQAu6cvbsmggKwyDEk')  # @DASIHotelBot
 dispatcher = updater.dispatcher

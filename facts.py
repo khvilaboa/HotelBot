@@ -15,6 +15,7 @@ class Desire(object):
 	ASK_SERVICE = "wantService"
 	SHOW_SUMMARY = "showSummary"
 	SHOW_ROOMS = "showRooms"
+	GREET_USER = "greetUser"
 	
 	def __init__(self, id = None):
 		self._id = id
