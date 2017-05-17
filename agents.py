@@ -235,7 +235,7 @@ class InsultsAgent:
     RACIST = ["negrata", "sudaca", "moro", "esclavo"];
     MACHIST = ["zorra", "esclava", "maricon"];
     GENERICS = ["puta", "puto", "cabron", "cabrona", "gilipollas"];
-    RESPONSE=["No me gusta su estilo","Porque no te vas a tomar por culo","Hable con educacion"];
+    RESPONSE=["No puedo seguir la conversación en este tono ","La educación es lo primero","Por favor, no utilice palabras malsonantes","El tono de la conversación no debe seguir por este camino","Hable con educacion", "No utilice lenguaje soez"];
 
 
     def evaluate(self, input):
