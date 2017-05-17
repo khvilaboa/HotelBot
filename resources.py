@@ -4,7 +4,11 @@
 from pymongo import MongoClient
 from facts import Reservation
 from datetime import datetime, timedelta
-import pdb
+from utils import spellchecker as sc, dateparser as dp, postagger as pos
+from facts import Response, Goal
+import nltk, pdb, re, string
+import langdetect, langid, textblob
+
 
 # To encapsulate the client's message and doing preparse tasks
 class UserInput:
@@ -68,7 +72,7 @@ class UserInput:
             return None  # Insuficient information
 
     # Generates the desires based on the user input
-    def desires(self, last_question = None):
+    def goals(self, last_question = None):
         des = []
 
         verbs_want = ("queria", "quiero", "qerria", "necesitaba", "necesitaria", "gustaria")
@@ -88,7 +92,7 @@ class UserInput:
         if (self.has_word(greetings) or \
            (self.has_word(["buenos"]) and self.has_word(["dias"])) or \
            (self.has_word(["buenas"]) and self.has_word(["tardes", "noches"]))):
-           des.append(Desire(Desire.GREET_USER))
+           des.append(Goal(Goal.GREET_USER))
 
         if (self.has_word(verbs_want, UserInput.VERB) and self.has_word(noun_room, UserInput.NOUN)) or last_question == Response.ASK_ROOM_TYPE:
             room_type = None
@@ -97,19 +101,19 @@ class UserInput:
                     room_type = rt
 
             if room_type is not None:  # Room type specified
-                d = Desire(Desire.ESTABLISH_ROOM_TYPE)
+                d = Goal(Goal.ESTABLISH_ROOM_TYPE)
                 d.data["room_type"] = room_type
                 des.append(d)
             elif last_question != Response.ASK_ROOM_TYPE:
-                des.append(Desire(Desire.WANT_ROOM))
+                des.append(Goal(Goal.WANT_ROOM))
         if (last_question == Response.ASK_INIT_DATE or self.has_word(["comienzo", "entrada", "empezando", "del", "desde"])) and len(self.dates()) > 0:
-            d = Desire(Desire.ESTABLISH_INIT_DATE)
+            d = Goal(Goal.ESTABLISH_INIT_DATE)
             d.data["init_date"] = self.dates()[0]
             des.append(d)
         if (last_question == Response.ASK_END_DATE and len(self.dates()) > 0) or \
            (self.has_word(["hasta", "al"]) and len(self.dates()) > 1) or \
            (self.has_word(["salida", "hasta"]) and len(self.dates()) > 0):
-            d = Desire(Desire.ESTABLISH_END_DATE)
+            d = Goal(Goal.ESTABLISH_END_DATE)
             d.data["end_date"] = self.dates()[-1]
             des.append(d)
         #pdb.set_trace()
@@ -119,16 +123,16 @@ class UserInput:
                 if self.has_word(pt):
                     pension_type = pt
 
-            d = Desire(Desire.ESTABLISH_PENSION_TYPE)
+            d = Goal(Goal.ESTABLISH_PENSION_TYPE)
             d.data["pension_type"] = pension_type
             des.append(d)
         if last_question == Response.SHOW_INTRO_SUMMARY:
             if self.has_word(afirmations):
-                d = Desire(Desire.CONFIRM_RESERVATION)
+                d = Goal(Goal.CONFIRM_RESERVATION)
                 d.data["response"] = "yes"
                 des.append(d)
             elif self.has_word(denials):
-                d = Desire(Desire.CONFIRM_RESERVATION)
+                d = Goal(Goal.CONFIRM_RESERVATION)
                 d.data["response"] = "no"
                 des.append(d)
         print(last_question, last_question == Response.ASK_SERVICES)
@@ -142,9 +146,9 @@ class UserInput:
                 services.append("minibar")
 
             if not services and self.has_word(denials):
-                des.append(Desire(Desire.SHOW_SUMMARY))
+                des.append(Goal(Goal.SHOW_SUMMARY))
             elif services or self.has_word(afirmations):
-                d = Desire(Desire.ASK_SERVICE)
+                d = Goal(Goal.ASK_SERVICE)
                 d.data["services"] = services
                 des.append(d)
 
@@ -155,7 +159,7 @@ class UserInput:
         if (self.has_word(["ensenar", "ensenarme", "mostrar", "mostrarme", "ver"]) and \
             self.has_word(["habitacion", "habitaciones"]) and \
             self.has_word(["contais", "cuentas", "teneis", "tienes", "disponeis", "dispones", "hotel", "tipo"])):
-            des.append(Desire(Desire.SHOW_ROOMS))
+            des.append(Goal(Goal.SHOW_ROOMS))
 
         return des or None
 

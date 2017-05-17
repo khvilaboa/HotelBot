@@ -1,12 +1,12 @@
 
-from facts import Desire, Response
+from facts import Goal, Response
 
 #i=0
 
 rule want_room:
 	#agenda-group "rooms"
 	when:
-		$desire := Desire(id == Desire.WANT_ROOM)
+		$goal := Goal(id == Goal.WANT_ROOM)
 	then:
 		#attribute i = i + 1
 		#msg = next_question()
@@ -14,10 +14,10 @@ rule want_room:
 		
 rule room_type:
 	when:
-		$desire := Desire(id == Desire.ESTABLISH_ROOM_TYPE)
+		$goal := Goal(id == Goal.ESTABLISH_ROOM_TYPE)
 	then:
 		# Get needed data
-		data = $desire.data
+		data = $goal.data
 		
 		# Modify room type in the current reservation
 		reserv = reservation()
@@ -27,10 +27,10 @@ rule room_type:
 		
 rule init_date:
 	when:
-		$desire := Desire(id == Desire.ESTABLISH_INIT_DATE) 
+		$goal := Goal(id == Goal.ESTABLISH_INIT_DATE)
 	then:
 		# Get needed data
-		data = $desire.data
+		data = $goal.data
 		
 		# Modify start date in the current reservation
 		#reserv = reservation()
@@ -44,10 +44,10 @@ rule init_date:
 		
 rule end_date:
 	when:
-		$desire := Desire(id == Desire.ESTABLISH_END_DATE)
+		$goal := Goal(id == Goal.ESTABLISH_END_DATE)
 	then:
 		# Get needed data
-		data = $desire.data
+		data = $goal.data
 		
 		# Modify end date in the current reservation
 		reserv = reservation()
@@ -58,10 +58,10 @@ rule end_date:
 		
 rule pension_type:
 	when:
-		$desire := Desire(id == Desire.ESTABLISH_PENSION_TYPE)
+		$goal := Goal(id == Goal.ESTABLISH_PENSION_TYPE)
 	then:
 		# Get needed data
-		data = $desire.data
+		data = $goal.data
 		
 		# Modify pension type in the current reservation
 		reserv = reservation()
@@ -73,17 +73,17 @@ rule pension_type:
 
 rule show_summary:
 	when:
-		$desire := Desire(id == Desire.SHOW_SUMMARY)
+		$goal := Goal(id == Goal.SHOW_SUMMARY)
 	then:
 		show_summary()
 		learn Response([])
 		
 rule set_service:
 	when:
-		$desire := Desire(id == Desire.ASK_SERVICE)
+		$goal := Goal(id == Goal.ASK_SERVICE)
 	then:		
 		# Get needed data
-		data = $desire.data
+		data = $goal.data
 		
 		services = data["services"]
 		msg = set_services(services)
@@ -91,10 +91,10 @@ rule set_service:
 
 rule finish_reservation:
 	when:
-		$desire := Desire(id == Desire.CONFIRM_RESERVATION)
+		$goal := Goal(id == Goal.CONFIRM_RESERVATION)
 	then:		
 		# Get needed data
-		data = $desire.data
+		data = $goal.data
 		
 		user_resp = data["response"]
 		msg = confirm_reservation(user_resp)
@@ -102,7 +102,7 @@ rule finish_reservation:
 		
 rule show_rooms:
 	when:
-		$desire := Desire(id == Desire.SHOW_ROOMS)
+		$goal := Goal(id == Goal.SHOW_ROOMS)
 	then:		
 		msg = Response.SHOW_ROOMS
 		learn Response([msg], None, False, Response.ACTION_SHOW_ROOMS)

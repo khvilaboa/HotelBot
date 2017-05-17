@@ -4,7 +4,7 @@
 import random, pdb
 
 # To comunicate de client's desires to the intellect
-class Desire(object):
+class Goal(object):
 	
 	WANT_ROOM = "wantRoom"
 	ESTABLISH_ROOM_TYPE = "roomType"
@@ -38,7 +38,7 @@ class Desire(object):
 		self._data = value
 		
 	def is_goal(self):
-		return self.id == Desire.ESTABLISH_ROOM_TYPE
+		return self.id == Goal.ESTABLISH_ROOM_TYPE
 
 		
 # To extract the intellect response

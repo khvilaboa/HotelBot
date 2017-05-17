@@ -3,12 +3,12 @@
 
 # from resources import Database, Weather
 
-import langdetect, langid, textblob
+
 import nltk, pdb, pymongo, re, string
 from collections import OrderedDict
 from utils import spellchecker as sc, postagger as pos, dateparser as dp
 from intellect.Intellect import Intellect, Callable
-from facts import Desire, Response, Reservation
+from facts import Goal, Response, Reservation
 from resources import UserInput, DBHandler
 from datetime import datetime
 
@@ -62,7 +62,7 @@ class MyIntellect(Intellect):
         i = 0
         while i < len(self._knowledge):
             fact = self._knowledge[i]
-            if type(fact) is Desire:
+            if type(fact) is Goal:
                 self._knowledge.remove(fact)
             else:
                 i += 1
@@ -207,7 +207,7 @@ class HotelAgent:
 
         resp = None
 
-        desires = input.desires(self.intellect.last_question)
+        desires = input.goals(self.intellect.last_question)
         #pdb.set_trace()
         if desires is not None:
             print("Desires: ")
