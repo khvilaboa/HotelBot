@@ -5,7 +5,7 @@
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from agents import HotelAgent, InsultsAgent, UserInput, LanguagesAgent
+from agents import HotelAgent, InsultsAgent, LanguagesAgent
 from facts import Response
 import pdb, traceback
 from resources import UserInput, DBHandler

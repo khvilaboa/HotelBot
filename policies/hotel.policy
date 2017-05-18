@@ -1,15 +1,20 @@
 
 from facts import Goal, Response
+import random
 
 #i=0
+
+rule greet_user:
+	when:
+		$goal := Goal(id == Goal.GREET_USER)
+	then:
+		learn Response(random.choice(Response.GREETINGS), None, False)
 
 rule want_room:
 	#agenda-group "rooms"
 	when:
 		$goal := Goal(id == Goal.WANT_ROOM)
 	then:
-		#attribute i = i + 1
-		#msg = next_question()
 		learn Response([], Response.KEYBOARD_ROOM_TYPES)
 		
 rule room_type:

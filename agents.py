@@ -3,15 +3,10 @@
 
 # from resources import Database, Weather
 
-
-import nltk, pdb, pymongo, re, string
-from collections import OrderedDict
-from utils import spellchecker as sc, postagger as pos, dateparser as dp
 from intellect.Intellect import Intellect, Callable
 from facts import Goal, Response, Reservation
-from resources import UserInput, DBHandler
-from datetime import datetime
-import random
+from resources import DBHandler
+import pdb, random
 
 
 # Custom intellect to improve the management of facts and policies
@@ -208,8 +203,8 @@ class HotelAgent:
 
         resp = None
 
+        pdb.set_trace()
         desires = input.goals(self.intellect.last_question)
-        #pdb.set_trace()
         if desires is not None:
             print("Desires: ")
             for d in desires: print(d.id)

@@ -44,6 +44,8 @@ class Goal(object):
 # To extract the intellect response
 class Response(object):
 
+	GREETINGS = ["Saludos", "Bienvenido", "Hola"]
+
 	ASK_ROOM_TYPE = "Que tipo de habitacion quieres?"
 	ASK_INIT_DATE = "Que dia quieres comenzar tu estancia?"
 	ASK_END_DATE = "Hasta que dia quieres estar?"

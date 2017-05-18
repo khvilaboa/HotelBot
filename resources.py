@@ -84,10 +84,10 @@ class UserInput:
         afirmations = ("si", "yep", "vale", "nada", "bien")
         denials = ("no", "nope")
 
-        greetings = ("hola", "hi")
+        greetings = ("hola", "saludos", "hi")
 
         # ---------------------
-        # RESERVATION DESIRES
+        # RESERVATION GOALS
         # ---------------------
         if (self.has_word(greetings) or \
            (self.has_word(["buenos"]) and self.has_word(["dias"])) or \
@@ -104,7 +104,7 @@ class UserInput:
                 d = Goal(Goal.ESTABLISH_ROOM_TYPE)
                 d.data["room_type"] = room_type
                 des.append(d)
-            elif last_question != Response.ASK_ROOM_TYPE:
+            else:
                 des.append(Goal(Goal.WANT_ROOM))
         if (last_question == Response.ASK_INIT_DATE or self.has_word(["comienzo", "entrada", "empezando", "del", "desde"])) and len(self.dates()) > 0:
             d = Goal(Goal.ESTABLISH_INIT_DATE)
@@ -153,7 +153,7 @@ class UserInput:
                 des.append(d)
 
         # ---------------------
-        # INFORMATION DESIRES
+        # INFORMATION GOALS
         # ---------------------
         #pdb.set_trace()
         if (self.has_word(["ensenar", "ensenarme", "mostrar", "mostrarme", "ver"]) and \
