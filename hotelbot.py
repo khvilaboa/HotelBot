@@ -9,6 +9,7 @@ from agents import HotelAgent, InsultsAgent, UserInput, LanguagesAgent
 from facts import Response
 import pdb, traceback
 from resources import UserInput, DBHandler
+from utils.directions import Directions
 
 updater = Updater(token='344919668:AAFvtg7WYYvxT9d8msQAu6cvbsmggKwyDEk')  # @DASIHotelBot
 dispatcher = updater.dispatcher
@@ -76,10 +77,10 @@ def images(bot, update):
 def location(bot, update):
 	db = DBHandler()
 	hotel_loc = db.location()
-	url = "http://maps.google.com/?saddr=%s,%s&daddr=%s,%s"
 	loc = update.message.location
+
 	update.message.reply_text("Puedes consultar la ruta desde la localización enviada hasta el hotel en el siguiente enlace:")
-	update.message.reply_text("http://maps.google.com/?saddr=%f,%f&daddr=%f,%f" % ((loc.latitude, loc.longitude) + hotel_loc))
+	update.message.reply_text(Directions.route_url(loc.latitude, loc.longitude, hotel_loc[0], hotel_loc[1]))
 
 # Example of in-line keyboard use
 def room_types(bot, update):

@@ -11,6 +11,7 @@ from intellect.Intellect import Intellect, Callable
 from facts import Goal, Response, Reservation
 from resources import UserInput, DBHandler
 from datetime import datetime
+import random
 
 
 # Custom intellect to improve the management of facts and policies

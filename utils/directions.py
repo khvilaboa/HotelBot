@@ -83,3 +83,8 @@ class Directions:
                                                   mode="bike",
                                                   departure_time=departure_time)
         return directions_result
+
+    @staticmethod
+    def route_url(current_lat, current_lon, hotel_lat, hotel_lon):
+        url = "http://maps.google.com/?saddr=%s,%s&daddr=%s,%s" % (current_lat, current_lon, hotel_lat, hotel_lon)
+        return url
