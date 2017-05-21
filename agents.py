@@ -93,7 +93,7 @@ class MyIntellect(Intellect):
             db = DBHandler()
             hotel_loc = db.location()
             weather = Weather("86b4bc5747efd019c9d6bf0da2c84813")
-            reservation.weather = weather.get_daily_forecast(hotel_loc)
+            #reservation.weather = weather.get_daily_forecast(*hotel_loc)
             resp = [Response.SHOW_INTRO_SUMMARY]
             resp.append(reservation.summary())
             resp.append(Response.TOTAL_PRICE.format(price=num_nights * (price_per_night + price_pension)))
@@ -193,7 +193,7 @@ class MyIntellect(Intellect):
         email = self.db.client_email(self.username)
         if email is not None:
             mail = Email("dasihotelbot@gmail.com", "3m0j1Lun4")
-            mail.send_email("dasihotelbot@gmail.com", email, "Resumen de reserva", "TODO")
+            mail.send_email("dasihotelbot@gmail.com", email, "Resumen de reserva", reserv.summary())
 
         self._knowledge.remove(reserv)
         self.learn(Reservation())
@@ -233,7 +233,6 @@ class HotelAgent:
             for desire in desires:
                 self.intellect.add_desire(desire)
             self.intellect.reason()
-            pdb.set_trace()
             resp = self.intellect.extract_response()
 
             if resp is not None:
@@ -249,13 +248,13 @@ class HotelAgent:
 
 
 class InsultsAgent:
-    RACIST = ["negrata", "sudaca", "moro", "esclavo"];
-    MACHIST = ["zorra", "esclava", "maricon"];
-    GENERICS = ["puta", "puto", "cabron", "cabrona", "gilipollas"];
+    RACIST = ["negrata", "sudaca", "moro", "esclavo"]
+    MACHIST = ["zorra", "esclava", "maricon"]
+    GENERICS = ["puta", "puto", "cabron", "cabrona", "gilipollas"]
     RESPONSE = ["No puedo seguir la conversación en este tono ", "La educación es lo primero",
                 "Por favor, no utilice palabras malsonantes",
                 "El tono de la conversación no debe seguir por este camino", "Hable con educacion",
-                "No utilice lenguaje soez"];
+                "No utilice lenguaje soez"]
 
     def evaluate(self, input):
         if input.has_word(InsultsAgent.RACIST) or input.has_word(InsultsAgent.MACHIST) or input.has_word(

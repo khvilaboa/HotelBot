@@ -282,6 +282,7 @@ class DBHandler:
     def update_email(self, username, email):
         self.clients.update({DBHandler.FIELD_CLIENT_USER: username}, {"$set": {DBHandler.FIELD_CLIENT_EMAIL: email}})
 
+
     # Returns the price of a specific type of room
     def price(self, room_type):
         return self.hotels.find_one()["room_prices"][room_type]
