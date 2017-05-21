@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
-import random, pdb
-
 # To comunicate de client's desires to the intellect
 
 

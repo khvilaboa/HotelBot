@@ -1,12 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
-from pymongo import MongoClient
 from datetime import datetime, timedelta
+
+import langdetect
+import langid
+import nltk
+import re
+import string
+import textblob
+from pymongo import MongoClient
+
+from facts import Response, Goal
 from utils import spellchecker as sc, dateparser as dp, postagger as pos
-from facts import Response, Goal, Reservation
-import nltk, pdb, re, string
-import langdetect, langid, textblob
 
 
 # To encapsulate the client's message and doing preparse tasks

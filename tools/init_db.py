@@ -1,5 +1,6 @@
-from pymongo import MongoClient
 import sys
+
+from pymongo import MongoClient
 
 NUM_FLOORS = 5
 NUM_ROOMS_PER_FLOOR = 10

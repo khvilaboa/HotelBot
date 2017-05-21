@@ -3,12 +3,12 @@
 
 # from resources import Database, Weather
 
+import random
+
 from intellect.Intellect import Intellect, Callable
+
 from facts import Goal, Response, Reservation
 from resources import DBHandler
-import pdb, random
-
-
 # Custom intellect to improve the management of facts and policies
 from utils.weather import Weather
 
