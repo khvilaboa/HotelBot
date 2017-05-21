@@ -75,7 +75,7 @@ class Response(object):
 
     TOTAL_PRICE = "Precio total: {price} EUR"
 
-    SERVICE_ADITIONAL_BED = "Añado una cama supletoria"
+    SERVICE_ADDITIONAL_BED = "Añado una cama supletoria"
     SERVICE_PARKING = "Añado el servicio de parking"
     SERVICE_MINIBAR = "El minibar se cobrará en función de las bebidas que se consuman en la habitacion (2 EUR por bebida)"
     SERVICE_MORE = "¿Algo mas?"
@@ -153,7 +153,7 @@ class Reservation(object):
         self._init_date = None
         self._end_date = None
         self._parking = False
-        self._aditional_bed = False
+        self._additional_bed = False
 
     @property
     def room_type(self):
@@ -196,12 +196,12 @@ class Reservation(object):
         self._parking = value
 
     @property
-    def aditional_bed(self):
-        return self._aditional_bed
+    def additional_bed(self):
+        return self._additional_bed
 
-    @aditional_bed.setter
-    def aditional_bed(self, value):
-        self._aditional_bed = value
+    @additional_bed.setter
+    def additional_bed(self, value):
+        self._additional_bed = value
 
     def summary(self):
         summ = ""
@@ -214,7 +214,8 @@ class Reservation(object):
         if self.pension_type is not None:
             summ += "Tipo de pension: %s\n" % self.pension_type
 
-        summ += "Cama supletoria: %s\n" % ("Si" if self.aditional_bed else "No")
+        summ += "Cama supletoria: %s\n" % ("Si" if self.additional_bed else "No")
         summ += "Parking: %s\n" % ("Si" if self.parking else "No")
+
 
         return summ

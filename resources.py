@@ -141,7 +141,7 @@ class UserInput:
         if last_question == Response.ASK_SERVICES[0]:
             services = []
             if self.has_word(["supletoria"]) or (self.has_word(["cama"]) and self.has_word(["adicional"])):
-                services.append("aditional_bed")
+                services.append("additional_bed")
             if self.has_word(["parking", "aparcamiento"]):
                 services.append("parking")
             if self.has_word(["minibar"]):

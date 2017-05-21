@@ -155,9 +155,9 @@ class MyIntellect(Intellect):
         msg = []
 
         for service in services:
-            if service == "aditional_bed":
-                msg.append(Response.SERVICE_ADITIONAL_BED)
-                reserv.aditional_bed = True
+            if service == "additional_bed":
+                msg.append(Response.SERVICE_ADDITIONAL_BED)
+                reserv.additional_bed = True
             elif service == "parking":
                 msg.append(Response.SERVICE_PARKING)
                 reserv.parking = True
