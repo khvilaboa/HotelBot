@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
-from pymongo import MongoClient
-from facts import Reservation
 from datetime import datetime, timedelta
-from utils import spellchecker as sc, dateparser as dp, postagger as pos
+
+import langdetect
+import langid
+import nltk
+import re
+import string
+import textblob
+from pymongo import MongoClient
+
 from facts import Response, Goal
-import nltk, pdb, re, string
-import langdetect, langid, textblob
+from utils import spellchecker as sc, dateparser as dp, postagger as pos
 
 
 # To encapsulate the client's message and doing preparse tasks
@@ -141,7 +146,7 @@ class UserInput:
         if last_question == Response.ASK_SERVICES[0]:
             services = []
             if self.has_word(["supletoria"]) or (self.has_word(["cama"]) and self.has_word(["adicional"])):
-                services.append("aditional_bed")
+                services.append("additional_bed")
             if self.has_word(["parking", "aparcamiento"]):
                 services.append("parking")
             if self.has_word(["minibar"]):
