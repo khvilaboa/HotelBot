@@ -10,6 +10,9 @@ import pdb, random
 
 
 # Custom intellect to improve the management of facts and policies
+from utils.weather import Weather
+
+
 class MyIntellect(Intellect):
     def __init__(self, username, db):
         Intellect.__init__(self)
@@ -85,7 +88,10 @@ class MyIntellect(Intellect):
             price_per_night = self.db.price(reservation.room_type)
             price_pension = self.db.price_pension(reservation.pension_type)
             num_nights = len(self.db.dates_in_interval(reservation.init_date, reservation.end_date))
-
+            db = DBHandler()
+            hotel_loc = db.location()
+            weather = Weather("86b4bc5747efd019c9d6bf0da2c84813")
+            reservation.weather = weather.get_daily_forecast(hotel_loc)
             resp = [Response.SHOW_INTRO_SUMMARY]
             resp.append(reservation.summary())
             resp.append(Response.TOTAL_PRICE.format(price=num_nights * (price_per_night + price_pension)))
@@ -202,7 +208,6 @@ class HotelAgent:
 
         resp = None
 
-        pdb.set_trace()
         desires = input.goals(self.intellect.last_question)
         if desires is not None:
             print("Desires: ")

@@ -3,8 +3,9 @@
 
 import random, pdb
 
-
 # To comunicate de client's desires to the intellect
+
+
 class Goal(object):
     WANT_ROOM = "wantRoom"
     ESTABLISH_ROOM_TYPE = "roomType"
@@ -154,6 +155,7 @@ class Reservation(object):
         self._end_date = None
         self._parking = False
         self._additional_bed = False
+        self._weather = None
 
     @property
     def room_type(self):
@@ -203,6 +205,14 @@ class Reservation(object):
     def additional_bed(self, value):
         self._additional_bed = value
 
+    @property
+    def weather(self):
+        return self._weather
+
+    @weather.setter
+    def weather(self, value):
+        self._weather = value
+
     def summary(self):
         summ = ""
         if self.room_type is not None:
@@ -216,6 +226,6 @@ class Reservation(object):
 
         summ += "Cama supletoria: %s\n" % ("Si" if self.additional_bed else "No")
         summ += "Parking: %s\n" % ("Si" if self.parking else "No")
-
+        summ += "Previsión meteorológica: %s\n " % self.weather
 
         return summ

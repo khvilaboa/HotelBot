@@ -2,10 +2,9 @@
 # -*- coding: utf8 -*-
 
 from pymongo import MongoClient
-from facts import Reservation
 from datetime import datetime, timedelta
 from utils import spellchecker as sc, dateparser as dp, postagger as pos
-from facts import Response, Goal
+from facts import Response, Goal, Reservation
 import nltk, pdb, re, string
 import langdetect, langid, textblob
 

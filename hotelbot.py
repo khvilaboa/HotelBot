@@ -2,6 +2,7 @@
 # -*- coding: utf8 -*-
 
 # Mail for future use: dasihotelbot@gmail.com / 3m0j1Lun4
+# API key for weather service: 86b4bc5747efd019c9d6bf0da2c84813
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
