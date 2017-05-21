@@ -111,3 +111,12 @@ rule show_rooms:
 	then:		
 		msg = Response.SHOW_ROOMS
 		learn Response([msg], None, False, Response.ACTION_SHOW_ROOMS)
+
+rule update_email:
+	when:
+		$goal := Goal(id == Goal.UPDATE_EMAIL)
+	then:
+		data = $goal.data
+		email = data["email"]
+		update_email(email)
+		learn Response(Response.FINISH_RESERVATION, None, False)

@@ -10,6 +10,9 @@ import pdb, random
 
 
 # Custom intellect to improve the management of facts and policies
+from utils.mail import Email
+
+
 class MyIntellect(Intellect):
 
     def __init__(self, username, db):
@@ -39,11 +42,11 @@ class MyIntellect(Intellect):
             else:
                 i += 1
 
-        next = self.next_question()
         if m is not None and m.next_question:
+            next = self.next_question()
             m.append(next)
-        if next == Response.ASK_PENSION_TYPE:
-            m.keyboard = Response.KEYBOARD_PENSION_TYPES
+            if next == Response.ASK_PENSION_TYPE:
+                m.keyboard = Response.KEYBOARD_PENSION_TYPES
 
         return m
 
@@ -138,10 +141,15 @@ class MyIntellect(Intellect):
     # Handle the confirmation response when the bot shows the summary
     @Callable
     def confirm_reservation(self, user_resp):
+        db = DBHandler()
         if user_resp == "yes":
-            self.last_question = Response.FINISH_RESERVATION
-            self.finish_reservation()
-            return Response.FINISH_RESERVATION
+            if db.client_email(self.username):
+                self.last_question = Response.FINISH_RESERVATION
+                self.finish_reservation()
+                return Response.FINISH_RESERVATION
+            else:
+                self.last_question = Response.ASK_EMAIL
+                return Response.ASK_EMAIL
         else:
             return Response.ASK_WRONG_INFO
 
@@ -177,8 +185,18 @@ class MyIntellect(Intellect):
     def finish_reservation(self):
         reserv = self.reservation()
         self.db.add_reservation(self.username, reserv)
+
+        email = self.db.client_email(self.username)
+        if email is not None:
+            mail = Email("dasihotelbot@gmail.com", "3m0j1Lun4")
+            mail.send_email("dasihotelbot@gmail.com", email, "Resumen de reserva", "TODO")
+
         self._knowledge.remove(reserv)
         self.learn(Reservation())
+
+    @Callable
+    def update_email(self, email):
+        self.db.update_email(self.username, email)
 
 class HotelAgent:
     def __init__(self, username):
@@ -203,7 +221,7 @@ class HotelAgent:
 
         resp = None
 
-        pdb.set_trace()
+        #pdb.set_trace()
         desires = input.goals(self.intellect.last_question)
         if desires is not None:
             print("Desires: ")
@@ -212,6 +230,7 @@ class HotelAgent:
             for desire in desires:
                 self.intellect.add_desire(desire)
             self.intellect.reason()
+            pdb.set_trace()
             resp = self.intellect.extract_response()
 
             if resp is not None:

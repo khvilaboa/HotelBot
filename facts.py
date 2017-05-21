@@ -6,6 +6,7 @@ import random, pdb
 # To comunicate de client's desires to the intellect
 class Goal(object):
 	
+	UPDATE_EMAIL = "updateEmail"
 	WANT_ROOM = "wantRoom"
 	ESTABLISH_ROOM_TYPE = "roomType"
 	ESTABLISH_INIT_DATE = "initDate"
@@ -55,6 +56,7 @@ class Response(object):
 	ASK_SERVICES = ["¿estas interesado en alguno de nuestros servicios?", "Disponemos de camas supletorias, parking y minibar"]
 	#, "Además te puedo hablar de lugares cercanos que te puedan ser de interes"
 	FINISH_RESERVATION = "Perfecto, guardo la reserva. Gracias por usar nuestros servicios."
+	ASK_EMAIL = "¿Cual es tu direccion de correo electronico? (para enviarte el resumen de la reserva)"
 	
 	SHOW_ROOMS = "Disponemos de los siguientes tipos de habitacion:"
 	

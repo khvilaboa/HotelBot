@@ -11,7 +11,7 @@ from email import encoders
 
 
 class Email:
-    def __init__(self, server_address, server_port, server_username, server_password):
+    def __init__(self, server_username, server_password, server_address="smtp.gmail.com", server_port=587):
         self.server_address = server_address
         self.server_port = server_port
         self.server_username = server_username
@@ -25,7 +25,7 @@ class Email:
         msg.attach(MIMEText(body, 'plain'))
         server = smtplib.SMTP(self.server_address, self.server_port)
         server.starttls()
-        server.login(from_address, self.password)
+        server.login(from_address, self.server_password)
         text = msg.as_string()
         server.sendmail(from_address, to_address, text)
         server.quit()
