@@ -45,13 +45,13 @@ class Goal(object):
 class Response(object):
     GREETINGS = ["Saludos", "Bienvenido", "Hola"]
 
-    ASK_ROOM_TYPE = "Que tipo de habitacion quieres?"
-    ASK_INIT_DATE = "Que dia quieres comenzar tu estancia?"
-    ASK_END_DATE = "Hasta que dia quieres estar?"
-    ASK_PENSION_TYPE = "Que tipo de pension prefieres?"
+    ASK_ROOM_TYPE = "¿Que tipo de habitacion quieres?"
+    ASK_INIT_DATE = "¿Que dia quieres comenzar tu estancia?"
+    ASK_END_DATE = "¿Hasta que dia quieres estar?"
+    ASK_PENSION_TYPE = "¿Que tipo de pension prefieres?"
     SHOW_INTRO_SUMMARY = "Los datos de la reserva son los siguientes:"
     ASK_WRONG_INFO = "Bueno... ¿que quieres cambiar entonces?"
-    ASK_SERVICES = ["¿estas interesado en alguno de nuestros servicios?",
+    ASK_SERVICES = ["¿Estas interesado en alguno de nuestros servicios?",
                     "Disponemos de camas supletorias, parking y minibar"]
     # , "Además te puedo hablar de lugares cercanos que te puedan ser de interes"
     FINISH_RESERVATION = "Perfecto, guardo la reserva. Gracias por usar nuestros servicios."
@@ -60,14 +60,14 @@ class Response(object):
 
     NO_INIT_DATE = "Lo siento, pero no tenemos {type} disponibles para esa fecha"
 
-    CONFIRM_ROOM_TYPE = "Una {room_type} pues"
+    CONFIRM_ROOM_TYPE = "Una {room_type}, pues"
     CHANGE_ROOM_TYPE = "Tenia apuntada una {room_type}... cambio a una {new_room_type}"
 
     CONFIRM_INIT_DATE = "Fecha de entrada para el {date}..."
     CONFIRM_END_DATE = "Fecha de salida para el {date}..."
     CONFIRM_PENSION_TYPE = "Bien, {pension_type} entonces"
 
-    CONFIRM_BASIC = "Esta todo correcto?"
+    CONFIRM_BASIC = "¿Esta todo correcto?"
 
     UNKNOWN_INPUT = "Perdona, pero no te he entendido"
 
@@ -77,7 +77,7 @@ class Response(object):
 
     SERVICE_ADITIONAL_BED = "Añado una cama supletoria"
     SERVICE_PARKING = "Añado el servicio de parking"
-    SERVICE_MINIBAR = "El minibar se combrará en función de las bebidas que se consuman en la habitacion (2 EUR por bebida)"
+    SERVICE_MINIBAR = "El minibar se cobrará en función de las bebidas que se consuman en la habitacion (2 EUR por bebida)"
     SERVICE_MORE = "¿Algo mas?"
     SERVICE_WHAT = "¿De que servicios quiere disponer?"
 
