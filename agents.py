@@ -11,7 +11,6 @@ import pdb, random
 
 # Custom intellect to improve the management of facts and policies
 class MyIntellect(Intellect):
-
     def __init__(self, username, db):
         Intellect.__init__(self)
         self.goals = []
@@ -49,7 +48,7 @@ class MyIntellect(Intellect):
 
     # Add a desire to the facts database 
     def add_desire(self, des):
-        #if des.is_goal():
+        # if des.is_goal():
         #    self.goals.append(des.id)
         self.learn(des)
 
@@ -89,7 +88,7 @@ class MyIntellect(Intellect):
 
             resp = [Response.SHOW_INTRO_SUMMARY]
             resp.append(reservation.summary())
-            resp.append(Response.TOTAL_PRICE.format(price = num_nights * (price_per_night + price_pension)))
+            resp.append(Response.TOTAL_PRICE.format(price=num_nights * (price_per_night + price_pension)))
             resp.append(Response.CONFIRM_BASIC)
 
         self.last_question = resp if type(resp) is not list else resp[0]
@@ -125,13 +124,13 @@ class MyIntellect(Intellect):
     @Callable
     def response_from_init_date(self, init_date):
         reserv = self.reservation()
-        if self.db.free_room_from_dates(init_date, room_type = reserv.room_type):
+        if self.db.free_room_from_dates(init_date, room_type=reserv.room_type):
             reserv.init_date = init_date
             msg = [Response.CONFIRM_INIT_DATE.replace("{date}", init_date)]
         else:
             room_type = reserv.room_type if reserv.room_type is not None else "habitaciones"
             room_type += "s" if room_type != DBHandler.ROOM_INDIVIDUAL else "es"
-            msg = Response.NO_INIT_DATE.format(type = room_type)
+            msg = Response.NO_INIT_DATE.format(type=room_type)
 
         return msg
 
@@ -180,6 +179,7 @@ class MyIntellect(Intellect):
         self._knowledge.remove(reserv)
         self.learn(Reservation())
 
+
 class HotelAgent:
     def __init__(self, username):
 
@@ -191,7 +191,6 @@ class HotelAgent:
 
         self.intellect = MyIntellect(username, self.db)
         self.intellect.learn(Intellect.local_file_uri("./policies/hotel.policy"))
-
 
     def evaluate(self, input):
         msg = "Language: %s" % input.lang
@@ -221,28 +220,31 @@ class HotelAgent:
 
         if resp is None:
             resp = Response(Response.UNKNOWN_INPUT)
-        #resp.msg = [msg]
+        # resp.msg = [msg]
         print(msg)  # Only for testing purposes
         return 1, resp  # trust, response
-
 
 
 class InsultsAgent:
     RACIST = ["negrata", "sudaca", "moro", "esclavo"];
     MACHIST = ["zorra", "esclava", "maricon"];
     GENERICS = ["puta", "puto", "cabron", "cabrona", "gilipollas"];
-    RESPONSE=["No puedo seguir la conversación en este tono ","La educación es lo primero","Por favor, no utilice palabras malsonantes","El tono de la conversación no debe seguir por este camino","Hable con educacion", "No utilice lenguaje soez"];
-
+    RESPONSE = ["No puedo seguir la conversación en este tono ", "La educación es lo primero",
+                "Por favor, no utilice palabras malsonantes",
+                "El tono de la conversación no debe seguir por este camino", "Hable con educacion",
+                "No utilice lenguaje soez"];
 
     def evaluate(self, input):
-        if input.has_word(InsultsAgent.RACIST) or input.has_word(InsultsAgent.MACHIST) or input.has_word(InsultsAgent.GENERICS):
-            return 1,Response(random.choice(InsultsAgent.RESPONSE))
+        if input.has_word(InsultsAgent.RACIST) or input.has_word(InsultsAgent.MACHIST) or input.has_word(
+                InsultsAgent.GENERICS):
+            return 1, Response(random.choice(InsultsAgent.RESPONSE))
         return 0, Response(Response.UNKNOWN_INPUT)
+
 
 class LanguagesAgent:
     def evaluate(self, input):
 
-        if input.lang=="en":
+        if input.lang == "en":
             return 1, Response("I only talk in spanish")  # trust, response
         elif input.lang == "de":
             return 1, Response("Ich spreche nur Spanisch")  # trust, response
@@ -252,6 +254,5 @@ class LanguagesAgent:
             return 1, Response("Je parle seulement espagnol")  # trust, response
         elif input.lang == "pt":
             return 1, Response("Eu só falo espanhol")  # trust, response
-
 
         return 0, Response(Response.UNKNOWN_INPUT)

@@ -12,7 +12,6 @@ import langdetect, langid, textblob
 
 # To encapsulate the client's message and doing preparse tasks
 class UserInput:
-
     VERB = "v"
     NOUN = "n"
 
@@ -33,7 +32,8 @@ class UserInput:
         return self.text
 
     def sanitize(self, text):
-        rep = {u'á': 'a', u'é': 'e', u'í': 'i', u'ó': 'o', u'ú': 'u', u'Á': 'A', u'É': 'E', u'Í': 'I', u'Ó': 'O', u'Ú': 'U', u'ü': 'u', u'Ü': 'u', u'ñ': 'n', u'Ñ': 'n'}   # temporal
+        rep = {u'á': 'a', u'é': 'e', u'í': 'i', u'ó': 'o', u'ú': 'u', u'Á': 'A', u'É': 'E', u'Í': 'I', u'Ó': 'O',
+               u'Ú': 'U', u'ü': 'u', u'Ü': 'u', u'ñ': 'n', u'Ñ': 'n'}  # temporal
         for k, v in rep.iteritems(): text = text.replace(k, v)
         return ''.join(filter(lambda c: c in string.printable, text))
 
@@ -42,7 +42,7 @@ class UserInput:
         text = ''.join([c for c in text if c not in UserInput.non_words])
 
         # Separate words
-        tokens =  nltk.word_tokenize(text)
+        tokens = nltk.word_tokenize(text)
 
         try:
             stems = map(lambda token: UserInput.stemmer.stem(token), tokens)
@@ -72,7 +72,7 @@ class UserInput:
             return None  # Insuficient information
 
     # Generates the desires based on the user input
-    def goals(self, last_question = None):
+    def goals(self, last_question=None):
         des = []
 
         verbs_want = ("queria", "quiero", "qerria", "necesitaba", "necesitaria", "gustaria")
@@ -90,11 +90,12 @@ class UserInput:
         # RESERVATION GOALS
         # ---------------------
         if (self.has_word(greetings) or \
-           (self.has_word(["buenos"]) and self.has_word(["dias"])) or \
-           (self.has_word(["buenas"]) and self.has_word(["tardes", "noches"]))):
-           des.append(Goal(Goal.GREET_USER))
+                    (self.has_word(["buenos"]) and self.has_word(["dias"])) or \
+                    (self.has_word(["buenas"]) and self.has_word(["tardes", "noches"]))):
+            des.append(Goal(Goal.GREET_USER))
 
-        if (self.has_word(verbs_want, UserInput.VERB) and self.has_word(noun_room, UserInput.NOUN)) or last_question == Response.ASK_ROOM_TYPE:
+        if (self.has_word(verbs_want, UserInput.VERB) and self.has_word(noun_room,
+                                                                        UserInput.NOUN)) or last_question == Response.ASK_ROOM_TYPE:
             room_type = None
             for rt in room_types:
                 if self.has_word(rt):
@@ -106,18 +107,19 @@ class UserInput:
                 des.append(d)
             else:
                 des.append(Goal(Goal.WANT_ROOM))
-        if (last_question == Response.ASK_INIT_DATE or self.has_word(["comienzo", "entrada", "empezando", "del", "desde"])) and len(self.dates()) > 0:
+        if (last_question == Response.ASK_INIT_DATE or self.has_word(
+                ["comienzo", "entrada", "empezando", "del", "desde"])) and len(self.dates()) > 0:
             d = Goal(Goal.ESTABLISH_INIT_DATE)
             d.data["init_date"] = self.dates()[0]
             des.append(d)
         if (last_question == Response.ASK_END_DATE and len(self.dates()) > 0) or \
-           (self.has_word(["hasta", "al"]) and len(self.dates()) > 1) or \
-           (self.has_word(["salida", "hasta"]) and len(self.dates()) > 0):
+                (self.has_word(["hasta", "al"]) and len(self.dates()) > 1) or \
+                (self.has_word(["salida", "hasta"]) and len(self.dates()) > 0):
             d = Goal(Goal.ESTABLISH_END_DATE)
             d.data["end_date"] = self.dates()[-1]
             des.append(d)
-        #pdb.set_trace()
-        if self.has_word(pension_types): # last_question == Response.ASK_PENSION_TYPE and
+        # pdb.set_trace()
+        if self.has_word(pension_types):  # last_question == Response.ASK_PENSION_TYPE and
             pension_type = None
             for pt in pension_types:
                 if self.has_word(pt):
@@ -155,16 +157,17 @@ class UserInput:
         # ---------------------
         # INFORMATION GOALS
         # ---------------------
-        #pdb.set_trace()
+        # pdb.set_trace()
         if (self.has_word(["ensenar", "ensenarme", "mostrar", "mostrarme", "ver"]) and \
-            self.has_word(["habitacion", "habitaciones"]) and \
-            self.has_word(["contais", "cuentas", "teneis", "tienes", "disponeis", "dispones", "hotel", "tipo"])):
+                    self.has_word(["habitacion", "habitaciones"]) and \
+                    self.has_word(
+                        ["contais", "cuentas", "teneis", "tienes", "disponeis", "dispones", "hotel", "tipo"])):
             des.append(Goal(Goal.SHOW_ROOMS))
 
         return des or None
 
     # Check if the input have some of the verbs in a list
-    def has_word(self, lst, word_type = None):
+    def has_word(self, lst, word_type=None):
         if type(lst) is str:
             lst = (lst,)
         lst = map(self.stemmer.stem, lst)
@@ -183,83 +186,82 @@ class UserInput:
 
 
 class DBHandler:
+    ROOM_INDIVIDUAL = "individual"
+    ROOM_DOUBLE = "double"
+    ROOM_SUITE = "suite"
 
-	ROOM_INDIVIDUAL = "individual"
-	ROOM_DOUBLE = "double"
-	ROOM_SUITE = "suite"
+    PENSION_FULL = "completa"
+    PENSION_HALF = "parcial"
+    PENSION_BREAKFAST = "desayuno"
 
-	PENSION_FULL = "completa"
-	PENSION_HALF = "parcial"
-	PENSION_BREAKFAST = "desayuno"
+    FIELD_CLIENT_USER = "username"
+    FIELD_CLIENT_RESERV = "reservations"
 
-	FIELD_CLIENT_USER = "username"
-	FIELD_CLIENT_RESERV = "reservations"
+    def __init__(self):
+        self.mongo_client = MongoClient()
+        self.hotel_db = self.mongo_client.hotelbot
 
-	def __init__(self):
-		self.mongo_client = MongoClient()
-		self.hotel_db = self.mongo_client.hotelbot
+        # Collections
+        self.hotels = self.hotel_db.hotels
+        self.rooms = self.hotel_db.rooms
+        self.clients = self.hotel_db.clients
 
-		# Collections
-		self.hotels = self.hotel_db.hotels
-		self.rooms = self.hotel_db.rooms
-		self.clients = self.hotel_db.clients
+    def add_reservation(self, username, reserv):
+        reserv_doc = dict()
+        reserv_doc["room_type"] = reserv.room_type
+        reserv_doc["init_date"] = reserv.init_date
+        reserv_doc["end_date"] = reserv.end_date
+        reserv_doc["pension_type"] = reserv.pension_type
 
-	def add_reservation(self, username, reserv):
-		reserv_doc = dict()
-		reserv_doc["room_type"] = reserv.room_type
-		reserv_doc["init_date"] = reserv.init_date
-		reserv_doc["end_date"] = reserv.end_date
-		reserv_doc["pension_type"] = reserv.pension_type
+        now = datetime.now()
+        reserv_doc["reservation_date"] = now.strftime("%d/%m/%Y")
+        reserv_doc["reservation_hour"] = now.strftime("%H:%M:%S")
 
-		now = datetime.now()
-		reserv_doc["reservation_date"] = now.strftime("%d/%m/%Y")
-		reserv_doc["reservation_hour"] = now.strftime("%H:%M:%S")
+        room = self.free_room_from_dates(reserv.init_date, reserv.end_date)
+        reserv_doc["room"] = room["number"]
+        reserv_doc["floor"] = room["floor"]
 
-		room = self.free_room_from_dates(reserv.init_date, reserv.end_date)
-		reserv_doc["room"] = room["number"]
-		reserv_doc["floor"] = room["floor"]
+        days = self.dates_in_interval(reserv.init_date, reserv.end_date)
+        self.rooms.update({"number": room["number"], "floor": room["floor"]}, \
+                          {"$push": {"reservations": {"$each": days}}})
 
-		days = self.dates_in_interval(reserv.init_date, reserv.end_date)
-		self.rooms.update({"number": room["number"], "floor": room["floor"]}, \
-		                  {"$push": {"reservations": {"$each": days}}})
+        self.clients.update({DBHandler.FIELD_CLIENT_USER: username},
+                            {"$push": {DBHandler.FIELD_CLIENT_RESERV: reserv_doc}})
 
-		self.clients.update({DBHandler.FIELD_CLIENT_USER: username}, {"$push": {DBHandler.FIELD_CLIENT_RESERV: reserv_doc}})
+    def free_room_from_dates(self, init_date, end_date=None, room_type=None):
+        days = self.dates_in_interval(init_date, end_date) if end_date else [init_date]
 
-	def free_room_from_dates(self, init_date, end_date = None, room_type = None):
-		days = self.dates_in_interval(init_date, end_date) if end_date else [init_date]
+        if room_type is None:
+            results = self.rooms.find({"reservations": {"$nin": days}})
+        else:
+            results = self.rooms.find({"reservations": {"$nin": days}, "type": room_type})
 
-		if room_type is None:
-			results = self.rooms.find({"reservations": {"$nin": days}})
-		else:
-			results = self.rooms.find({"reservations": {"$nin": days}, "type": room_type})
+        return results.next() if results.count() != 0 else None
 
-		return results.next() if results.count() != 0 else None
+    def dates_in_interval(self, init_date, end_date):
+        idt = datetime.strptime(init_date, "%d/%m/%Y")
+        edt = datetime.strptime(end_date, "%d/%m/%Y")
+        delta = timedelta(days=1)
+        days = []
 
-	def dates_in_interval(self, init_date, end_date):
-		idt = datetime.strptime(init_date, "%d/%m/%Y")
-		edt = datetime.strptime(end_date, "%d/%m/%Y")
-		delta = timedelta(days = 1)
-		days = []
+        while idt != edt:
+            days.append(idt.strftime("%d/%m/%Y"))
+            idt += delta
 
-		while idt != edt:
-			days.append(idt.strftime("%d/%m/%Y"))
-			idt += delta
+            # days.append(idt.strftime("%d/%m/%Y"))
+        return days
 
-		#days.append(idt.strftime("%d/%m/%Y"))
-		return days
+    def check_client(self, username):
+        if self.clients.find_one({DBHandler.FIELD_CLIENT_USER: username}) is None:
+            self.clients.insert_one({DBHandler.FIELD_CLIENT_USER: username})
 
+    # Returns the price of a specific type of room
+    def price(self, room_type):
+        return self.hotels.find_one()["room_prices"][room_type]
 
-	def check_client(self, username):
-		if self.clients.find_one({DBHandler.FIELD_CLIENT_USER: username}) is None:
-			self.clients.insert_one({DBHandler.FIELD_CLIENT_USER: username})
+    def price_pension(self, pension_type):
+        return self.hotels.find_one()["pension_prices"][pension_type]
 
-	# Returns the price of a specific type of room
-	def price(self, room_type):
-		return self.hotels.find_one()["room_prices"][room_type]
-
-	def price_pension(self, pension_type):
-		return self.hotels.find_one()["pension_prices"][pension_type]
-
-	def location(self):
-		loc = self.hotels.find_one()["location"]
-		return (loc["latitude"], loc["longitude"])
+    def location(self):
+        loc = self.hotels.find_one()["location"]
+        return (loc["latitude"], loc["longitude"])
