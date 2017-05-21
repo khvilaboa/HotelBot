@@ -45,7 +45,7 @@ class Email:
             msg.attach(part)
         server = smtplib.SMTP(self.server_address, self.server_port)
         server.starttls()
-        server.login(from_address, self.password)
+        server.login(from_address, self.server_password)
         text = msg.as_string()
         server.sendmail(from_address, to_address, text)
         server.quit()

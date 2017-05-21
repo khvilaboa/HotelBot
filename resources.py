@@ -9,6 +9,7 @@ import nltk
 import re
 import string
 import textblob
+import pdb
 from pymongo import MongoClient
 
 from facts import Response, Goal
@@ -98,9 +99,8 @@ class UserInput:
                     (self.has_word(["buenos"]) and self.has_word(["dias"])) or \
                     (self.has_word(["buenas"]) and self.has_word(["tardes", "noches"]))):
             des.append(Goal(Goal.GREET_USER))
-
-        if (self.has_word(verbs_want, UserInput.VERB) and self.has_word(noun_room,
-                                                                        UserInput.NOUN)) or last_question == Response.ASK_ROOM_TYPE:
+        pdb.set_trace()
+        if (self.has_word(verbs_want, UserInput.VERB) and self.has_word(noun_room)) or last_question == Response.ASK_ROOM_TYPE:
             room_type = None
             for rt in room_types:
                 if self.has_word(rt):
@@ -203,7 +203,7 @@ class UserInput:
 
 class DBHandler:
     ROOM_INDIVIDUAL = "individual"
-    ROOM_DOUBLE = "double"
+    ROOM_DOUBLE = "doble"
     ROOM_SUITE = "suite"
 
     PENSION_FULL = "completa"

@@ -2,6 +2,7 @@
 # -*- coding: utf8 -*-
 
 # from resources import Database, Weather
+import os
 
 import random
 
@@ -193,7 +194,10 @@ class MyIntellect(Intellect):
         email = self.db.client_email(self.username)
         if email is not None:
             mail = Email("dasihotelbot@gmail.com", "3m0j1Lun4")
-            mail.send_email("dasihotelbot@gmail.com", email, "Resumen de reserva", reserv.summary())
+            print(os.getcwd())
+            print("images\\%s.jpg" % reserv.room_type)
+            print(os.getcwd() + "\\images\\%s.jpg" % reserv.room_type)
+            mail.send_email_with_attachments("dasihotelbot@gmail.com", email, "Resumen de reserva", reserv.summary(), ["images/%s.jpg" % reserv.room_type])
 
         self._knowledge.remove(reserv)
         self.learn(Reservation())

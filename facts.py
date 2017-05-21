@@ -228,6 +228,6 @@ class Reservation(object):
 
         summ += "Cama supletoria: %s\n" % ("Si" if self.additional_bed else "No")
         summ += "Parking: %s\n" % ("Si" if self.parking else "No")
-        summ += "Previsión meteorológica: %s\n " % self.weather
+        #summ += "Prevision meteorologica: %s\n " % self.weather
 
         return summ
