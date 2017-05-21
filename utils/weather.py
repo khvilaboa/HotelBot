@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 
 import pyowm
-
+import geopy
 
 class Weather:
     def __init__(self, api_key):
@@ -25,3 +25,35 @@ class Weather:
 
     def get_fahrenheit_temperature(self, address):
         return self.owm.weather_at_place(address).get_weather().get_temperature('fahrenheit')
+
+    def get_current_weather(self, lat, long):
+        geolocator = geopy.Nominatim()
+        location = geolocator.reverse(lat, long)
+        return self.owm.weather_at_place(location.address).get_weather()
+
+    def get_daily_forecast(self, lat, long):
+        geolocator = geopy.Nominatim()
+        location = geolocator.reverse(lat, long)
+        return self.owm.daily_forecast(location.address)
+
+    def get_wind(self, lat, long):
+        geolocator = geopy.Nominatim()
+        location = geolocator.reverse(lat, long)
+        return self.owm.weather_at_place(location.address).get_weather().get_wind()
+
+    def get_humidity(self, lat, long):
+        geolocator = geopy.Nominatim()
+        location = geolocator.reverse(lat, long)
+        return self.owm.weather_at_place(location.address).get_weather().get_humidity()
+
+    def get_celsius_temperature(self, lat, long):
+        geolocator = geopy.Nominatim()
+        location = geolocator.reverse(lat, long)
+        return self.owm.weather_at_place(location.address).get_weather().get_temperature('celsius')
+
+    def get_fahrenheit_temperature(self, lat, long):
+        geolocator = geopy.Nominatim()
+        location = geolocator.reverse(lat, long)
+        return self.owm.weather_at_place(location.address).get_weather().get_temperature('fahrenheit')
+
+
