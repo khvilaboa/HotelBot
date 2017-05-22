@@ -99,7 +99,7 @@ class UserInput:
                     (self.has_word(["buenos"]) and self.has_word(["dias"])) or \
                     (self.has_word(["buenas"]) and self.has_word(["tardes", "noches"]))):
             des.append(Goal(Goal.GREET_USER))
-        pdb.set_trace()
+        # pdb.set_trace()
         if (self.has_word(verbs_want, UserInput.VERB) and self.has_word(noun_room)) or last_question == Response.ASK_ROOM_TYPE:
             room_type = None
             for rt in room_types:
