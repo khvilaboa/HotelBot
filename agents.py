@@ -94,7 +94,7 @@ class MyIntellect(Intellect):
             db = DBHandler()
             hotel_loc = db.location()
             weather = Weather("86b4bc5747efd019c9d6bf0da2c84813")
-            #reservation.weather = weather.get_daily_forecast(*hotel_loc)
+            reservation.weather = weather.get_daily_forecast(*hotel_loc).get_weather_at(reservation.init_date)
             resp = [Response.SHOW_INTRO_SUMMARY]
             resp.append(reservation.summary())
             resp.append(Response.TOTAL_PRICE.format(price=num_nights * (price_per_night + price_pension)))
