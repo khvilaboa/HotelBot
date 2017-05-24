@@ -44,7 +44,7 @@ class UserInputTestCase(unittest.TestCase):
         o_tag11 = OrderedDict([(u'una', 'di'), (u'cam', 'nc'), (u'adicional', 'rg'), (u'no', 'rn'), (u'me', 'pp'), (u'vendri', 'vm'), (u'mal', 'aq')])
 
         i_tag12 = u'esa información es falsa'
-        o_tag12 = OrderedDict([(u'esa', 'dd'), (u'informacion', 'nc'), (u'es', 'vs'), (u'incorrect', None)])
+        o_tag12 = OrderedDict([(u'esa', 'dd'), (u'informacion', 'nc'), (u'es', 'vs'), (u'fals', 'vm')])
 
         i_tag13 = u'eso no es correcto'
         o_tag13 = OrderedDict([(u'eso', 'pd'), (u'no', 'rn'), (u'es', 'vs'), (u'correct', 'rg')])
@@ -76,13 +76,40 @@ class UserInputTestCase(unittest.TestCase):
         self._test_tagging(i_tag15, o_tag15)
         self._test_tagging(i_tag16, o_tag16)
 
+        # Test languages
+        i_lang1 = u'hola, quiero una habitación individual'
+        i_lang2 = u'tienes una pizza?'
+        i_lang3 = u'dame la habitación grande'
+        i_lang4 = u'no la quiero para ese dia'
+        i_lang5 = u'porqué no me saludas todos los días?'
+        i_lang6 = u'es un viaje de trabajo'
+        i_lang7 = u'me da igual, dormiré debajo de la cama :S'
+        i_lang8 = u'no la quiero para ese dia'
+        o_lang_es = 'es'
+
+        self._test_language(i_lang1, o_lang_es)
+        self._test_language(i_lang2, o_lang_es)
+        self._test_language(i_lang3, o_lang_es)
+        self._test_language(i_lang4, o_lang_es)
+        self._test_language(i_lang5, o_lang_es)
+        self._test_language(i_lang6, o_lang_es)
+        self._test_language(i_lang7, o_lang_es)
+        self._test_language(i_lang8, o_lang_es)
+
         # Test goal generation
         # ...
+
+
 
     # Test for tagging (when it's tagger all the proccess has been done
     def _test_tagging(self, text, res):
         input = UserInput(text)
         self.assertEqual(input.tagged, res)
+
+    # Test for tagging (when it's tagger all the proccess has been done
+    def _test_language(self, text, lang):
+        input = UserInput(text)
+        self.assertEqual(input.lang, lang)
 
 
 class SpellCheckerTestCase(unittest.TestCase):
