@@ -1,3 +1,5 @@
+# -*- coding: utf8 -*-
+
 import sys
 
 from pymongo import MongoClient
@@ -23,7 +25,7 @@ print("Limpiando datos anteriores...")
 hotels.remove()
 rooms.remove()
 
-pois = {
+pois = [
     {"name": "Museo Nacional del Prado", "category": "museum",
      "description": "Colección de obras de arte de los siglos XII a XIX y obras maestras de Velázquez, Goya y el Greco",
      "direction": "Paseo del Prado, s/n, 28014 Madrid",
@@ -73,7 +75,7 @@ pois = {
      "image_url": "https://lh3.googleusercontent.com/proxy/_auldWmrH3ZlxdIWOcrbPFwPbi8Y8ZI12XWze87ru8XEmM15F235BR7mQVAUK33OIi2_kbq8eBA-5nAdt6C0gLky2XmeQufyMb0FxEmdPpeiN5JwRlDCDvQvezCOI3rCm1XGKRxWAAqPXJ0O3JXBbInZfQ=w408-h272-k-no",
      "gmaps_url": "https://www.google.es/maps/place/Teatro+de+la+Zarzuela/@40.4165943,-3.6992026,17.12z/data=!4m8!1m2!2m1!1slugar+de+culto!3m4!1s0x0:0xa6446797bd4dab2f!8m2!3d40.4171893!4d-3.6969906",
      "webpage": "https://teatrodelazarzuela.mcu.es"}
-}
+]
 
 print("\nIntroduciendo datos del hotel...")
 hotels.insert_one({"room_prices": {"individual": 20, "doble": 35, "suite": 60}, \
