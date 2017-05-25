@@ -5,7 +5,7 @@ import unittest
 from resources import UserInput
 from collections import OrderedDict
 from utils import spellchecker
-
+from facts import Goal
 
 class UserInputTestCase(unittest.TestCase):
 
@@ -24,8 +24,8 @@ class UserInputTestCase(unittest.TestCase):
         i_tag4 = u'pues.. creo qeu prefiero una doble.. lo siento por cambiar de opinión'
         o_tag4 = OrderedDict([(u'pues', 'cs'), (u'cre', 'vm'), (u'que', 'pr'), (u'prefier', 'vm'), (u'una', 'di'), (u'dobl', 'aq'), (u'lo', 'pp'), (u'sient', 'vm'), (u'por', 'sp'), (u'cambi', 'vm'), (u'de', 'sp'), (u'opinion', 'nc')])
 
-        i_tag5 = u'pues.. dentro de dos dias me viene bien'
-        o_tag5 = OrderedDict([(u'pues', 'cs'), (u'el', 'pp'), (u'24052017', 'dt'), (u'me', 'pp'), (u'vien', 'vm'), (u'bien', 'rg')])
+        i_tag5 = u'pues.. el 24 de enero me viene bien'
+        o_tag5 = OrderedDict([(u'pues', 'cs'), (u'el', 'pp'), (u'24012018', 'dt'), (u'me', 'pp'), (u'vien', 'vm'), (u'bien', 'rg')])
 
         i_tag6 = u'quiero estar en el hotel hasta el 7 de octubre'
         o_tag6 = OrderedDict([(u'quier', 'vm'), (u'estar', 'vm'), (u'en', 'sp'), (u'el', 'pp'), (u'hotel', 'nc'), (u'hast', 'rg'), (u'07102017', 'dt')])
@@ -89,6 +89,22 @@ class UserInputTestCase(unittest.TestCase):
         i_lang8 = u'no la quiero para ese dia'
         o_lang_es = 'es'
 
+        i_lang9 = u'where I am?'
+        i_lang10 = u'i\'m bored, tell me something'
+        i_lang11 = u'do you talk in english?'
+        i_lang12 = u'my email is the following:'
+        o_lang_en = 'en'
+
+        i_lang13 = u'Ich möchte eine Reservierung vornehmen'
+        i_lang14 = u'keine Parkplätze gibt?'
+        i_lang15 = u'Nichts mehr, dank'
+        o_lang_de = 'de'
+
+        i_lang16 = u'Niente di più, grazie'
+        i_lang17 = u'Mi piace fare molto male'
+        i_lang18 = u'buon giorno, si ha a disposizione una camera singola?'
+        o_lang_it = 'it'
+
         self._test_language(i_lang1, o_lang_es)
         self._test_language(i_lang2, o_lang_es)
         self._test_language(i_lang3, o_lang_es)
@@ -98,8 +114,36 @@ class UserInputTestCase(unittest.TestCase):
         self._test_language(i_lang7, o_lang_es)
         self._test_language(i_lang8, o_lang_es)
 
+        self._test_language(i_lang9, o_lang_en)
+        self._test_language(i_lang10, o_lang_en)
+        self._test_language(i_lang11, o_lang_en)
+        self._test_language(i_lang12, o_lang_en)
+
+        self._test_language(i_lang13, o_lang_de)
+        self._test_language(i_lang14, o_lang_de)
+        self._test_language(i_lang15, o_lang_de)
+
+        self._test_language(i_lang16, o_lang_it)
+        self._test_language(i_lang17, o_lang_it)
+        self._test_language(i_lang18, o_lang_it)
+
         # Test goal generation
-        # ...
+        i_goals1 = u'Solo pasaba por aquí'
+        o_goals1 = None
+
+        i_goals2 = u'Quiero una habitación'
+        o_goals2 = [Goal.WANT_ROOM]
+
+        i_goals3 = u'buenos días'
+        o_goals3 = [Goal.GREET_USER]
+
+        i_goals4 = u'saludos, quiero una habitación'
+        o_goals4 = [Goal.GREET_USER, Goal.WANT_ROOM]
+
+        self._test_goals(i_goals1, o_goals1)
+        self._test_goals(i_goals2, o_goals2)
+        self._test_goals(i_goals3, o_goals3)
+        self._test_goals(i_goals4, o_goals4)
 
 
 
@@ -112,6 +156,20 @@ class UserInputTestCase(unittest.TestCase):
     def _test_language(self, text, lang):
         input = UserInput(text)
         self.assertEqual(input.lang, lang)
+
+    # Test for tagging (when it's tagger all the proccess has been done
+    def _test_goals(self, text, goals):
+        input_goals = UserInput(text).goals()
+        if input_goals is None and goals is None:
+            return
+
+        self.assertIsNotNone(input_goals)
+        self.assertIsNotNone(goals)
+
+        input_goals = map(lambda x: x.id, input_goals)
+
+        for goal in input_goals:
+            self.assertIn(goal, goals)
 
 
 class SpellCheckerTestCase(unittest.TestCase):
