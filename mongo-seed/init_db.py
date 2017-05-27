@@ -67,7 +67,7 @@ pois = [
      "direction": "Calle Lope de Vega, 18, 28014 Madrid",
      "image_url": "https://lh3.googleusercontent.com/-GONxKWIIvVs/WHgw8XOzqcI/AAAAAAAAK_k/SWpTUVIkigEulZDlFY6UbT784OIBvuJOQCLIB/w408-h229-k-no/",
      "gmaps_url": "https://www.google.es/maps/place/Convento+de+las+Trinitarias+Descalzas+de+San+Ildefonso/@40.4139045,-3.6996747,16.12z/data=!4m8!1m2!2m1!1slugar+de+culto!3m4!1s0x0:0x528f43e730d69a51!8m2!3d40.4136911!4d-3.6975606",
-     "webpage": None},
+     "webpage": "https://www.esmadrid.com/informacion-turistica/iglesia-y-convento-de-las-trinitarias-descalzas"},
     {"name": "Teatro de la Zarzuela", "category": "theater",
      "description": "Zarzuela, danza y conciertos en un emblematico teatro de fachada clasica construido a mediados del siglo XIX.",
      "direction": "Calle de Jovellanos, 4, 28014 Madrid",
