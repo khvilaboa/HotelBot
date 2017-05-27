@@ -31,7 +31,14 @@ scheduler.start()
 
 def check_agent(username):
     if username not in agents:
-        agents[username] = HotelAgent(username)  # Register the user specific agent
+        subscribe(username)
+
+# Register a user specific agent
+def subscribe(username):
+    agents[username] = HotelAgent(username)
+
+def unsubscribe(username):
+    del agents[username]
 
 def lookup_user(chat_id):
     for user, ci in chat_ids.iteritems():
@@ -40,20 +47,18 @@ def lookup_user(chat_id):
     return None
 
 def c_warn_user(bot, username):
-    print("beat...")
     scheduler.remove_job(username)
     chat_id = chat_ids[username]
     bot.sendMessage(chat_id=chat_id, text="Ha pasado un tiempo desde el último mensaje... si pasan %d minutos más se reiniciará la sesión" % TIME_ERASE_MIN)
     scheduler.add_job(c_remove_chat, 'interval', minutes=TIME_ERASE_MIN, args=(bot, username), id=username, replace_existing=True)
 
 def c_remove_chat(bot, username):
-    print("beat...")
     scheduler.remove_job(username)
 
     chat_id = chat_ids[username]
     bot.sendMessage(chat_id=chat_id, text="Sesión reiniciada")
 
-    del agents[username]
+    unsubscribe(username)
     del chat_ids[username]
 
 # ------------------------------------------------------------------------------
