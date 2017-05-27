@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: iso-8859-1 -*-
+# -*- coding: cp1252 -*-
 
 import re
 from datetime import datetime, timedelta
@@ -22,6 +22,7 @@ regex2 = re.compile("(dentro\s+de\s+(%s|[0-9]+)s?\s+(%s)s?)" % (numbers, measure
 numbersLst = numbers.split("|")
 daysLst = days.split("|")
 monthsLst = months.split("|")
+rel_daysLst = rel_days.split("|")
 measuresLst = measures.split("|")
 mesuresValuesLst = [1, 2, 30, 365]
 
@@ -59,6 +60,20 @@ def parse(text):
         elif measure == "año":
             new = now.replace(year=now.year + number)
         text = text.replace(match, "el %s" % new.strftime("%d/%m/%Y"))
+
+    #for rel_day in rel_daysLst:
+    #    print rel_day
+    #    if rel_day in text:
+    #        new = now
+    #        if rel_day == "ayer":
+    #            new -= timedelta(days=1)
+    #        elif rel_day == "anteayer":
+    #            new -= timedelta(days=2)
+    #        elif rel_day == "mañana":
+    #            new += timedelta(days=1)
+    #        elif rel_day == "pasado mañana":
+    #            new += timedelta(days=2)
+    #        text = text.replace(rel_day, "el %s" % new.strftime("%d/%m/%Y"))
 
     return text
 
