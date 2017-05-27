@@ -173,6 +173,19 @@ class UserInput:
                         ["contais", "cuentas", "teneis", "tienes", "disponeis", "dispones", "hotel", "tipo"])):
             des.append(Goal(Goal.SHOW_ROOMS))
 
+        if ((self.has_word(["visitar", "ver"]) or self.has_word(["cerca", "cercano"])) and \
+                    self.has_word(["lugar", "sitio", "lugares", "zona", "museo", "edificio", "iglesia", "teatro"])):
+            d = Goal(Goal.SHOW_POIS)
+
+            poi_types = []
+            for ind, poi_type in enumerate(("museo", "edificio", "iglesia", "teatro")):
+                if self.has_word(poi_type):
+                    poi_types.append(("museum", "building", "church", "theater")[ind])
+
+            d.data["pois_types"] = poi_types
+
+            des.append(d)
+
         return des or None
 
     # Check if the input have some of the verbs in a list
@@ -293,3 +306,10 @@ class DBHandler:
     def location(self):
         loc = self.hotels.find_one()["location"]
         return (loc["latitude"], loc["longitude"])
+
+    def get_pois(self, pois_type=None, limit=5):
+        if pois_type is not None:
+            print(pois_type)
+            return list(self.hotels.aggregate([{'$unwind':'$pois'}, {'$match':{'pois.category': pois_type }}, {'$project': {'pois':1}}]))[:limit]
+        else:
+            return list(self.hotels.aggregate([{'$unwind':'$pois'}, {'$project': {'pois':1}}]))[:limit]

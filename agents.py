@@ -3,6 +3,7 @@
 
 # from resources import Database, Weather
 import os
+import pdb
 
 import random
 from datetime import datetime
@@ -212,6 +213,42 @@ class MyIntellect(Intellect):
     def update_email(self, email):
         self.db.update_email(self.username, email)
 
+    @Callable
+    def reply_to_pois_request(self, pois_types):
+        db = DBHandler()
+        # Make a method to retrieve the pois in a common format (with a optional param to filter)
+        msg = [Response.POIS_PLACES]
+
+        if pois_types:
+            for pois_type in pois_types:
+                for place in db.get_pois(pois_type):
+                    if str(place['pois']['webpage']) is not None:
+                        msg.append(
+                            '\xF0\x9F\x9A\xA9' + str(place['pois']['name']).encode('utf-8') + '\xF0\x9F\x9A\xA9' +
+                            '\n Descripción: ' + str(place['pois']['description']).encode('utf-8') +
+                            '\n\n Dirección: ' + str(place['pois']['direction']).encode('utf-8') +
+                            '\n\n ¿Cómo llegar?: ' + str(place['pois']['gmaps_url']).encode('utf-8') +
+                            '\n\n Página web: ' + str(place['pois']['webpage']).encode('utf-8'))
+                    else:
+                        msg.append(
+                            '\xF0\x9F\x9A\xA9' + str(place['pois']['name']).encode('utf-8') + '\xF0\x9F\x9A\xA9' +
+                            '\n Descripción: ' + str(place['pois']['description']).encode('utf-8') +
+                            '\n\n Dirección: ' + str(place['pois']['direction']).encode('utf-8') +
+                            '\n\n ¿Cómo llegar?: ' + str(place['pois']['gmaps_url']).encode('utf-8'))
+        else:
+            for place in db.get_pois(limit=5):
+                if str(place['pois']['webpage']) is not None:
+                    msg.append('\xF0\x9F\x9A\xA9' + str(place['pois']['name']).encode('utf-8') + '\xF0\x9F\x9A\xA9' +
+                               '\n Descripción: ' + str(place['pois']['description']).encode('utf-8') +
+                               '\n\n Dirección: ' + str(place['pois']['direction']).encode('utf-8') +
+                               '\n\n ¿Cómo llegar?: ' + str(place['pois']['gmaps_url']).encode('utf-8') +
+                               '\n\n Página web: ' + str(place['pois']['webpage']).encode('utf-8'))
+                else:
+                    msg.append('\xF0\x9F\x9A\xA9' + str(place['pois']['name']).encode('utf-8') + '\xF0\x9F\x9A\xA9' +
+                               '\n Descripción: ' + str(place['pois']['description']).encode('utf-8') +
+                               '\n\n Dirección: ' + str(place['pois']['direction']).encode('utf-8') +
+                               '\n\n ¿Cómo llegar?: ' + str(place['pois']['gmaps_url']).encode('utf-8'))
+        return msg
 
 class HotelAgent:
     def __init__(self, username):
@@ -243,6 +280,7 @@ class HotelAgent:
             for desire in desires:
                 self.intellect.add_desire(desire)
             self.intellect.reason()
+            #pdb.set_trace()
             resp = self.intellect.extract_response()
 
             if resp is not None:

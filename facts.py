@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
-# To comunicate de client's desires to the intellect
+# To communicate the client's desires to the intellect
 
 
 class Goal(object):
@@ -16,6 +16,7 @@ class Goal(object):
     ASK_SERVICE = "wantService"
     SHOW_SUMMARY = "showSummary"
     SHOW_ROOMS = "showRooms"
+    SHOW_POIS = "showPois"
     GREET_USER = "greetUser"
 
     def __init__(self, id = None):
@@ -80,12 +81,14 @@ class Response(object):
 
     SERVICE_ADITIONAL_BED = "Añado una cama supletoria"
     SERVICE_PARKING = "Añado el servicio de parking"
-    SERVICE_MINIBAR = "El minibar se combrará en función de las bebidas que se consuman en la habitacion (2 EUR por bebida)"
+    SERVICE_MINIBAR = "El minibar se cobrará en función de las bebidas que se consuman en la habitacion (2 EUR por bebida)"
     SERVICE_MORE = "¿Algo mas?"
     SERVICE_WHAT = "¿De que servicios quiere disponer?"
 
     KEYBOARD_ROOM_TYPES = "keyboardRoomTypes"
     KEYBOARD_PENSION_TYPES = "keyboardPensionTypes"
+
+    POIS_PLACES = "Estos son algunos lugares que te pueden interesar y están cerca del hotel"
 
     ACTION_SHOW_ROOMS = "showRooms"
 

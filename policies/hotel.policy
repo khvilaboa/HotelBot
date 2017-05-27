@@ -104,7 +104,18 @@ rule finish_reservation:
 		user_resp = data["response"]
 		msg = confirm_reservation(user_resp)
 		learn Response([msg], None, False)
-		
+
+rule show_pois:
+	when:
+		$goal := Goal(id == Goal.SHOW_POIS)
+	then:
+		data = $goal.data
+		pois_types = data["pois_types"]
+
+		msg = reply_to_pois_request(pois_types)
+
+		learn Response([msg], None, False)
+
 rule show_rooms:
 	when:
 		$goal := Goal(id == Goal.SHOW_ROOMS)
