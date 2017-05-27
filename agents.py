@@ -74,6 +74,14 @@ class MyIntellect(Intellect):
     def clear_last_question(self):
         self.last_question = None
 
+    def set_room_type(self, room_type):
+        reservation = self.reservation()
+        reservation.room_type = room_type
+
+    def set_pension_type(self, pension_type):
+        reservation = self.reservation()
+        reservation.pension_type = pension_type
+
     # Returns the next question in the preferred flowchart
     @Callable
     def next_question(self):

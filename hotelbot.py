@@ -11,7 +11,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 from apscheduler.schedulers.background import BackgroundScheduler
 from agents import HotelAgent, InsultsAgent, LanguagesAgent
-from facts import Response
+from facts import Response, Reservation
 from resources import UserInput, DBHandler
 from utils.directions import Directions
 
@@ -32,6 +32,12 @@ scheduler.start()
 def check_agent(username):
     if username not in agents:
         agents[username] = HotelAgent(username)  # Register the user specific agent
+
+def lookup_user(chat_id):
+    for user, ci in chat_ids.iteritems():
+        if ci == chat_id:
+            return user
+    return None
 
 def c_warn_user(bot, username):
     print("beat...")
@@ -126,9 +132,9 @@ def room_types(bot, update):
     db = DBHandler()
     # pdb.set_trace()
     keyboard = [[InlineKeyboardButton("Individual (%d EUR/noche)" % db.price(DBHandler.ROOM_INDIVIDUAL),
-                                      callback_data='Individual')], \
-                [InlineKeyboardButton("Doble (%d EUR/noche)" % db.price(DBHandler.ROOM_DOUBLE), callback_data='Doble')], \
-                [InlineKeyboardButton("Suite (%d EUR/noche)" % db.price(DBHandler.ROOM_SUITE), callback_data='Suite')]]
+                                      callback_data='individual')], \
+                [InlineKeyboardButton("Doble (%d EUR/noche)" % db.price(DBHandler.ROOM_DOUBLE), callback_data='doble')], \
+                [InlineKeyboardButton("Suite (%d EUR/noche)" % db.price(DBHandler.ROOM_SUITE), callback_data='suite')]]
 
     rooms_markup = InlineKeyboardMarkup(keyboard)  # , one_time_keyboard=True
 
@@ -140,11 +146,11 @@ def pension_types(bot, update):
     db = DBHandler()
     # pdb.set_trace()
     keyboard = [[InlineKeyboardButton("Completa (%d EUR/dia)" % db.price_pension(DBHandler.PENSION_FULL),
-                                      callback_data='Completa')], \
+                                      callback_data='completa')], \
                 [InlineKeyboardButton("Parcial (%d EUR/dia)" % db.price_pension(DBHandler.PENSION_HALF),
-                                      callback_data='Parcial')], \
+                                      callback_data='parcial')], \
                 [InlineKeyboardButton("Desayuno (%d EUR/dia)" % db.price_pension(DBHandler.PENSION_BREAKFAST),
-                                      callback_data='Desayuno')]]
+                                      callback_data='desayuno')]]
 
     rooms_markup = InlineKeyboardMarkup(keyboard)  # , one_time_keyboard=True
 
@@ -160,6 +166,22 @@ def keyboard_press(bot, update):
     bot.editMessageText(text="Has seleccionado: %s" % query.data,
                         chat_id=query.message.chat_id,
                         message_id=query.message.message_id)
+
+    username = lookup_user(query.message.chat_id)
+
+    if(query.data in ('individual', 'doble', 'suite')):
+        agents[username].intellect.set_room_type(query.data)
+    elif(query.data in ('completa', 'parcial', 'desayuno')):
+        agents[username].intellect.set_pension_type(query.data)
+
+    msg = agents[username].intellect.next_question()
+    if type(msg) is not list:
+        bot.sendMessage(chat_id=query.message.chat_id, text=msg)
+    else:
+        for m in msg:
+            bot.sendMessage(chat_id=query.message.chat_id, text=m)
+
+
 
 
 # ------------------------------------------------------------------------------
