@@ -3,12 +3,13 @@
 
 # Mail for future use: dasihotelbot@gmail.com / 3m0j1Lun4
 # API key for weather service: 86b4bc5747efd019c9d6bf0da2c84813
+import pdb
 
 import traceback
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
-
+from apscheduler.schedulers.background import BackgroundScheduler
 from agents import HotelAgent, InsultsAgent, LanguagesAgent
 from facts import Response
 from resources import UserInput, DBHandler
@@ -18,7 +19,13 @@ updater = Updater(token='344919668:AAFvtg7WYYvxT9d8msQAu6cvbsmggKwyDEk')  # @DAS
 dispatcher = updater.dispatcher
 
 agents = {"insults": InsultsAgent(), "languages": LanguagesAgent()}  # HotelAgent()
+chat_ids = {}
 
+TIME_WARN_MIN = 5
+TIME_ERASE_MIN = 10
+
+scheduler = BackgroundScheduler()
+scheduler.start()
 
 # ------------------------------------------------------------------------------
 
@@ -26,6 +33,22 @@ def check_agent(username):
     if username not in agents:
         agents[username] = HotelAgent(username)  # Register the user specific agent
 
+def c_warn_user(bot, username):
+    print("beat...")
+    scheduler.remove_job(username)
+    chat_id = chat_ids[username]
+    bot.sendMessage(chat_id=chat_id, text="Ha pasado un tiempo desde el último mensaje... si pasan %d minutos más se reiniciará la sesión" % TIME_ERASE_MIN)
+    scheduler.add_job(c_remove_chat, 'interval', minutes=TIME_ERASE_MIN, args=(bot, username), id=username, replace_existing=True)
+
+def c_remove_chat(bot, username):
+    print("beat...")
+    scheduler.remove_job(username)
+
+    chat_id = chat_ids[username]
+    bot.sendMessage(chat_id=chat_id, text="Sesión reiniciada")
+
+    del agents[username]
+    del chat_ids[username]
 
 # ------------------------------------------------------------------------------
 # Default command (executed on bot init)
@@ -39,6 +62,9 @@ def text(bot, update):
     # pdb.set_trace()
     username = update.message.from_user.username
     check_agent(username)
+
+    if username not in chat_ids:
+        chat_ids[username] = update.message.chat_id
 
     print("\nReceived: %s" % text)
     try:
@@ -61,6 +87,9 @@ def text(bot, update):
     except Exception as e:
         traceback.print_exc()
         print(e)
+
+    scheduler.add_job(c_warn_user, 'interval', minutes=TIME_WARN_MIN, args=(bot, username), id=username, replace_existing=True)
+
 
 
 # To handle unknown commands
