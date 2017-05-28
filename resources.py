@@ -101,17 +101,20 @@ class UserInput:
             des.append(Goal(Goal.GREET_USER))
         # pdb.set_trace()
         if (self.has_word(verbs_want) and self.has_word(noun_room)) or last_question == Response.ASK_ROOM_TYPE:
-            room_type = None
-            for rt in room_types:
-                if self.has_word(rt):
-                    room_type = rt
-
-            if room_type is not None:  # Room type specified
-                d = Goal(Goal.ESTABLISH_ROOM_TYPE)
-                d.data["room_type"] = room_type
-                des.append(d)
+            if self.has_word(["camas"]) and self.has_word(["separadas", "apartadas"]):
+                des.append(Goal(Goal.DOUBLE_WITH_SEPARATED_BEDS))
             else:
-                des.append(Goal(Goal.WANT_ROOM))
+                room_type = None
+                for rt in room_types:
+                    if self.has_word(rt):
+                        room_type = rt
+
+                if room_type is not None:  # Room type specified
+                    d = Goal(Goal.ESTABLISH_ROOM_TYPE)
+                    d.data["room_type"] = room_type
+                    des.append(d)
+                else:
+                    des.append(Goal(Goal.WANT_ROOM))
         if (last_question == Response.ASK_INIT_DATE or self.has_word(
                 ["comienzo", "entrada", "empezando", "del", "desde", "para"])) and len(self.dates()) > 0:
             d = Goal(Goal.ESTABLISH_INIT_DATE)

@@ -131,3 +131,9 @@ rule update_email:
 		email = data["email"]
 		update_email(email)
 		learn Response(Response.FINISH_RESERVATION, None, False)
+
+rule double_separated:
+	when:
+		$goal := Goal(id == Goal.DOUBLE_WITH_SEPARATED_BEDS)
+	then:
+		learn Response(Response.DOUBLE_WITH_SEPARATED_BEDS)

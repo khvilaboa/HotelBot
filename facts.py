@@ -18,6 +18,7 @@ class Goal(object):
     SHOW_ROOMS = "showRooms"
     SHOW_POIS = "showPois"
     GREET_USER = "greetUser"
+    DOUBLE_WITH_SEPARATED_BEDS = "doubleSeparated"
 
     def __init__(self, id = None):
         self._id = id
@@ -91,6 +92,8 @@ class Response(object):
     POIS_PLACES = "Estos son algunos lugares que te pueden interesar y están cerca del hotel"
 
     ACTION_SHOW_ROOMS = "showRooms"
+
+    DOUBLE_WITH_SEPARATED_BEDS = ["Actualmente no disponemos de ese tipo de habitaciones", "En su lugar puedes coger dos individuales o seleccionar posteriormente una cama supletoria"]
 
     def __init__(self, msg = [], keyboard = None, next_question = True, action = None):
         #pdb.set_trace()
