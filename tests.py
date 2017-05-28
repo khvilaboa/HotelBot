@@ -2,10 +2,11 @@
 # -*- coding: utf8 -*-
 
 import unittest
-from resources import UserInput
 from collections import OrderedDict
-from utils import spellchecker
+
 from facts import Goal
+from resources import UserInput
+from utils import spellchecker
 
 
 class UserInputTestCase(unittest.TestCase):

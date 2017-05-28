@@ -1,15 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
+import re
+import string
 from datetime import datetime, timedelta
 
 import langdetect
 import langid
 import nltk
-import re
-import string
 import textblob
-import pdb
 from pymongo import MongoClient
 
 from facts import Response, Goal

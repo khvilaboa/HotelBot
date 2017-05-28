@@ -3,13 +3,13 @@
 
 # Mail for future use: dasihotelbot@gmail.com / 3m0j1Lun4
 # API key for weather service: 86b4bc5747efd019c9d6bf0da2c84813
-import pdb
 
 import traceback
 
+from apscheduler.schedulers.background import BackgroundScheduler
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
-from apscheduler.schedulers.background import BackgroundScheduler
+
 from agents import HotelAgent, InsultsAgent, LanguagesAgent
 from facts import Response
 from resources import UserInput, DBHandler

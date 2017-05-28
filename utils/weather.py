@@ -2,7 +2,6 @@
 # -*- coding: utf8 -*-
 
 import pyowm
-import pdb
 
 
 class Weather:

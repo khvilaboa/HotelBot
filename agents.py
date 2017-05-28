@@ -3,8 +3,6 @@
 
 # from resources import Database, Weather
 import os
-import pdb
-
 import random
 from datetime import datetime
 
@@ -13,10 +11,9 @@ from intellect.Intellect import Intellect, Callable
 from facts import Goal, Response, Reservation
 from resources import DBHandler
 # Custom intellect to improve the management of facts and policies
-from utils.weather import Weather
-
-# Custom intellect to improve the management of facts and policies
 from utils.mail import Email
+# Custom intellect to improve the management of facts and policies
+from utils.weather import Weather
 
 
 class MyIntellect(Intellect):
