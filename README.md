@@ -7,6 +7,7 @@ ChatBot que pretende gestionar la reserva de habitaciones en un hotel. Entre los
   - Información de "Como llegar".
   - Información de tiempo atmosférico.
 - Posibilidad de enviar correos electrónicos para confirmar la reserva.
+- Posibilidad de ofrecer al usuario recomendaciones sobre lugares cercanos al hotel para poder visitar.
 - Valoración de la experiencia.
 
 Se recomienda utilizar Python 2 para ejecutar el bot.
