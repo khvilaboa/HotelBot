@@ -1,15 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
+import re
+import string
 from datetime import datetime, timedelta
 
 import langdetect
 import langid
 import nltk
-import re
-import string
 import textblob
-import pdb
 from pymongo import MongoClient
 
 from facts import Response, Goal
@@ -99,7 +98,6 @@ class UserInput:
                     (self.has_word(["buenos"]) and self.has_word(["dias"])) or \
                     (self.has_word(["buenas"]) and self.has_word(["tardes", "noches"]))):
             des.append(Goal(Goal.GREET_USER))
-        # pdb.set_trace()
         if (self.has_word(verbs_want) and self.has_word(noun_room)) or last_question == Response.ASK_ROOM_TYPE:
             if self.has_word(["camas"]) and self.has_word(["separadas", "apartadas"]):
                 des.append(Goal(Goal.DOUBLE_WITH_SEPARATED_BEDS))
@@ -126,7 +124,6 @@ class UserInput:
             d = Goal(Goal.ESTABLISH_END_DATE)
             d.data["end_date"] = self.dates()[-1]
             des.append(d)
-        # pdb.set_trace()
         if self.has_word(pension_types):  # last_question == Response.ASK_PENSION_TYPE and
             pension_type = None
             for pt in pension_types:
@@ -169,7 +166,6 @@ class UserInput:
         # ---------------------
         # INFORMATION GOALS
         # ---------------------
-        # pdb.set_trace()
         if (self.has_word(["ensenar", "ensenarme", "mostrar", "mostrarme", "ver"]) and \
                     self.has_word(["habitacion", "habitaciones"]) and \
                     self.has_word(
@@ -288,7 +284,6 @@ class DBHandler:
         if self.clients.find_one({DBHandler.FIELD_CLIENT_USER: username}) is None:
             self.clients.insert_one({DBHandler.FIELD_CLIENT_USER: username})
 
-
     def client_email(self, username):
         client = self.clients.find_one({DBHandler.FIELD_CLIENT_USER: username})
         if client is not None and DBHandler.FIELD_CLIENT_EMAIL in client:
@@ -297,7 +292,6 @@ class DBHandler:
 
     def update_email(self, username, email):
         self.clients.update({DBHandler.FIELD_CLIENT_USER: username}, {"$set": {DBHandler.FIELD_CLIENT_EMAIL: email}})
-
 
     # Returns the price of a specific type of room
     def price(self, room_type):
@@ -316,6 +310,7 @@ class DBHandler:
     def get_pois(self, pois_type=None, limit=5):
         if pois_type is not None:
             print(pois_type)
-            return list(self.hotels.aggregate([{'$unwind':'$pois'}, {'$match':{'pois.category': pois_type }}, {'$project': {'pois':1}}]))[:limit]
+            return list(self.hotels.aggregate(
+                [{'$unwind': '$pois'}, {'$match': {'pois.category': pois_type}}, {'$project': {'pois': 1}}]))[:limit]
         else:
-            return list(self.hotels.aggregate([{'$unwind':'$pois'}, {'$project': {'pois':1}}]))[:limit]
+            return list(self.hotels.aggregate([{'$unwind': '$pois'}, {'$project': {'pois': 1}}]))[:limit]

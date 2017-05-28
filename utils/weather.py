@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 
 import pyowm
-import pdb
+
 
 class Weather:
     codes = {
@@ -103,21 +103,19 @@ class Weather:
         return self.owm.weather_at_place(address).get_weather().get_temperature('fahrenheit')
 
     def get_current_weather(self, lat, lon):
-        return self.owm.weather_at_coords(lat,lon).get_weather()
+        return self.owm.weather_at_coords(lat, lon).get_weather()
 
     def get_daily_forecast(self, lat, lon):
-        return self.owm.daily_forecast_at_coords(lat,lon)
+        return self.owm.daily_forecast_at_coords(lat, lon)
 
     def get_wind(self, lat, lon):
-        return self.owm.weather_at_coords(lat,lon).get_weather().get_wind()
+        return self.owm.weather_at_coords(lat, lon).get_weather().get_wind()
 
     def get_humidity(self, lat, lon):
-        return self.owm.weather_at_coords(lat,lon).get_weather().get_humidity()
+        return self.owm.weather_at_coords(lat, lon).get_weather().get_humidity()
 
     def get_celsius_temperature(self, lat, lon):
-        return self.owm.weather_at_coords(lat,lon).get_weather().get_temperature('celsius')
+        return self.owm.weather_at_coords(lat, lon).get_weather().get_temperature('celsius')
 
     def get_fahrenheit_temperature(self, lat, lon):
-        return self.owm.weather_at_coords(lat,lon).get_weather().get_temperature('fahrenheit')
-
-
+        return self.owm.weather_at_coords(lat, lon).get_weather().get_temperature('fahrenheit')

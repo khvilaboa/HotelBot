@@ -2,11 +2,11 @@
 # -*- coding: utf8 -*-
 
 import unittest
-from resources import UserInput
 from collections import OrderedDict
-from utils import spellchecker
 from facts import Goal
 from datetime import datetime, timedelta
+from resources import UserInput
+from utils import spellchecker
 
 
 class UserInputTestCase(unittest.TestCase):
@@ -316,7 +316,6 @@ class DateParserTestCase(unittest.TestCase):
     def _test_dates(self, text, parsed):
         input = UserInput(text)
         self.assertEqual(input.dateparsed, parsed)
-
 
 if __name__ == '__main__':
     unittest.main()

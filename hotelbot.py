@@ -3,13 +3,13 @@
 
 # Mail for future use: dasihotelbot@gmail.com / 3m0j1Lun4
 # API key for weather service: 86b4bc5747efd019c9d6bf0da2c84813
-import pdb
 
 import traceback
 
+from apscheduler.schedulers.background import BackgroundScheduler
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
-from apscheduler.schedulers.background import BackgroundScheduler
+
 from agents import HotelAgent, InsultsAgent, LanguagesAgent
 from facts import Response
 from resources import UserInput, DBHandler
@@ -27,18 +27,22 @@ TIME_ERASE_MIN = 10
 scheduler = BackgroundScheduler()
 scheduler.start()
 
+
 # ------------------------------------------------------------------------------
 
 def check_agent(username):
     if username not in agents:
         subscribe(username)
 
+
 # Register a user specific agent
 def subscribe(username):
     agents[username] = HotelAgent(username)
 
+
 def unsubscribe(username):
     del agents[username]
+
 
 def lookup_user(chat_id):
     for user, ci in chat_ids.iteritems():
@@ -46,11 +50,15 @@ def lookup_user(chat_id):
             return user
     return None
 
+
 def c_warn_user(bot, username):
     scheduler.remove_job(username)
     chat_id = chat_ids[username]
-    bot.sendMessage(chat_id=chat_id, text="Ha pasado un tiempo desde el último mensaje... si pasan %d minutos más se reiniciará la sesión" % TIME_ERASE_MIN)
-    scheduler.add_job(c_remove_chat, 'interval', minutes=TIME_ERASE_MIN, args=(bot, username), id=username, replace_existing=True)
+    bot.sendMessage(chat_id=chat_id,
+                    text="Ha pasado un tiempo desde el último mensaje... si pasan %d minutos más se reiniciará la sesión" % TIME_ERASE_MIN)
+    scheduler.add_job(c_remove_chat, 'interval', minutes=TIME_ERASE_MIN, args=(bot, username), id=username,
+                      replace_existing=True)
+
 
 def c_remove_chat(bot, username):
     scheduler.remove_job(username)
@@ -61,6 +69,7 @@ def c_remove_chat(bot, username):
     unsubscribe(username)
     del chat_ids[username]
 
+
 # ------------------------------------------------------------------------------
 # Default command (executed on bot init)
 def start(bot, update):
@@ -70,7 +79,6 @@ def start(bot, update):
 # To handle text (that doesn't start with '/')
 def text(bot, update):
     text = update.message.text
-    # pdb.set_trace()
     username = update.message.from_user.username
     check_agent(username)
 
@@ -99,8 +107,8 @@ def text(bot, update):
         traceback.print_exc()
         print(e)
 
-    scheduler.add_job(c_warn_user, 'interval', minutes=TIME_WARN_MIN, args=(bot, username), id=username, replace_existing=True)
-
+    scheduler.add_job(c_warn_user, 'interval', minutes=TIME_WARN_MIN, args=(bot, username), id=username,
+                      replace_existing=True)
 
 
 # To handle unknown commands
@@ -135,7 +143,6 @@ def location(bot, update):
 # Example of in-line keyboard use
 def room_types(bot, update):
     db = DBHandler()
-    # pdb.set_trace()
     keyboard = [[InlineKeyboardButton("Individual (%d EUR/noche)" % db.price(DBHandler.ROOM_INDIVIDUAL),
                                       callback_data='individual')], \
                 [InlineKeyboardButton("Doble (%d EUR/noche)" % db.price(DBHandler.ROOM_DOUBLE), callback_data='doble')], \
@@ -149,7 +156,6 @@ def room_types(bot, update):
 
 def pension_types(bot, update):
     db = DBHandler()
-    # pdb.set_trace()
     keyboard = [[InlineKeyboardButton("Completa (%d EUR/dia)" % db.price_pension(DBHandler.PENSION_FULL),
                                       callback_data='completa')], \
                 [InlineKeyboardButton("Parcial (%d EUR/dia)" % db.price_pension(DBHandler.PENSION_HALF),
@@ -174,9 +180,9 @@ def keyboard_press(bot, update):
 
     username = lookup_user(query.message.chat_id)
 
-    if(query.data in ('individual', 'doble', 'suite')):
+    if (query.data in ('individual', 'doble', 'suite')):
         agents[username].intellect.set_room_type(query.data)
-    elif(query.data in ('completa', 'parcial', 'desayuno')):
+    elif (query.data in ('completa', 'parcial', 'desayuno')):
         agents[username].intellect.set_pension_type(query.data)
 
     msg = agents[username].intellect.next_question()
@@ -185,8 +191,6 @@ def keyboard_press(bot, update):
     else:
         for m in msg:
             bot.sendMessage(chat_id=query.message.chat_id, text=m)
-
-
 
 
 # ------------------------------------------------------------------------------
