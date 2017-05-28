@@ -87,7 +87,7 @@ class UserInput:
         room_types = ("individual", "doble", "suite")
         pension_types = ("completa", "parcial", "desayuno")
 
-        afirmations = ("si", "yep", "vale", "nada", "bien")
+        afirmations = ("si", "yep", "vale", "nada", "bien", "correcto")
         denials = ("no", "nope", "nada", "ninguno")
 
         greetings = ("hola", "saludos", "hi")
@@ -302,6 +302,9 @@ class DBHandler:
 
     def price_pension(self, pension_type):
         return self.hotels.find_one()["pension_prices"][pension_type]
+
+    def price_service(self, service_type):
+        return self.hotels.find_one()["service_prices"][service_type]
 
     def location(self):
         loc = self.hotels.find_one()["location"]

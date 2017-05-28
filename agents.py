@@ -100,6 +100,8 @@ class MyIntellect(Intellect):
         else:
             price_per_night = self.db.price(reservation.room_type)
             price_pension = self.db.price_pension(reservation.pension_type)
+            price_services = self.db.price_service("parking") if reservation.parking else 0
+            price_services += self.db.price_service("additional_bed") if reservation.additional_bed else 0
             num_nights = len(self.db.dates_in_interval(reservation.init_date, reservation.end_date))
             db = DBHandler()
             hotel_loc = db.location()
@@ -112,7 +114,7 @@ class MyIntellect(Intellect):
 
             resp = [Response.SHOW_INTRO_SUMMARY]
             resp.append(reservation.summary())
-            resp.append(Response.TOTAL_PRICE.format(price=num_nights * (price_per_night + price_pension)))
+            resp.append(Response.TOTAL_PRICE.format(price=num_nights * (price_per_night + price_pension + price_services)))
             resp.append(Response.CONFIRM_BASIC)
 
         self.last_question = resp if type(resp) is not list else resp[0]

@@ -80,6 +80,7 @@ pois = [
 print("\nIntroduciendo datos del hotel...")
 hotels.insert_one({"room_prices": {"individual": 20, "doble": 35, "suite": 60}, \
                    "pension_prices": {"completa": 10, "parcial": 6, "desayuno": 3}, \
+                   "service_prices": {"parking": 3, "additional_bed": 6}, \
                    "location": {"latitude": 40.4124689, "longitude": -3.6971957}, "pois": pois})
 
 room_types = ("individual", "doble", "suite")
@@ -90,7 +91,7 @@ for floor in range(1, NUM_FLOORS + 1):
         rooms.insert({"floor": floor, "number": room, "type": room_types[ind]})
         ind = (ind + 1) % len(room_types)
 
-print("Introduciendo datos de lugares de interés...")
+print("Introduciendo datos de lugares de interÃ©s...")
 
 print("\n\nBase de datos iniciada con exito :)")
 raw_input()
