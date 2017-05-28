@@ -81,14 +81,14 @@ class UserInput:
     def goals(self, last_question=None):
         des = []
 
-        verbs_want = ("queria", "quiero", "qerria", "necesitaba", "necesitaria", "gustaria")
+        verbs_want = ("queria", "quiero", "qerria", "necesito", "necesitaba", "necesitaria", "gustaria")
         noun_room = ("habitacion", "reserva", "individual", "doble", "suite")
 
         room_types = ("individual", "doble", "suite")
         pension_types = ("completa", "parcial", "desayuno")
 
         afirmations = ("si", "yep", "vale", "nada", "bien")
-        denials = ("no", "nope")
+        denials = ("no", "nope", "nada", "ninguno")
 
         greetings = ("hola", "saludos", "hi")
 
@@ -100,7 +100,7 @@ class UserInput:
                     (self.has_word(["buenas"]) and self.has_word(["tardes", "noches"]))):
             des.append(Goal(Goal.GREET_USER))
         # pdb.set_trace()
-        if (self.has_word(verbs_want, UserInput.VERB) and self.has_word(noun_room)) or last_question == Response.ASK_ROOM_TYPE:
+        if (self.has_word(verbs_want) and self.has_word(noun_room)) or last_question == Response.ASK_ROOM_TYPE:
             room_type = None
             for rt in room_types:
                 if self.has_word(rt):
@@ -113,7 +113,7 @@ class UserInput:
             else:
                 des.append(Goal(Goal.WANT_ROOM))
         if (last_question == Response.ASK_INIT_DATE or self.has_word(
-                ["comienzo", "entrada", "empezando", "del", "desde"])) and len(self.dates()) > 0:
+                ["comienzo", "entrada", "empezando", "del", "desde", "para"])) and len(self.dates()) > 0:
             d = Goal(Goal.ESTABLISH_INIT_DATE)
             d.data["init_date"] = self.dates()[0]
             des.append(d)

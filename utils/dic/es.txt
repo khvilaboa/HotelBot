@@ -14181,6 +14181,7 @@ aparcadas
 aparcado
 aparcados
 aparcamos
+aparcamiento
 aparcan
 aparcando
 aparcar

@@ -330,7 +330,7 @@ class LanguagesAgent:
             return 1, Response("Io solo parliamo spagnolo")  # trust, response
         elif input.lang == "fr":
             return 1, Response("Je parle seulement espagnol")  # trust, response
-        elif input.lang == "pt":
-            return 1, Response("Eu só falo espanhol")  # trust, response
+        #elif input.lang == "pt":
+        #    return 1, Response("Eu só falo espanhol")  # trust, response
 
         return 0, Response(Response.UNKNOWN_INPUT)

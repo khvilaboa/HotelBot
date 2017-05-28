@@ -11,7 +11,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 from apscheduler.schedulers.background import BackgroundScheduler
 from agents import HotelAgent, InsultsAgent, LanguagesAgent
-from facts import Response, Reservation
+from facts import Response
 from resources import UserInput, DBHandler
 from utils.directions import Directions
 

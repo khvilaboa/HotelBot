@@ -79,7 +79,7 @@ class Response(object):
 
     TOTAL_PRICE = "Precio total: {price} EUR"
 
-    SERVICE_ADITIONAL_BED = "Añado una cama supletoria"
+    SERVICE_ADDITIONAL_BED = "Añado una cama supletoria"
     SERVICE_PARKING = "Añado el servicio de parking"
     SERVICE_MINIBAR = "El minibar se cobrará en función de las bebidas que se consuman en la habitacion (2 EUR por bebida)"
     SERVICE_MORE = "¿Algo mas?"
