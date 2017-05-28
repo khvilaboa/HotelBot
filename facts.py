@@ -5,7 +5,6 @@
 
 
 class Goal(object):
-
     UPDATE_EMAIL = "updateEmail"
     WANT_ROOM = "wantRoom"
     ESTABLISH_ROOM_TYPE = "roomType"
@@ -20,7 +19,7 @@ class Goal(object):
     GREET_USER = "greetUser"
     DOUBLE_WITH_SEPARATED_BEDS = "doubleSeparated"
 
-    def __init__(self, id = None):
+    def __init__(self, id=None):
         self._id = id
         self._data = {}
 
@@ -93,10 +92,11 @@ class Response(object):
 
     ACTION_SHOW_ROOMS = "showRooms"
 
-    DOUBLE_WITH_SEPARATED_BEDS = ["Actualmente no disponemos de ese tipo de habitaciones", "En su lugar puedes coger dos individuales o seleccionar posteriormente una cama supletoria"]
+    DOUBLE_WITH_SEPARATED_BEDS = ["Actualmente no disponemos de ese tipo de habitaciones",
+                                  "En su lugar puedes coger dos individuales o seleccionar posteriormente una cama supletoria"]
 
-    def __init__(self, msg = [], keyboard = None, next_question = True, action = None):
-        #pdb.set_trace()
+    def __init__(self, msg=[], keyboard=None, next_question=True, action=None):
+        # pdb.set_trace()
         msg = [msg] if type(msg) is str else msg
         self._msg = []
         for m in msg:
@@ -234,7 +234,7 @@ class Reservation(object):
 
         summ += "Cama supletoria: %s\n" % ("Si" if self.additional_bed else "No")
         summ += "Parking: %s\n" % ("Si" if self.parking else "No")
-        
+
         if self.weather is not None:
             summ += "Prevision meteorologica: %s\n " % self.weather
 

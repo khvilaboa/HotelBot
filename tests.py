@@ -7,43 +7,60 @@ from collections import OrderedDict
 from utils import spellchecker
 from facts import Goal
 
-class UserInputTestCase(unittest.TestCase):
 
+class UserInputTestCase(unittest.TestCase):
     def tests(self):
 
         # Test text tagging
         i_tag1 = u'hola, quiero una habitación individual'
-        o_tag1 = OrderedDict([(u'hol', 'np'), (u'quier', 'vm'), (u'una', 'di'), (u'habitacion', 'nc'), (u'individual', 'nc')])
+        o_tag1 = OrderedDict(
+            [(u'hol', 'np'), (u'quier', 'vm'), (u'una', 'di'), (u'habitacion', 'nc'), (u'individual', 'nc')])
 
         i_tag2 = u'me gustaría realizar una reserva, por favor'
-        o_tag2 = OrderedDict([(u'me', 'pp'), (u'gustari', 'vm'), (u'realiz', 'vm'), (u'una', 'di'), (u'reserv', 'nc'), (u'por', 'sp'), (u'favor', 'aq')])
+        o_tag2 = OrderedDict(
+            [(u'me', 'pp'), (u'gustari', 'vm'), (u'realiz', 'vm'), (u'una', 'di'), (u'reserv', 'nc'), (u'por', 'sp'),
+             (u'favor', 'aq')])
 
         i_tag3 = u'mmmh.. me vlae con una individual (voy a estar solo)'
-        o_tag3 = OrderedDict([(u'mmmh', None), (u'me', 'pp'), (u'val', 'aq'), (u'con', 'sp'), (u'una', 'di'), (u'individual', 'nc'), (u'voy', 'vm'), (u'a', 'sp'), (u'estar', 'vm'), (u'sol', 'nc')])
+        o_tag3 = OrderedDict(
+            [(u'mmmh', None), (u'me', 'pp'), (u'val', 'aq'), (u'con', 'sp'), (u'una', 'di'), (u'individual', 'nc'),
+             (u'voy', 'vm'), (u'a', 'sp'), (u'estar', 'vm'), (u'sol', 'nc')])
 
         i_tag4 = u'pues.. creo qeu prefiero una doble.. lo siento por cambiar de opinión'
-        o_tag4 = OrderedDict([(u'pues', 'cs'), (u'cre', 'vm'), (u'que', 'pr'), (u'prefier', 'vm'), (u'una', 'di'), (u'dobl', 'aq'), (u'lo', 'pp'), (u'sient', 'vm'), (u'por', 'sp'), (u'cambi', 'vm'), (u'de', 'sp'), (u'opinion', 'nc')])
+        o_tag4 = OrderedDict(
+            [(u'pues', 'cs'), (u'cre', 'vm'), (u'que', 'pr'), (u'prefier', 'vm'), (u'una', 'di'), (u'dobl', 'aq'),
+             (u'lo', 'pp'), (u'sient', 'vm'), (u'por', 'sp'), (u'cambi', 'vm'), (u'de', 'sp'), (u'opinion', 'nc')])
 
         i_tag5 = u'pues.. el 24 de enero me viene bien'
-        o_tag5 = OrderedDict([(u'pues', 'cs'), (u'el', 'pp'), (u'24012018', 'dt'), (u'me', 'pp'), (u'vien', 'vm'), (u'bien', 'rg')])
+        o_tag5 = OrderedDict(
+            [(u'pues', 'cs'), (u'el', 'pp'), (u'24012018', 'dt'), (u'me', 'pp'), (u'vien', 'vm'), (u'bien', 'rg')])
 
         i_tag6 = u'quiero estar en el hotel hasta el 7 de octubre'
-        o_tag6 = OrderedDict([(u'quier', 'vm'), (u'estar', 'vm'), (u'en', 'sp'), (u'el', 'pp'), (u'hotel', 'nc'), (u'hast', 'rg'), (u'07102017', 'dt')])
+        o_tag6 = OrderedDict(
+            [(u'quier', 'vm'), (u'estar', 'vm'), (u'en', 'sp'), (u'el', 'pp'), (u'hotel', 'nc'), (u'hast', 'rg'),
+             (u'07102017', 'dt')])
 
         i_tag7 = u'quiero salir del hotel pasado mañana'
-        o_tag7 = OrderedDict([(u'quier', 'vm'), (u'sal', 'vm'), (u'del', 'sp'), (u'hotel', 'nc'), (u'pas', 'vm'), (u'manan', 'nc')])
+        o_tag7 = OrderedDict(
+            [(u'quier', 'vm'), (u'sal', 'vm'), (u'del', 'sp'), (u'hotel', 'nc'), (u'pas', 'vm'), (u'manan', 'nc')])
 
         i_tag8 = u'solo quiero el desayuno, ya comeré fuera en algún sitio'
-        o_tag8 = OrderedDict([(u'sol', 'nc'), (u'quier', 'vm'), (u'el', 'pp'), (u'desayun', 'vm'), (u'ya', 'rg'), (u'comer', 'vm'), (u'fuer', 'vs'), (u'en', 'sp'), (u'algun', 'di'), (u'siti', 'nc')])
+        o_tag8 = OrderedDict(
+            [(u'sol', 'nc'), (u'quier', 'vm'), (u'el', 'pp'), (u'desayun', 'vm'), (u'ya', 'rg'), (u'comer', 'vm'),
+             (u'fuer', 'vs'), (u'en', 'sp'), (u'algun', 'di'), (u'siti', 'nc')])
 
         i_tag9 = u'no estoy interesado en ninguno de esos servicios'
-        o_tag9 = OrderedDict([(u'no', 'rn'), (u'estoy', 'vm'), (u'interes', 'aq'), (u'en', 'sp'), (u'ningun', 'di'), (u'de', 'sp'), (u'esos', 'dd'), (u'servici', 'nc')])
+        o_tag9 = OrderedDict(
+            [(u'no', 'rn'), (u'estoy', 'vm'), (u'interes', 'aq'), (u'en', 'sp'), (u'ningun', 'di'), (u'de', 'sp'),
+             (u'esos', 'dd'), (u'servici', 'nc')])
 
         i_tag10 = u'si, quisiera disponer de aparcamiento'
         o_tag10 = OrderedDict([(u'sic', 'np'), (u'quis', 'vm'), (u'dispon', 'vm'), (u'de', 'sp'), (u'abarc', 'vm')])
 
         i_tag11 = u'una cama adicional no me vendría mal'
-        o_tag11 = OrderedDict([(u'una', 'di'), (u'cam', 'nc'), (u'adicional', 'rg'), (u'no', 'rn'), (u'me', 'pp'), (u'vendri', 'vm'), (u'mal', 'aq')])
+        o_tag11 = OrderedDict(
+            [(u'una', 'di'), (u'cam', 'nc'), (u'adicional', 'rg'), (u'no', 'rn'), (u'me', 'pp'), (u'vendri', 'vm'),
+             (u'mal', 'aq')])
 
         i_tag12 = u'esa información es falsa'
         o_tag12 = OrderedDict([(u'esa', 'dd'), (u'informacion', 'nc'), (u'es', 'vs'), (u'fals', 'vm')])
@@ -55,11 +72,11 @@ class UserInputTestCase(unittest.TestCase):
         o_tag14 = OrderedDict([(u'me', 'pp'), (u'parec', 'vm'), (u'bien', 'rg')])
 
         i_tag15 = u'mi correo es eresunbot@gmail.com'
-        o_tag15 = OrderedDict([(u'mi', 'dp'), (u'corre', 'nc'), (u'es', 'vs'), (u'eresunbotgmailcom', None)])  # the email extraction is done by the mails() method
+        o_tag15 = OrderedDict([(u'mi', 'dp'), (u'corre', 'nc'), (u'es', 'vs'),
+                               (u'eresunbotgmailcom', None)])  # the email extraction is done by the mails() method
 
         i_tag16 = u'muy bien, hasta la proxima!! :)'
         o_tag16 = OrderedDict([(u'muy', 'rg'), (u'bien', 'rg'), (u'hast', 'rg'), (u'la', 'da'), (u'proxim', 'rg')])
-
 
         self._test_tagging(i_tag1, o_tag1)
         self._test_tagging(i_tag2, o_tag2)
@@ -145,8 +162,6 @@ class UserInputTestCase(unittest.TestCase):
         self._test_goals(i_goals3, o_goals3)
         self._test_goals(i_goals4, o_goals4)
 
-
-
     # Test for tagging (when it's tagger all the proccess has been done
     def _test_tagging(self, text, res):
         input = UserInput(text)
@@ -173,9 +188,7 @@ class UserInputTestCase(unittest.TestCase):
 
 
 class SpellCheckerTestCase(unittest.TestCase):
-
     def tests(self):
-
         # Test edits1(word): All edits that are one edit away from `word`.
 
         i_word1_edits = 'hoal'
@@ -266,10 +279,8 @@ class SpellCheckerTestCase(unittest.TestCase):
 
 
 class DateParserTestCase(unittest.TestCase):
-
     def tests(self):
         pass
-
 
 
 if __name__ == '__main__':

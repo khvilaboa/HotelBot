@@ -288,7 +288,6 @@ class DBHandler:
         if self.clients.find_one({DBHandler.FIELD_CLIENT_USER: username}) is None:
             self.clients.insert_one({DBHandler.FIELD_CLIENT_USER: username})
 
-
     def client_email(self, username):
         client = self.clients.find_one({DBHandler.FIELD_CLIENT_USER: username})
         if client is not None and DBHandler.FIELD_CLIENT_EMAIL in client:
@@ -297,7 +296,6 @@ class DBHandler:
 
     def update_email(self, username, email):
         self.clients.update({DBHandler.FIELD_CLIENT_USER: username}, {"$set": {DBHandler.FIELD_CLIENT_EMAIL: email}})
-
 
     # Returns the price of a specific type of room
     def price(self, room_type):
@@ -316,6 +314,7 @@ class DBHandler:
     def get_pois(self, pois_type=None, limit=5):
         if pois_type is not None:
             print(pois_type)
-            return list(self.hotels.aggregate([{'$unwind':'$pois'}, {'$match':{'pois.category': pois_type }}, {'$project': {'pois':1}}]))[:limit]
+            return list(self.hotels.aggregate(
+                [{'$unwind': '$pois'}, {'$match': {'pois.category': pois_type}}, {'$project': {'pois': 1}}]))[:limit]
         else:
-            return list(self.hotels.aggregate([{'$unwind':'$pois'}, {'$project': {'pois':1}}]))[:limit]
+            return list(self.hotels.aggregate([{'$unwind': '$pois'}, {'$project': {'pois': 1}}]))[:limit]

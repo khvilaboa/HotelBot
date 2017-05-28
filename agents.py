@@ -18,6 +18,7 @@ from utils.weather import Weather
 # Custom intellect to improve the management of facts and policies
 from utils.mail import Email
 
+
 class MyIntellect(Intellect):
     def __init__(self, username, db):
         Intellect.__init__(self)
@@ -108,13 +109,15 @@ class MyIntellect(Intellect):
             weather = Weather("86b4bc5747efd019c9d6bf0da2c84813")
 
             try:
-                reservation.weather = weather.codes[weather.get_daily_forecast(*hotel_loc).get_weather_at(datetime.strptime(reservation.init_date, '%d/%m/%Y')).get_weather_code()]
+                reservation.weather = weather.codes[weather.get_daily_forecast(*hotel_loc).get_weather_at(
+                    datetime.strptime(reservation.init_date, '%d/%m/%Y')).get_weather_code()]
             except:
                 reservation.weather = None
 
             resp = [Response.SHOW_INTRO_SUMMARY]
             resp.append(reservation.summary())
-            resp.append(Response.TOTAL_PRICE.format(price=num_nights * (price_per_night + price_pension + price_services)))
+            resp.append(
+                Response.TOTAL_PRICE.format(price=num_nights * (price_per_night + price_pension + price_services)))
             resp.append(Response.CONFIRM_BASIC)
 
         self.last_question = resp if type(resp) is not list else resp[0]
@@ -214,7 +217,8 @@ class MyIntellect(Intellect):
             print(os.getcwd())
             print("images\\%s.jpg" % reserv.room_type)
             print(os.getcwd() + "\\images\\%s.jpg" % reserv.room_type)
-            mail.send_email_with_attachments("dasihotelbot@gmail.com", email, "Resumen de reserva", reserv.summary(), ["images/%s.jpg" % reserv.room_type])
+            mail.send_email_with_attachments("dasihotelbot@gmail.com", email, "Resumen de reserva", reserv.summary(),
+                                             ["images/%s.jpg" % reserv.room_type])
 
         self._knowledge.remove(reserv)
         self.learn(Reservation())
@@ -260,6 +264,7 @@ class MyIntellect(Intellect):
                                '\n\n ¿Cómo llegar?: ' + str(place['pois']['gmaps_url']).encode('utf-8'))
         return msg
 
+
 class HotelAgent:
     def __init__(self, username):
 
@@ -290,7 +295,7 @@ class HotelAgent:
             for desire in desires:
                 self.intellect.add_desire(desire)
             self.intellect.reason()
-            #pdb.set_trace()
+            # pdb.set_trace()
             resp = self.intellect.extract_response()
 
             if resp is not None:
@@ -332,7 +337,7 @@ class LanguagesAgent:
             return 1, Response("Io solo parliamo spagnolo")  # trust, response
         elif input.lang == "fr":
             return 1, Response("Je parle seulement espagnol")  # trust, response
-        #elif input.lang == "pt":
+        # elif input.lang == "pt":
         #    return 1, Response("Eu só falo espanhol")  # trust, response
 
         return 0, Response(Response.UNKNOWN_INPUT)

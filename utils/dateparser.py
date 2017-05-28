@@ -20,7 +20,6 @@ regex2 = re.compile("((%s|[0-9]+)\s+de\s+(%s))" % (numbers, months), re.IGNORECA
 regex3 = re.compile("((dentro\s+de|en)\s+(%s|[0-9]+)s?\s+(%s)s?)" % (numbers, measures), re.IGNORECASE)
 regex4 = re.compile("((el|la)\s+(%s)\s+que\s+viene)" % measures, re.IGNORECASE)
 
-
 numbersLst = numbers.split("|")
 daysLst = days.split("|")
 monthsLst = months.split("|")
