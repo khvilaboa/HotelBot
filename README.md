@@ -44,6 +44,10 @@ HotelBot tiene las siguientes dependencias:
 
 ```pip install pymongo```
 
+**APScheduler**: para la gestión de tareas asíncronas (comunicación con el usuario sin interacción previa).
+
+```pip install apscheduler```
+
 Todas estas dependencias además están recogidas en el fichero **requirements.txt**. Para obtener todas las dependencias
 sin necesidad de escribirlas a mano una a una, basta con ejecutar el siguiente comando:
 
