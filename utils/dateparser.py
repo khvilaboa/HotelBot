@@ -30,7 +30,6 @@ mesuresValuesLst = [1, 2, 30, 365]
 
 def parse(text):
     now = datetime.now()
-    # pdb.set_trace()
 
     matches = regex1.findall(text)
     for data in matches:

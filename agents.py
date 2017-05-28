@@ -292,7 +292,6 @@ class HotelAgent:
             for desire in desires:
                 self.intellect.add_desire(desire)
             self.intellect.reason()
-            # pdb.set_trace()
             resp = self.intellect.extract_response()
 
             if resp is not None:

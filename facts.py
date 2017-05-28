@@ -96,7 +96,6 @@ class Response(object):
                                   "En su lugar puedes coger dos individuales o seleccionar posteriormente una cama supletoria"]
 
     def __init__(self, msg=[], keyboard=None, next_question=True, action=None):
-        # pdb.set_trace()
         msg = [msg] if type(msg) is str else msg
         self._msg = []
         for m in msg:

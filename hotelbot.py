@@ -79,7 +79,6 @@ def start(bot, update):
 # To handle text (that doesn't start with '/')
 def text(bot, update):
     text = update.message.text
-    # pdb.set_trace()
     username = update.message.from_user.username
     check_agent(username)
 
@@ -144,7 +143,6 @@ def location(bot, update):
 # Example of in-line keyboard use
 def room_types(bot, update):
     db = DBHandler()
-    # pdb.set_trace()
     keyboard = [[InlineKeyboardButton("Individual (%d EUR/noche)" % db.price(DBHandler.ROOM_INDIVIDUAL),
                                       callback_data='individual')], \
                 [InlineKeyboardButton("Doble (%d EUR/noche)" % db.price(DBHandler.ROOM_DOUBLE), callback_data='doble')], \
@@ -158,7 +156,6 @@ def room_types(bot, update):
 
 def pension_types(bot, update):
     db = DBHandler()
-    # pdb.set_trace()
     keyboard = [[InlineKeyboardButton("Completa (%d EUR/dia)" % db.price_pension(DBHandler.PENSION_FULL),
                                       callback_data='completa')], \
                 [InlineKeyboardButton("Parcial (%d EUR/dia)" % db.price_pension(DBHandler.PENSION_HALF),

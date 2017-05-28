@@ -98,7 +98,6 @@ class UserInput:
                     (self.has_word(["buenos"]) and self.has_word(["dias"])) or \
                     (self.has_word(["buenas"]) and self.has_word(["tardes", "noches"]))):
             des.append(Goal(Goal.GREET_USER))
-        # pdb.set_trace()
         if (self.has_word(verbs_want) and self.has_word(noun_room)) or last_question == Response.ASK_ROOM_TYPE:
             if self.has_word(["camas"]) and self.has_word(["separadas", "apartadas"]):
                 des.append(Goal(Goal.DOUBLE_WITH_SEPARATED_BEDS))
@@ -125,7 +124,6 @@ class UserInput:
             d = Goal(Goal.ESTABLISH_END_DATE)
             d.data["end_date"] = self.dates()[-1]
             des.append(d)
-        # pdb.set_trace()
         if self.has_word(pension_types):  # last_question == Response.ASK_PENSION_TYPE and
             pension_type = None
             for pt in pension_types:
@@ -168,7 +166,6 @@ class UserInput:
         # ---------------------
         # INFORMATION GOALS
         # ---------------------
-        # pdb.set_trace()
         if (self.has_word(["ensenar", "ensenarme", "mostrar", "mostrarme", "ver"]) and \
                     self.has_word(["habitacion", "habitaciones"]) and \
                     self.has_word(
