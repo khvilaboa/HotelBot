@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: cp1252 -*-
+# -*- coding: utf8 -*-
 
 import re
 from datetime import datetime, timedelta
@@ -10,9 +10,9 @@ days = "lunes|martes|miercoles|jueves|viernes|sabado|domingo"
 
 months = "enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre"
 
-rel_days = "ayer|anteayer|mañana|pasado mañana"
+rel_days = "anteayer|ayer|pasado manana|manana"
 
-measures = "dia|semana|mes|año"
+measures = "dia|semana|mes|ano"
 
 regex1 = re.compile("((%s|[0-9]+)\s+de\s+(%s))" % (numbers, months), re.IGNORECASE)
 # regex2 = re.compile("(([0-9]+)\s+de\s+(%s))" % (months), re.IGNORECASE)
@@ -57,23 +57,22 @@ def parse(text):
                 number -= 12 - now.month - 1
                 new = now.replace(year=now.year + 1 + number / 12)
                 new = now.replace(month=1 + number - 12 * (number / 12))
-        elif measure == "año":
+        elif measure == "ano":
             new = now.replace(year=now.year + number)
         text = text.replace(match, "el %s" % new.strftime("%d/%m/%Y"))
 
-    #for rel_day in rel_daysLst:
-    #    print rel_day
-    #    if rel_day in text:
-    #        new = now
-    #        if rel_day == "ayer":
-    #            new -= timedelta(days=1)
-    #        elif rel_day == "anteayer":
-    #            new -= timedelta(days=2)
-    #        elif rel_day == "mañana":
-    #            new += timedelta(days=1)
-    #        elif rel_day == "pasado mañana":
-    #            new += timedelta(days=2)
-    #        text = text.replace(rel_day, "el %s" % new.strftime("%d/%m/%Y"))
+    for rel_day in rel_daysLst:
+        if rel_day in text:
+            new = now
+            if rel_day == "ayer":
+                new -= timedelta(days=1)
+            elif rel_day == "anteayer":
+                new -= timedelta(days=2)
+            elif rel_day == "manana":
+                new += timedelta(days=1)
+            elif rel_day == "pasado manana":
+                new += timedelta(days=2)
+            text = text.replace(rel_day, "el %s" % new.strftime("%d/%m/%Y"))
 
     return text
 
