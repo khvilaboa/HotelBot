@@ -9,3 +9,4 @@ Intellect
 googlemaps
 pymongo
 apscheduler
+unittest
