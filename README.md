@@ -49,6 +49,10 @@ HotelBot tiene las siguientes dependencias:
 
 ```pip install apscheduler```
 
+**unittest**: para el desarrollo de tests unitarios.
+
+```pip install unittest```
+
 Todas estas dependencias además están recogidas en el fichero **requirements.txt**. Para obtener todas las dependencias
 sin necesidad de escribirlas a mano una a una, basta con ejecutar el siguiente comando:
 
