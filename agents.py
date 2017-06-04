@@ -303,7 +303,7 @@ class HotelAgent:
             resp = Response(Response.UNKNOWN_INPUT)
         # resp.msg = [msg]
         print(msg)  # Only for testing purposes
-        return 1, resp  # trust, response
+        return 0.8, resp  # trust, response
 
 
 class InsultsAgent:
@@ -326,13 +326,13 @@ class LanguagesAgent:
     def evaluate(self, input):
 
         if input.lang == "en":
-            return 1, Response("I only talk in spanish")  # trust, response
+            return 0.9, Response("I only talk in spanish")  # trust, response
         elif input.lang == "de":
-            return 1, Response("Ich spreche nur Spanisch")  # trust, response
+            return 0.9, Response("Ich spreche nur Spanisch")  # trust, response
         elif input.lang == "it":
-            return 1, Response("Io solo parliamo spagnolo")  # trust, response
+            return 0.9, Response("Io solo parliamo spagnolo")  # trust, response
         elif input.lang == "fr":
-            return 1, Response("Je parle seulement espagnol")  # trust, response
+            return 0.9, Response("Je parle seulement espagnol")  # trust, response
         # elif input.lang == "pt":
         #    return 1, Response("Eu só falo espanhol")  # trust, response
 
